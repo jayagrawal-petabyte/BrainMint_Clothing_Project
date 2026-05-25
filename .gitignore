@@ -1,1 +1,4 @@
 docs_Devansh/
+node_modules/
+dist/
+.vite/

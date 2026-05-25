@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --ltn__primary-color: #565656;
+  --ltn__primary-color-2: #041113;
+  --ltn__secondary-color: #e55472;
+  --ltn__heading-color: #010101;
+  --ltn__paragraph-color: #000000;
+  --ltn__heading-font: 'Montserrat', sans-serif;
+  --ltn__body-font: 'Poppins', sans-serif;
+  --section-bg-1: #F9F9F9;
+  --border-color-1: #f0f0f0;
+  --border-color-7: #d1dae0;
+  --border-color-11: #ededed;
+  --white-7: #F7F7F7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ltn__paragraph-color);
+  background-color: #fff;
+  line-height: 1.8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ltn__heading-font);
+  color: var(--ltn__heading-color);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+a {
+  color: var(--ltn__heading-color);
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

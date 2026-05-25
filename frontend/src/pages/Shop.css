@@ -1,0 +1,124 @@
+.shop-page-header {
+  background-color: var(--section-bg-1);
+  padding: 50px 0 50px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.page-title {
+  font-family: var(--ltn__heading-font);
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--ltn__heading-color);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+}
+
+.breadcrumb {
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  color: var(--ltn__primary-color);
+  margin-top: 10px;
+}
+
+.breadcrumb a {
+  color: var(--ltn__primary-color);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--ltn__secondary-color);
+}
+
+.breadcrumb .separator {
+  margin: 0 8px;
+  color: var(--ltn__primary-color);
+}
+
+.breadcrumb .current {
+  color: var(--ltn__secondary-color);
+}
+
+/* --- Main Layout --- */
+.shop-container {
+  display: flex;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.shop-sidebar {
+  width: 270px;
+  flex-shrink: 0;
+}
+
+.shop-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Toolbar (Sort + Count) --- */
+.shop-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.product-count {
+  font-family: var(--ltn__heading-font);
+  font-size: 20px;
+  color: var(--ltn__heading-color);
+}
+
+.sort-dropdown select {
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  color: var(--ltn__heading-color);
+  padding: 8px 35px 8px 15px;
+  border: 2px solid var(--border-color-11);
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  appearance: auto;
+}
+
+/* --- Product Grid --- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1199px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .shop-container {
+    flex-direction: column;
+  }
+
+  .shop-sidebar {
+    width: 100%;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 575px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+}

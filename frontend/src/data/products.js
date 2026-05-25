@@ -1,0 +1,80 @@
+export const mockProducts = [
+  {
+    id: "1",
+    name: "Classic Black T-Shirt",
+    price: 25.00,
+    originalPrice: null,
+    category: "T-Shirts",
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black"],
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Black+T-Shirt"],
+    description: "A comfortable classic black cotton t-shirt for everyday wear.",
+    isNew: true,
+    isFeatured: true
+  },
+  {
+    id: "2",
+    name: "Slim Fit Blue Jeans",
+    price: 65.00,
+    originalPrice: null,
+    category: "Jeans",
+    sizes: ["30", "32", "34", "36"],
+    colors: ["Blue"],
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Blue+Jeans"],
+    description: "Premium denim jeans folded neatly.",
+    isNew: false,
+    isFeatured: true
+  },
+  {
+    id: "3",
+    name: "Essential White T-Shirt",
+    price: 25.00,
+    originalPrice: null,
+    category: "T-Shirts",
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["White"],
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=White+T-Shirt"],
+    description: "Crisp and clean basic white t-shirt.",
+    isNew: true,
+    isFeatured: false
+  },
+  {
+    id: "4",
+    name: "Black Wash Slim Jeans",
+    price: 70.00,
+    originalPrice: null,
+    category: "Jeans",
+    sizes: ["30", "32", "34", "36"],
+    colors: ["Black"],
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Black+Jeans"],
+    description: "Dark wash black jeans with slight stretch.",
+    isNew: false,
+    isFeatured: true
+  },
+  {
+    id: "5",
+    name: "Plaid Flannel Shirt",
+    price: 45.00,
+    originalPrice: null,
+    category: "Shirts",
+    sizes: ["M", "L", "XL"],
+    colors: ["Red/Black"],
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Flannel+Shirt"],
+    description: "Warm folded flannel shirt.",
+    isNew: true,
+    isFeatured: false
+  },
+  {
+    id: "6",
+    name: "Oxford Button-Down",
+    price: 55.00,
+    originalPrice: null,
+    category: "Shirts",
+    sizes: ["S", "M", "L"],
+    colors: ["Light Blue"],
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Oxford+Shirt"],
+    description: "Classic light blue Oxford shirt.",
+    isNew: true,
+    isFeatured: true
+  }
+];

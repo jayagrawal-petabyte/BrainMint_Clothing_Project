@@ -1,0 +1,242 @@
+.ltn__sidebar-filter {
+  font-family: var(--ltn__body-font);
+}
+
+/* --- Widget Block --- */
+.ltn__menu-widget {
+  border-bottom: 1px solid var(--border-color-1);
+  padding: 25px 0;
+}
+
+.ltn__menu-widget:first-child {
+  padding-top: 0;
+}
+
+.ltn__menu-widget:last-child {
+  border-bottom: none;
+}
+
+/* --- Widget Header (Clickable) --- */
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ltn__widget-title {
+  font-family: var(--ltn__heading-font);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ltn__heading-color);
+  text-transform: capitalize;
+  margin: 0;
+  position: relative;
+}
+
+.ltn__widget-title::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 2px;
+  background-color: var(--ltn__secondary-color);
+  margin-top: 10px;
+}
+
+.toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ltn__heading-color);
+}
+
+/* --- Widget Content --- */
+.widget-content {
+  margin-top: 20px;
+}
+
+/* --- Menu List --- */
+.menu-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.menu-list li {
+  margin-bottom: 0;
+}
+
+.menu-list li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  color: var(--ltn__primary-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-color-1);
+  cursor: pointer;
+}
+
+.menu-list li:last-child a {
+  border-bottom: none;
+}
+
+.menu-list li a:hover {
+  color: var(--ltn__secondary-color);
+}
+
+.menu-list .count {
+  font-size: 13px;
+  color: #999;
+}
+
+/* --- Price Filter --- */
+.price-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-field {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--border-color-11);
+  padding: 0 10px;
+  flex: 1;
+}
+
+.price-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ltn__heading-color);
+  margin-right: 4px;
+}
+
+.price-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  padding: 8px 0;
+  color: var(--ltn__primary-color);
+  background: transparent;
+}
+
+/* Hide number input spinners */
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.price-input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.price-separator {
+  font-size: 16px;
+  color: var(--ltn__primary-color);
+  flex-shrink: 0;
+}
+
+.price-filter-btn {
+  font-family: var(--ltn__heading-font);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 107px;
+  background-color: var(--ltn__secondary-color);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.price-filter-btn:hover {
+  background-color: var(--ltn__primary-color);
+}
+
+/* --- Size List (Inline Pills) --- */
+.size-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.size-list li {
+  margin-bottom: 0;
+}
+
+.size-list li a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--border-color-11);
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ltn__heading-color);
+  background-color: transparent;
+}
+
+.size-list li a:hover {
+  background-color: var(--ltn__secondary-color);
+  border-color: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+/* --- Color List (Checkboxes) --- */
+.color-list li {
+  margin-bottom: 0;
+}
+
+.color-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  color: var(--ltn__primary-color);
+  border-bottom: 1px solid var(--border-color-1);
+  cursor: pointer;
+}
+
+.color-list li:last-child .color-checkbox {
+  border-bottom: none;
+}
+
+.color-checkbox:hover {
+  color: var(--ltn__secondary-color);
+}
+
+.color-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ltn__secondary-color);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.color-swatch {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

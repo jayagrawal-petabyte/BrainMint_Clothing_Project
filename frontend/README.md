@@ -69,7 +69,7 @@ frontend/
     ├── main.jsx            # React entry point
     ├── App.jsx             # Router setup (Home, Shop)
     ├── App.css             # App-level styles (intentionally empty)
-    ├── index.css           # Global reset + Fiama design tokens
+    ├── index.css           # Global reset + UrbanWear design tokens
     ├── data/
     │   └── products.js     # Mock product data (shared across team)
     ├── pages/
@@ -79,6 +79,8 @@ frontend/
     └── components/
         ├── FilterSidebar.jsx   # Left sidebar filters (collapsible)
         ├── FilterSidebar.css   # Sidebar styles
+        ├── Navbar.jsx          # Main navigation bar with dropdowns
+        ├── Navbar.css          # Navbar styles
         ├── ProductCard.jsx     # Individual product card
         └── ProductCard.css     # Product card styles
 ```

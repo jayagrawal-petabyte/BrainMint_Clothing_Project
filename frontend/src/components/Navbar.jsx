@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Search, User, ShoppingCart, ChevronDown, Phone } from 'lucide-react';
+import { Search, User, ShoppingCart, ChevronDown, Phone, Heart } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -47,6 +47,11 @@ const Navbar = () => {
                     <li><Link to="/wishlist">Wishlist</Link></li>
                     <li><Link to="/account">My Account</Link></li>
                   </ul>
+                </li>
+                <li className="user-menu">
+                  <Link to="/wishlist" title="Wishlist">
+                    <Heart size={24} />
+                  </Link>
                 </li>
                 <li className="mini-cart">
                   <Link to="/cart" className="mini-cart-btn">

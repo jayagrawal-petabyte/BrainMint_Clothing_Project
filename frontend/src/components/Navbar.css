@@ -120,7 +120,7 @@
   color: var(--ltn__secondary-color, #e55472);
 }
 
-.header-options ul {
+.header-options > ul {
   display: flex;
   align-items: center;
   gap: 20px;

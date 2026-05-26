@@ -78,14 +78,8 @@ const Navbar = () => {
         <div className="container">
           <nav className="main-menu">
             <ul>
-              <li className="has-dropdown">
-                <Link to="/">HOME <ChevronDown size={14} className="dropdown-icon" /></Link>
-                <ul className="dropdown">
-                  <li><Link to="/">Home Style - 01</Link></li>
-                  <li><Link to="/">Home Style - 02</Link></li>
-                  <li><Link to="/">Home Style - 03</Link></li>
-                  <li><Link to="/">Home Style - 04</Link></li>
-                </ul>
+              <li>
+                <Link to="/">HOME</Link>
               </li>
               <li className="has-dropdown">
                 <Link to="/about">ABOUT US <ChevronDown size={14} className="dropdown-icon" /></Link>

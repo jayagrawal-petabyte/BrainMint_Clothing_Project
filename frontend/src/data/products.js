@@ -76,5 +76,83 @@ export const mockProducts = [
     isNew: true,
     rating: 4.6,
     reviewCount: 28
+  },
+  {
+    id: "7",
+    name: "Classic Denim Jacket",
+    price: 6999,
+    originalPrice: null,
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Denim+Jacket"],
+    category: "men",
+    sizes: ["M", "L", "XL"],
+    colors: ["#1e73be"],
+    isNew: false,
+    rating: 4.8,
+    reviewCount: 56
+  },
+  {
+    id: "8",
+    name: "Summer Graphic Tee",
+    price: 1499,
+    originalPrice: 1999,
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Graphic+Tee"],
+    category: "men",
+    sizes: ["S", "M", "L"],
+    colors: ["#FFFFFF", "#000000"],
+    isNew: true,
+    rating: 4.1,
+    reviewCount: 15
+  },
+  {
+    id: "9",
+    name: "Athletic Joggers",
+    price: 2999,
+    originalPrice: null,
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Athletic+Joggers"],
+    category: "men",
+    sizes: ["M", "L", "XL"],
+    colors: ["#808080"],
+    isNew: false,
+    rating: 4.4,
+    reviewCount: 42
+  },
+  {
+    id: "10",
+    name: "Vintage Leather Jacket",
+    price: 12999,
+    originalPrice: 14999,
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Leather+Jacket"],
+    category: "men",
+    sizes: ["L", "XL"],
+    colors: ["#8B4513", "#000000"],
+    isNew: true,
+    rating: 4.9,
+    reviewCount: 89
+  },
+  {
+    id: "11",
+    name: "Basic Chino Pants",
+    price: 3499,
+    originalPrice: null,
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Chino+Pants"],
+    category: "men",
+    sizes: ["30", "32", "34", "36"],
+    colors: ["#F5F5DC"],
+    isNew: false,
+    rating: 4.3,
+    reviewCount: 27
+  },
+  {
+    id: "12",
+    name: "Oversized Hoodie",
+    price: 3999,
+    originalPrice: null,
+    images: ["https://placehold.co/400x500/eeeeee/999999?text=Oversized+Hoodie"],
+    category: "men",
+    sizes: ["M", "L", "XL"],
+    colors: ["#000000", "#808080"],
+    isNew: true,
+    rating: 4.6,
+    reviewCount: 38
   }
 ];

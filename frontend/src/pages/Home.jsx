@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import './Home.css';
 
 const Home = () => {
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="home-placeholder">
       <h1>Welcome to Clothing Store</h1>
       <p>This is the homepage placeholder.</p>
-      <a href="/shop">Go to Shop</a>
+      <Link to="/shop">Go to Shop</Link>
     </div>
   );
 };

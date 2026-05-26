@@ -36,7 +36,7 @@
   list-style: none;
 }
 
-.product-hover-action li a {
+.product-hover-action li button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,7 +49,7 @@
   font-size: 14px;
 }
 
-.product-hover-action li a:hover {
+.product-hover-action li button:hover {
   background-color: var(--ltn__secondary-color);
   color: #fff;
 }

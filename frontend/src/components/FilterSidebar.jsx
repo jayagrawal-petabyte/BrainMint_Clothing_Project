@@ -29,9 +29,9 @@ const FilterSidebar = () => {
       {/* Categories */}
       <FilterSection title="Categories">
         <ul className="menu-list">
-          <li><a href="#" onClick={e => e.preventDefault()}>T-Shirts <span className="count">(2)</span></a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>Shirts <span className="count">(2)</span></a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>Jeans <span className="count">(2)</span></a></li>
+          <li><button type="button" className="filter-btn">T-Shirts <span className="count">(2)</span></button></li>
+          <li><button type="button" className="filter-btn">Shirts <span className="count">(2)</span></button></li>
+          <li><button type="button" className="filter-btn">Jeans <span className="count">(2)</span></button></li>
         </ul>
       </FilterSection>
 
@@ -40,7 +40,7 @@ const FilterSidebar = () => {
         <div className="price-filter">
           <div className="price-inputs">
             <div className="price-field">
-              <span className="price-label">$</span>
+              <span className="price-label">₹</span>
               <input
                 type="number"
                 placeholder="0"
@@ -50,30 +50,30 @@ const FilterSidebar = () => {
             </div>
             <span className="price-separator">—</span>
             <div className="price-field">
-              <span className="price-label">$</span>
+              <span className="price-label">₹</span>
               <input
                 type="number"
-                placeholder="100"
+                placeholder="10000"
                 min="0"
                 className="price-input"
               />
             </div>
           </div>
-          <button className="price-filter-btn" onClick={e => e.preventDefault()}>Filter</button>
+          <button type="button" className="price-filter-btn">Filter</button>
         </div>
       </FilterSection>
 
       {/* Size */}
       <FilterSection title="Size">
         <ul className="menu-list size-list">
-          <li><a href="#" onClick={e => e.preventDefault()}>S</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>M</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>L</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>XL</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>30</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>32</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>34</a></li>
-          <li><a href="#" onClick={e => e.preventDefault()}>36</a></li>
+          <li><button type="button" className="size-pill">S</button></li>
+          <li><button type="button" className="size-pill">M</button></li>
+          <li><button type="button" className="size-pill">L</button></li>
+          <li><button type="button" className="size-pill">XL</button></li>
+          <li><button type="button" className="size-pill">30</button></li>
+          <li><button type="button" className="size-pill">32</button></li>
+          <li><button type="button" className="size-pill">34</button></li>
+          <li><button type="button" className="size-pill">36</button></li>
         </ul>
       </FilterSection>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Eye } from 'lucide-react';
 import './ProductCard.css';
 
@@ -7,25 +8,25 @@ const ProductCard = ({ product }) => {
     <div className="ltn__product-item">
       {/* Product Image */}
       <div className="product-img">
-        <a href="#">
+        <Link to={`/product/${product.id}`}>
           <img src={product.images[0]} alt={product.name} />
-        </a>
+        </Link>
         <div className="product-hover-action">
           <ul>
             <li>
-              <a href="#" title="Quick View">
+              <button type="button" title="Quick View">
                 <Eye size={16} />
-              </a>
+              </button>
             </li>
             <li>
-              <a href="#" title="Add to Wishlist">
+              <button type="button" title="Add to Wishlist">
                 <Heart size={16} />
-              </a>
+              </button>
             </li>
             <li>
-              <a href="#" title="Add to Cart">
+              <button type="button" title="Add to Cart">
                 <ShoppingCart size={16} />
-              </a>
+              </button>
             </li>
           </ul>
         </div>
@@ -34,10 +35,10 @@ const ProductCard = ({ product }) => {
       {/* Product Info */}
       <div className="product-info">
         <h2 className="product-title">
-          <a href="#">{product.name}</a>
+          <Link to={`/product/${product.id}`}>{product.name}</Link>
         </h2>
         <div className="product-price">
-          <span>${product.price.toFixed(2)}</span>
+          <span>₹{product.price.toLocaleString('en-IN')}</span>
         </div>
       </div>
     </div>

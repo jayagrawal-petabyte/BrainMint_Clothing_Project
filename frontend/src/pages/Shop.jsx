@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import FilterSidebar from '../components/FilterSidebar';
 import ProductCard from '../components/ProductCard';
 import { mockProducts } from '../data/products';
@@ -11,7 +12,7 @@ const Shop = () => {
       <div className="shop-page-header">
         <h1 className="page-title">Shop</h1>
         <div className="breadcrumb">
-          <a href="/">Home</a> &gt; <span className="current">Shop</span>
+          <Link to="/">Home</Link> &gt; <span className="current">Shop</span>
         </div>
       </div>
 

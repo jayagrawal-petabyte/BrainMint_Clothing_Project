@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Search, User, ShoppingCart, ChevronDown, Phone, Heart } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { cartCount, cartTotal } = useCart();
+
   return (
     <header className="navbar-container">
       <div className="navbar-middle">
@@ -57,11 +60,11 @@ const Navbar = () => {
                   <Link to="/cart" className="mini-cart-btn">
                     <div className="mini-cart-icon">
                       <ShoppingCart size={24} />
-                      <sup><span className="cart-badge">0</span></sup>
+                      <sup><span className="cart-badge">{cartCount}</span></sup>
                     </div>
                     <div className="mini-cart-info">
                       <h6>Your Cart</h6>
-                      <span className="cart-total">$0.00</span>
+                      <span className="cart-total">₹{cartTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                   </Link>
                 </li>

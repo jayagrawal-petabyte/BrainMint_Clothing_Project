@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import FilterSidebar from '../components/FilterSidebar';
 import ProductCard from '../components/ProductCard';
@@ -7,13 +7,58 @@ import './Shop.css';
 
 const Shop = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortType, setSortType] = useState('default');
+  const [filters, setFilters] = useState({
+    categories: [],
+    sizes: [],
+    colors: [],
+    minPrice: '',
+    maxPrice: ''
+  });
+
   const itemsPerPage = 9;
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, sortType]);
+
+  // Filtering Logic
+  let filteredProducts = mockProducts.filter(product => {
+    const matchesCategory = filters.categories.length === 0 || 
+      filters.categories.some(cat => product.name.toLowerCase().includes(cat.toLowerCase()));
+    
+    const matchesSize = filters.sizes.length === 0 || 
+      product.sizes.some(size => filters.sizes.includes(size));
+      
+    const matchesColor = filters.colors.length === 0 || 
+      product.colors.some(color => filters.colors.includes(color));
+      
+    const matchesMinPrice = filters.minPrice === '' || product.price >= Number(filters.minPrice);
+    const matchesMaxPrice = filters.maxPrice === '' || product.price <= Number(filters.maxPrice);
+
+    return matchesCategory && matchesSize && matchesColor && matchesMinPrice && matchesMaxPrice;
+  });
+
+  // Sorting Logic
+  if (sortType === 'price-low') {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (sortType === 'price-high') {
+    filteredProducts.sort((a, b) => b.price - a.price);
+  } else if (sortType === 'latest') {
+    // Assuming newer products have higher IDs or isNew flag
+    filteredProducts.sort((a, b) => {
+      if (a.isNew && !b.isNew) return -1;
+      if (!a.isNew && b.isNew) return 1;
+      return Number(b.id) - Number(a.id);
+    });
+  }
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockProducts.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(mockProducts.length / itemsPerPage);
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -34,7 +79,7 @@ const Shop = () => {
       <div className="shop-container">
         {/* Left Sidebar */}
         <aside className="shop-sidebar">
-          <FilterSidebar />
+          <FilterSidebar filters={filters} onFilterChange={setFilters} />
         </aside>
 
         {/* Right Content Area */}
@@ -42,16 +87,15 @@ const Shop = () => {
           {/* Toolbar */}
           <div className="shop-toolbar">
             <div className="sort-dropdown">
-              <select>
-                <option>Default sorting</option>
-                <option>Sort by popularity</option>
-                <option>Sort by latest</option>
-                <option>Sort by price: low to high</option>
-                <option>Sort by price: high to low</option>
+              <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
+                <option value="default">Default sorting</option>
+                <option value="latest">Sort by latest</option>
+                <option value="price-low">Sort by price: low to high</option>
+                <option value="price-high">Sort by price: high to low</option>
               </select>
             </div>
             <h4 className="product-count">
-              Showing {indexOfFirstItem + 1} - {Math.min(indexOfLastItem, mockProducts.length)} of {mockProducts.length} results
+              Showing {filteredProducts.length === 0 ? 0 : indexOfFirstItem + 1} - {Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} results
             </h4>
           </div>
 

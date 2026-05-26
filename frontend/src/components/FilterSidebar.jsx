@@ -22,16 +22,37 @@ const FilterSection = ({ title, children, defaultOpen = true }) => {
   );
 };
 
-const FilterSidebar = () => {
+const FilterSidebar = ({ filters, onFilterChange }) => {
+  const toggleArrayFilter = (type, value) => {
+    const current = filters[type];
+    const updated = current.includes(value)
+      ? current.filter(item => item !== value)
+      : [...current, value];
+    onFilterChange({ ...filters, [type]: updated });
+  };
+
+  const handlePriceChange = (e, field) => {
+    onFilterChange({ ...filters, [field]: e.target.value });
+  };
+
   return (
     <div className="ltn__sidebar-filter">
 
       {/* Categories */}
       <FilterSection title="Categories">
         <ul className="menu-list">
-          <li><button type="button" className="filter-btn">T-Shirts <span className="count">(2)</span></button></li>
-          <li><button type="button" className="filter-btn">Shirts <span className="count">(2)</span></button></li>
-          <li><button type="button" className="filter-btn">Jeans <span className="count">(2)</span></button></li>
+          {['T-Shirt', 'Shirt', 'Jeans', 'Jacket', 'Hoodie'].map(cat => (
+            <li key={cat}>
+              <button 
+                type="button" 
+                className={`filter-btn ${filters.categories.includes(cat) ? 'active' : ''}`}
+                onClick={() => toggleArrayFilter('categories', cat)}
+                style={{ fontWeight: filters.categories.includes(cat) ? 'bold' : 'normal' }}
+              >
+                {cat}s
+              </button>
+            </li>
+          ))}
         </ul>
       </FilterSection>
 
@@ -43,9 +64,11 @@ const FilterSidebar = () => {
               <span className="price-label">₹</span>
               <input
                 type="number"
-                placeholder="0"
+                placeholder="Min"
                 min="0"
                 className="price-input"
+                value={filters.minPrice}
+                onChange={(e) => handlePriceChange(e, 'minPrice')}
               />
             </div>
             <span className="price-separator">—</span>
@@ -53,61 +76,62 @@ const FilterSidebar = () => {
               <span className="price-label">₹</span>
               <input
                 type="number"
-                placeholder="10000"
+                placeholder="Max"
                 min="0"
                 className="price-input"
+                value={filters.maxPrice}
+                onChange={(e) => handlePriceChange(e, 'maxPrice')}
               />
             </div>
           </div>
-          <button type="button" className="price-filter-btn">Filter</button>
         </div>
       </FilterSection>
 
       {/* Size */}
       <FilterSection title="Size">
         <ul className="menu-list size-list">
-          <li><button type="button" className="size-pill">S</button></li>
-          <li><button type="button" className="size-pill">M</button></li>
-          <li><button type="button" className="size-pill">L</button></li>
-          <li><button type="button" className="size-pill">XL</button></li>
-          <li><button type="button" className="size-pill">30</button></li>
-          <li><button type="button" className="size-pill">32</button></li>
-          <li><button type="button" className="size-pill">34</button></li>
-          <li><button type="button" className="size-pill">36</button></li>
+          {['S', 'M', 'L', 'XL', '30', '32', '34', '36'].map(size => (
+            <li key={size}>
+              <button 
+                type="button" 
+                className={`size-pill ${filters.sizes.includes(size) ? 'active' : ''}`}
+                onClick={() => toggleArrayFilter('sizes', size)}
+                style={{
+                  backgroundColor: filters.sizes.includes(size) ? '#111' : '#f7f7f7',
+                  color: filters.sizes.includes(size) ? '#fff' : '#111'
+                }}
+              >
+                {size}
+              </button>
+            </li>
+          ))}
         </ul>
       </FilterSection>
 
       {/* Color */}
       <FilterSection title="Color">
         <ul className="menu-list color-list">
-          <li>
-            <label className="color-checkbox">
-              <input type="checkbox" />
-              <span className="color-swatch" style={{backgroundColor: '#000'}}></span>
-              Black
-            </label>
-          </li>
-          <li>
-            <label className="color-checkbox">
-              <input type="checkbox" />
-              <span className="color-swatch" style={{backgroundColor: '#fff', border: '1px solid #ddd'}}></span>
-              White
-            </label>
-          </li>
-          <li>
-            <label className="color-checkbox">
-              <input type="checkbox" />
-              <span className="color-swatch" style={{backgroundColor: '#1e73be'}}></span>
-              Blue
-            </label>
-          </li>
-          <li>
-            <label className="color-checkbox">
-              <input type="checkbox" />
-              <span className="color-swatch" style={{backgroundColor: '#c8232c'}}></span>
-              Red
-            </label>
-          </li>
+          {[
+            { name: 'Black', hex: '#000000' },
+            { name: 'White', hex: '#FFFFFF' },
+            { name: 'Blue', hex: '#1e73be' },
+            { name: 'Red', hex: '#c8232c' }
+          ].map(color => (
+            <li key={color.name}>
+              <label className="color-checkbox">
+                <input 
+                  type="checkbox" 
+                  checked={filters.colors.includes(color.hex)}
+                  onChange={() => toggleArrayFilter('colors', color.hex)}
+                />
+                <span className="color-swatch" style={{
+                  backgroundColor: color.hex, 
+                  border: color.name === 'White' ? '1px solid #ddd' : 'none'
+                }}></span>
+                {color.name}
+              </label>
+            </li>
+          ))}
         </ul>
       </FilterSection>
 

@@ -67,6 +67,24 @@ const getProductById = asyncHandler(async (req, res) => {
   });
 });
 
+const getProductForCart = asyncHandler(async (req, res) => {
+  const quantity = Math.max(Number(req.query.quantity) || 1, 1);
+  const product = await Product.findAvailableForCart(req.params.id, quantity);
+
+  if (!product) {
+    throw new ApiError(400, 'Product is inactive or does not have enough stock');
+  }
+
+  res.json({
+    success: true,
+    message: 'Product is available for cart',
+    data: {
+      ...product.toObject(),
+      orderSnapshot: product.toOrderSnapshot()
+    }
+  });
+});
+
 const createProduct = asyncHandler(async (req, res) => {
   const product = await Product.create(req.body);
 
@@ -143,6 +161,7 @@ const getNewArrivals = asyncHandler(async (req, res) => {
 module.exports = {
   getProducts,
   getProductById,
+  getProductForCart,
   createProduct,
   updateProduct,
   deleteProduct,

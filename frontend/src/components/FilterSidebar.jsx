@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import './FilterSidebar.css';
 
 const FilterSection = ({ title, children, defaultOpen = true }) => {
@@ -13,11 +14,21 @@ const FilterSection = ({ title, children, defaultOpen = true }) => {
           {isOpen ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
         </span>
       </div>
-      {isOpen && (
-        <div className="widget-content">
-          {children}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div className="widget-content">
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -41,7 +52,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
       {/* Categories */}
       <FilterSection title="Categories">
         <ul className="menu-list">
-          {['T-Shirt', 'Shirt', 'Jeans', 'Jacket', 'Hoodie'].map(cat => (
+          {['Dress', 'Top', 'Blouse', 'Skirt', 'Trouser', 'Coat', 'Blazer'].map(cat => (
             <li key={cat}>
               <button 
                 type="button" 
@@ -90,7 +101,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
       {/* Size */}
       <FilterSection title="Size">
         <ul className="menu-list size-list">
-          {['S', 'M', 'L', 'XL', '30', '32', '34', '36'].map(size => (
+          {['XS', 'S', 'M', 'L', 'XL'].map(size => (
             <li key={size}>
               <button 
                 type="button" 
@@ -114,8 +125,11 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
           {[
             { name: 'Black', hex: '#000000' },
             { name: 'White', hex: '#FFFFFF' },
+            { name: 'Pink', hex: '#FFB6C1' },
+            { name: 'Beige', hex: '#F5F5DC' },
             { name: 'Blue', hex: '#1e73be' },
-            { name: 'Red', hex: '#c8232c' }
+            { name: 'Red', hex: '#c8232c' },
+            { name: 'Grey', hex: '#808080' }
           ].map(color => (
             <li key={color.name}>
               <label className="color-checkbox">
@@ -126,7 +140,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
                 />
                 <span className="color-swatch" style={{
                   backgroundColor: color.hex, 
-                  border: color.name === 'White' ? '1px solid #ddd' : 'none'
+                  border: color.name === 'White' || color.name === 'Beige' ? '1px solid #ddd' : 'none'
                 }}></span>
                 {color.name}
               </label>

@@ -12,6 +12,11 @@
 .product-img img {
   width: 100%;
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.ltn__product-item:hover .product-img img {
+  transform: scale(1.05);
 }
 
 /* --- Hover Action Icons --- */
@@ -22,10 +27,12 @@
   width: 100%;
   text-align: center;
   opacity: 0;
+  transition: opacity 0.3s ease, bottom 0.3s ease;
 }
 
 .ltn__product-item:hover .product-hover-action {
   opacity: 1;
+  bottom: 25px;
 }
 
 .product-hover-action ul {
@@ -47,11 +54,24 @@
   border: none;
   cursor: pointer;
   font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.product-hover-action li button svg {
+  transition: fill 0.3s ease, stroke 0.3s ease;
 }
 
 .product-hover-action li button:hover {
   background-color: var(--ltn__secondary-color);
   color: #fff;
+}
+
+.product-hover-action li button.wishlisted {
+  color: var(--ltn__secondary-color);
+}
+
+.product-hover-action li button.wishlisted svg {
+  fill: currentColor;
 }
 
 /* --- Product Info --- */

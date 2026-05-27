@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Eye } from 'lucide-react';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
   return (
     <div className="ltn__product-item">
       {/* Product Image */}
@@ -19,7 +21,15 @@ const ProductCard = ({ product }) => {
               </button>
             </li>
             <li>
-              <button type="button" title="Add to Wishlist">
+              <button 
+                type="button" 
+                title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                className={isWishlisted ? 'wishlisted' : ''}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsWishlisted(!isWishlisted);
+                }}
+              >
                 <Heart size={16} />
               </button>
             </li>

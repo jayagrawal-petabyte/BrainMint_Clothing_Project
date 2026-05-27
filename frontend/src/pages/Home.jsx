@@ -13,7 +13,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-left">
-          <span className="hero-badge">✨ NEW COLLECTION 2026</span>
+          <span className="hero-badge">NEW COLLECTION</span>
 
           <h1>
             Elegance <br />
@@ -21,21 +21,21 @@ const Home = () => {
           </h1>
 
           <p>
-            Discover stunning dresses, chic blouses,
-            tailored skirts, and timeless outerwear
-            crafted for the modern woman.
+            Discover curated collections of timeless essentials,
+            delicate dresses, and modern silhouettes for
+            the contemporary woman.
           </p>
 
           <div className="hero-buttons">
             <Link to="/shop" className="shop-btn">Shop Collection</Link>
-            <Link to="/shop" className="explore-btn">Explore New Arrivals</Link>
+            <Link to="/shop" className="explore-btn">Explore Trends</Link>
           </div>
         </div>
 
         <div className="hero-right">
           <img
-            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200"
-            alt="Women's Fashion"
+            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800"
+            alt="Fashion Model"
           />
         </div>
       </section>
@@ -51,21 +51,21 @@ const Home = () => {
             </div>
           </Link>
           <Link to="/shop" className="category-tile">
-            <img src="https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=500" alt="Tops & Blouses" />
+            <img src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=500" alt="Tops" />
             <div className="category-content">
-              <h3>Tops & Blouses</h3>
+              <h3>Tops</h3>
             </div>
           </Link>
           <Link to="/shop" className="category-tile">
-            <img src="https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=500" alt="Skirts" />
+            <img src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500" alt="Skirts" />
             <div className="category-content">
               <h3>Skirts</h3>
             </div>
           </Link>
           <Link to="/shop" className="category-tile">
-            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500" alt="Outerwear" />
+            <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500" alt="Accessories" />
             <div className="category-content">
-              <h3>Outerwear</h3>
+              <h3>Accessories</h3>
             </div>
           </Link>
         </div>

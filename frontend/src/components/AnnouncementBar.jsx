@@ -5,7 +5,7 @@ const AnnouncementBar = () => {
   return (
     <div className="announcement-bar">
       <div className="container">
-        <p>Free Shipping over ₹1,999</p>
+        <h2 style={{ color: 'white' }}>Free Shipping over ₹1,999</h2>
       </div>
     </div>
   );

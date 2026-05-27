@@ -4,16 +4,14 @@
 
 /* --- Widget Block --- */
 .ltn__menu-widget {
-  border-bottom: 1px solid var(--border-color-1);
-  padding: 25px 0;
-}
-
-.ltn__menu-widget:first-child {
-  padding-top: 0;
+  border: 1px solid var(--border-color-1);
+  padding: 20px;
+  margin-bottom: 30px;
+  background-color: #fff;
 }
 
 .ltn__menu-widget:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
 /* --- Widget Header (Clickable) --- */
@@ -26,22 +24,23 @@
 }
 
 .ltn__widget-title {
+  display: flex;
+  align-items: center;
   font-family: var(--ltn__heading-font);
   font-size: 18px;
   font-weight: 700;
   color: var(--ltn__heading-color);
   text-transform: capitalize;
   margin: 0;
-  position: relative;
 }
 
-.ltn__widget-title::after {
+.ltn__widget-title::before {
   content: '';
-  display: block;
-  width: 30px;
+  display: inline-block;
+  width: 15px;
   height: 2px;
   background-color: var(--ltn__secondary-color);
-  margin-top: 10px;
+  margin-right: 12px;
 }
 
 .toggle-icon {
@@ -210,7 +209,8 @@
   margin-bottom: 0;
 }
 
-.color-checkbox {
+/* --- Filter Checkboxes (Categories & Colors) --- */
+.filter-checkbox {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -222,20 +222,29 @@
   cursor: pointer;
 }
 
-.color-list li:last-child .color-checkbox {
+.menu-list li:last-child .filter-checkbox {
   border-bottom: none;
 }
 
-.color-checkbox:hover {
+.filter-checkbox:hover {
   color: var(--ltn__secondary-color);
 }
 
-.color-checkbox input[type="checkbox"] {
+.filter-checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
   accent-color: var(--ltn__secondary-color);
   cursor: pointer;
   flex-shrink: 0;
+}
+
+.filter-name {
+  flex: 1;
+}
+
+.filter-count {
+  font-size: 13px;
+  color: #999;
 }
 
 .color-swatch {
@@ -244,4 +253,94 @@
   height: 20px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+/* --- Active Filters Display --- */
+.active-filters-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.active-filters-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.active-filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f7f7f7;
+  padding: 6px 12px;
+  font-family: var(--ltn__heading-font);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ltn__heading-color);
+  border-radius: 3px;
+}
+
+.active-filter-tag button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+}
+
+.active-filter-tag button:hover {
+  color: var(--ltn__secondary-color);
+}
+
+.clear-all-btn {
+  background-color: var(--ltn__secondary-color);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--ltn__heading-font);
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.clear-all-btn:hover {
+  background-color: var(--ltn__primary-color);
+}
+
+/* --- Filter Selection Info (Inside Widget) --- */
+.filter-selection-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.selection-count {
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  color: #888;
+}
+
+.reset-btn {
+  background: none;
+  border: none;
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  color: var(--ltn__secondary-color);
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  text-decoration: underline;
 }

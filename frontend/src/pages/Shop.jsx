@@ -24,7 +24,8 @@ const Shop = () => {
   const searchQuery = searchParams.get('q') || '';
   const isSearchPage = location.pathname === '/search';
 
-  const itemsPerPage = 9;
+  const [gridSize, setGridSize] = useState(3);
+  const itemsPerPage = gridSize * 4;
 
   // Reset to page 1 when filters or search change
   useEffect(() => {
@@ -106,7 +107,7 @@ const Shop = () => {
       <div className="shop-container">
         {/* Left Sidebar (Desktop) */}
         <aside className="shop-sidebar">
-          <FilterSidebar filters={filters} onFilterChange={setFilters} />
+          <FilterSidebar filters={filters} onFilterChange={setFilters} products={products} />
         </aside>
 
         {/* Mobile Filter Drawer */}
@@ -134,7 +135,7 @@ const Shop = () => {
                   </button>
                 </div>
                 <div className="drawer-body">
-                  <FilterSidebar filters={filters} onFilterChange={setFilters} />
+                  <FilterSidebar filters={filters} onFilterChange={setFilters} products={products} />
                 </div>
               </motion.div>
             </>
@@ -149,14 +150,32 @@ const Shop = () => {
               <SlidersHorizontal size={18} />
               <span>Filter</span>
             </button>
+            <div className="grid-size-slider">
+              <span className="grid-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1 1h4v4H1V1zm5 0h4v4H6V1zm5 0h4v4h-4V1zM1 6h4v4H1V6zm5 0h4v4H6V6zm5 0h4v4h-4V6zm-10 5h4v4H1v-4zm5 0h4v4H6v-4zm5 0h4v4h-4v-4z"/>
+                </svg>
+              </span>
+              <input 
+                type="range" 
+                min="2" 
+                max="4" 
+                step="1" 
+                value={gridSize} 
+                onChange={(e) => setGridSize(Number(e.target.value))}
+                className="grid-range"
+              />
+            </div>
+            
             <div className="sort-dropdown">
               <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
-                <option value="default">Default sorting</option>
+                <option value="default">SORT</option>
                 <option value="latest">Sort by latest</option>
                 <option value="price-low">Sort by price: low to high</option>
                 <option value="price-high">Sort by price: high to low</option>
               </select>
             </div>
+            
             <h4 className="product-count">
               Showing {filteredProducts.length === 0 ? 0 : indexOfFirstItem + 1} - {Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} results
             </h4>
@@ -170,7 +189,7 @@ const Shop = () => {
           )}
 
           {/* Product Grid */}
-          <div className="product-grid">
+          <div className={`product-grid grid-cols-${gridSize}`}>
             {currentItems.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}

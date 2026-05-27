@@ -4,7 +4,12 @@ export const mockProducts = [
     name: "Floral Maxi Dress",
     price: 4999,
     originalPrice: null,
-    images: ["https://placehold.co/400x500/eeeeee/999999?text=Floral+Maxi+Dress"],
+    images: [
+      "https://placehold.co/400x500/eeeeee/999999?text=Floral+Maxi+Dress+1",
+      "https://placehold.co/400x500/dddddd/888888?text=Floral+Maxi+Dress+2",
+      "https://placehold.co/400x500/cccccc/777777?text=Floral+Maxi+Dress+3",
+      "https://placehold.co/400x500/bbbbbb/666666?text=Floral+Maxi+Dress+4"
+    ],
     category: "women",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["#FFB6C1", "#FFFFFF"],
@@ -17,7 +22,10 @@ export const mockProducts = [
     name: "Silk Blouse",
     price: 3499,
     originalPrice: null,
-    images: ["https://placehold.co/400x500/eeeeee/999999?text=Silk+Blouse"],
+    images: [
+      "https://placehold.co/400x500/eeeeee/999999?text=Silk+Blouse+1",
+      "https://placehold.co/400x500/dddddd/888888?text=Silk+Blouse+2"
+    ],
     category: "women",
     sizes: ["XS", "S", "M", "L"],
     colors: ["#FFFFFF", "#F5F5DC"],

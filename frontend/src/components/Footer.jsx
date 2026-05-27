@@ -12,7 +12,7 @@ const Footer = () => {
             {/* Column 1: About */}
             <div className="footer-widget">
               <h4 className="footer-title">About Us</h4>
-              <p>We are a premium clothing store dedicated to bringing you the best fashion from around the world. Quality and style in every thread.</p>
+              <p>We are an exclusive women's fashion destination, bringing you curated collections of dresses, tops, skirts, and outerwear. Elegance and style in every thread.</p>
               <div className="social-icons">
                 <ul>
                   <li>

@@ -1,10 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, ChevronDown, Phone, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const { cartCount, cartTotal } = useCart();
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const query = e.target.elements.q.value.trim();
+    if (query) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+      e.target.reset();
+    }
+  };
 
   return (
     <header className="navbar-container">
@@ -29,7 +39,7 @@ const Navbar = () => {
               </div>
 
               <div className="header-search">
-                <form action="/search" method="get">
+                <form onSubmit={handleSearch}>
                   <input type="search" name="q" placeholder="Search our store" />
                   <button type="submit">
                     <Search size={20} />
@@ -95,28 +105,33 @@ const Navbar = () => {
                 <div className="mega-menu">
 
                   <div className="mega-menu-column">
-                    <h4>Women's Wear</h4>
+                    <h4>Dresses</h4>
                     <ul>
-                      <li><Link to="/category/womens-dresses">Dresses</Link></li>
-                      <li><Link to="/category/womens-tops">Tops</Link></li>
-                      <li><Link to="/category/womens-skirts">Skirts</Link></li>
-                      <li><Link to="/category/womens-outerwear">Outerwear</Link></li>
+                      <li><Link to="/shop">Maxi Dresses</Link></li>
+                      <li><Link to="/shop">Wrap Dresses</Link></li>
+                      <li><Link to="/shop">Evening Dresses</Link></li>
+                    </ul>
+                  </div>
+
+                  <div className="mega-menu-column">
+                    <h4>Tops & Blouses</h4>
+                    <ul>
+                      <li><Link to="/shop">Blouses</Link></li>
+                      <li><Link to="/shop">Crop Tops</Link></li>
+                      <li><Link to="/shop">Off-Shoulder Tops</Link></li>
+                    </ul>
+                  </div>
+
+                  <div className="mega-menu-column">
+                    <h4>Bottoms & Outerwear</h4>
+                    <ul>
+                      <li><Link to="/shop">Skirts</Link></li>
+                      <li><Link to="/shop">Trousers & Pants</Link></li>
+                      <li><Link to="/shop">Coats & Blazers</Link></li>
                     </ul>
                   </div>
 
                 </div>
-              </li>
-              <li className="has-dropdown">
-                <Link to="/product/all">PRODUCT <ChevronDown size={14} className="dropdown-icon" /></Link>
-                <ul className="dropdown">
-                  <li><Link to="/collections">All Collections</Link></li>
-                  <li><Link to="/product-media">Product Media</Link></li>
-                  <li><Link to="/product-variants">Product Variants</Link></li>
-                  <li><Link to="/product-countdown">Product Countdown</Link></li>
-                </ul>
-              </li>
-              <li>
-                <Link to="/news">NEWS</Link>
               </li>
               <li>
                 <Link to="/contact">CONTACT</Link>

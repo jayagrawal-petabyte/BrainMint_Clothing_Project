@@ -54,8 +54,8 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
         <ul className="menu-list">
           {['Dress', 'Top', 'Blouse', 'Skirt', 'Trouser', 'Coat', 'Blazer'].map(cat => (
             <li key={cat}>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className={`filter-btn ${filters.categories.includes(cat) ? 'active' : ''}`}
                 onClick={() => toggleArrayFilter('categories', cat)}
                 style={{ fontWeight: filters.categories.includes(cat) ? 'bold' : 'normal' }}
@@ -103,8 +103,8 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
         <ul className="menu-list size-list">
           {['XS', 'S', 'M', 'L', 'XL'].map(size => (
             <li key={size}>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className={`size-pill ${filters.sizes.includes(size) ? 'active' : ''}`}
                 onClick={() => toggleArrayFilter('sizes', size)}
                 style={{
@@ -133,13 +133,13 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
           ].map(color => (
             <li key={color.name}>
               <label className="color-checkbox">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={filters.colors.includes(color.hex)}
                   onChange={() => toggleArrayFilter('colors', color.hex)}
                 />
                 <span className="color-swatch" style={{
-                  backgroundColor: color.hex, 
+                  backgroundColor: color.hex,
                   border: color.name === 'White' || color.name === 'Beige' ? '1px solid #ddd' : 'none'
                 }}></span>
                 {color.name}

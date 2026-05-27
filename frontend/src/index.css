@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  --ltn__primary-color: #565656;
-  --ltn__primary-color-2: #041113;
-  --ltn__secondary-color: #e55472;
-  --ltn__heading-color: #010101;
-  --ltn__paragraph-color: #000000;
-  --ltn__heading-font: 'Montserrat', sans-serif;
-  --ltn__body-font: 'Poppins', sans-serif;
-  --section-bg-1: #F9F9F9;
-  --border-color-1: #f0f0f0;
+  --ltn__primary-color: #1a1a1a;
+  --ltn__primary-color-2: #333333;
+  --ltn__secondary-color: #d4a3b3;
+  --ltn__heading-color: #1a1a1a;
+  --ltn__paragraph-color: #4a4a4a;
+  --ltn__heading-font: 'Playfair Display', serif;
+  --ltn__body-font: 'Inter', sans-serif;
+  --section-bg-1: #f5f0eb;
+  --border-color-1: #eae6df;
   --border-color-7: #d1dae0;
   --border-color-11: #ededed;
-  --white-7: #F7F7F7;
+  --white-7: #faf9f8;
 }
 
 * {
@@ -26,7 +26,7 @@ body {
   font-size: 14px;
   font-weight: 400;
   color: var(--ltn__paragraph-color);
-  background-color: #fff;
+  background-color: var(--white-7);
   line-height: 1.8;
 }
 

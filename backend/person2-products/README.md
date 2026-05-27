@@ -34,6 +34,7 @@ http://localhost:5000/api
 | --- | --- | --- | --- |
 | GET | `/products` | Public | List products with pagination, search, filter, and sort |
 | GET | `/products/:id` | Public | Get one product |
+| GET | `/products/:id/cart-check?quantity=1` | Public | Validate product is active and has enough stock for cart |
 | POST | `/products` | Admin | Create product |
 | PUT | `/products/:id` | Admin | Update product |
 | DELETE | `/products/:id` | Admin | Delete product |
@@ -50,6 +51,81 @@ GET /api/products?brand=nike&inStock=true
 GET /api/products?sort=price
 GET /api/products?sort=-createdAt
 ```
+
+## Cart and Order Integration for Person 3
+
+Person 3 should store only `productId` in cart. For orders, store a product snapshot so order history stays accurate even if the product is edited or deleted later.
+
+Cart/order fields supported by this module:
+
+- `_id`
+- `name`
+- `price`
+- `discountPrice`
+- `images`
+- `inventory.stock`
+- `isActive`
+
+Before adding a product to cart, check:
+
+- `isActive === true`
+- `inventory.stock > 0`
+- requested quantity is less than or equal to `inventory.stock`
+
+Optional cart validation endpoint:
+
+```text
+GET /api/products/:id/cart-check?quantity=2
+```
+
+Successful response:
+
+```json
+{
+  "success": true,
+  "message": "Product is available for cart",
+  "data": {
+    "_id": "PRODUCT_ID",
+    "name": "Classic Cotton T-Shirt",
+    "price": 799,
+    "discountPrice": 599,
+    "images": [],
+    "inventory": {
+      "stock": 50
+    },
+    "isActive": true,
+    "orderSnapshot": {
+      "productId": "PRODUCT_ID",
+      "name": "Classic Cotton T-Shirt",
+      "price": 799,
+      "discountPrice": 599,
+      "image": null
+    }
+  }
+}
+```
+
+If Person 3 calls the shared Product model directly, use these helpers:
+
+```js
+const Product = require('../person2-products/src/models/Product');
+
+const product = await Product.findAvailableForCart(productId, quantity);
+const orderSnapshot = product.toOrderSnapshot();
+const updatedProduct = await Product.decreaseStockForOrder(productId, quantity);
+```
+
+`decreaseStockForOrder` uses an atomic MongoDB update with this condition:
+
+```js
+{
+  _id: productId,
+  isActive: true,
+  'inventory.stock': { $gte: quantity }
+}
+```
+
+So stock will never go below `0`. If it returns `null`, the product is inactive or does not have enough stock.
 
 ## Category APIs
 

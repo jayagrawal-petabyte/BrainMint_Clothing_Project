@@ -1,0 +1,131 @@
+const Order = require('../models/Order');
+const Cart = require('../models/Cart');
+const ApiError = require('../utils/ApiError');
+const asyncHandler = require('../utils/asyncHandler');
+
+// @desc    Create new order
+// @route   POST /api/orders
+// @access  Private
+const createOrder = asyncHandler(async (req, res) => {
+  const { shippingAddress } = req.body;
+
+  if (!shippingAddress) {
+    throw new ApiError(400, 'Shipping address is required');
+  }
+
+  const cart = await Cart.findOne({ user: req.user._id }).populate(
+    'items.product'
+  );
+
+  if (!cart || cart.items.length === 0) {
+    throw new ApiError(400, 'Cart is empty, cannot place order');
+  }
+
+  // Check stock availability for all items
+  for (const item of cart.items) {
+    if (!item.product.isActive) {
+      throw new ApiError(400, `Product ${item.product.name} is no longer available`);
+    }
+    if (item.product.inventory.stock < item.quantity) {
+      throw new ApiError(400, `Insufficient stock for ${item.product.name}`);
+    }
+  }
+
+  // Build order items as snapshot
+  const orderItems = cart.items.map((item) => ({
+    product: item.product._id,
+    quantity: item.quantity,
+    price: item.price
+  }));
+
+  const order = await Order.create({
+    user: req.user._id,
+    items: orderItems,
+    shippingAddress,
+    totalPrice: cart.totalPrice,
+    status: 'pending',
+    paymentStatus: 'unpaid'
+  });
+
+  // Clear cart after order creation
+  cart.items = [];
+  cart.totalPrice = 0;
+  await cart.save();
+
+  res.status(201).json({
+    success: true,
+    message: 'Order placed successfully',
+    data: order
+  });
+});
+
+// @desc    Get all orders of logged in user
+// @route   GET /api/orders
+// @access  Private
+const getUserOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id }).sort({
+    createdAt: -1
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Orders fetched successfully',
+    data: orders
+  });
+});
+
+// @desc    Get single order by ID
+// @route   GET /api/orders/:orderId
+// @access  Private
+const getOrderById = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.orderId);
+
+  if (!order) {
+    throw new ApiError(404, 'Order not found');
+  }
+
+  if (order.user.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, 'Not authorized to view this order');
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Order fetched successfully',
+    data: order
+  });
+});
+
+// @desc    Cancel order
+// @route   PUT /api/orders/:orderId/cancel
+// @access  Private
+const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.orderId);
+
+  if (!order) {
+    throw new ApiError(404, 'Order not found');
+  }
+
+  if (order.user.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, 'Not authorized to cancel this order');
+  }
+
+  if (['shipped', 'delivered'].includes(order.status)) {
+    throw new ApiError(400, 'Cannot cancel an order that is already shipped or delivered');
+  }
+
+  order.status = 'cancelled';
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Order cancelled successfully',
+    data: order
+  });
+});
+
+module.exports = {
+  createOrder,
+  getUserOrders,
+  getOrderById,
+  cancelOrder
+};

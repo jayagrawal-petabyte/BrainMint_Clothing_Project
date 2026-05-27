@@ -1,5 +1,10 @@
 .ltn__product-item {
   margin-bottom: 0;
+  transition: transform 0.4s ease;
+}
+
+.ltn__product-item:hover {
+  transform: translateY(-5px);
 }
 
 /* --- Product Image Area --- */
@@ -12,7 +17,7 @@
 .product-img img {
   width: 100%;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.8s ease;
 }
 
 .ltn__product-item:hover .product-img img {
@@ -22,22 +27,23 @@
 /* --- Hover Action Icons --- */
 .product-hover-action {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;
   left: 0;
   width: 100%;
   text-align: center;
   opacity: 0;
-  transition: opacity 0.3s ease, bottom 0.3s ease;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
 }
 
 .ltn__product-item:hover .product-hover-action {
   opacity: 1;
-  bottom: 25px;
+  transform: translateY(0);
 }
 
 .product-hover-action ul {
   display: inline-flex;
-  gap: 5px;
+  gap: 8px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -47,50 +53,43 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background-color: #fff;
   color: var(--ltn__heading-color);
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
 }
 
-.product-hover-action li button svg {
-  transition: fill 0.3s ease, stroke 0.3s ease;
-}
-
 .product-hover-action li button:hover {
-  background-color: var(--ltn__secondary-color);
+  background-color: var(--ltn__primary-color);
   color: #fff;
-}
-
-.product-hover-action li button.wishlisted {
-  color: var(--ltn__secondary-color);
-}
-
-.product-hover-action li button.wishlisted svg {
-  fill: currentColor;
+  transform: scale(1.05);
 }
 
 /* --- Product Info --- */
 .product-info {
   padding: 20px 0 5px;
-  text-align: left;
+  text-align: center; /* Center aligning product info for a more editorial look */
 }
 
 .product-title {
   font-family: var(--ltn__heading-font);
   font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-weight: 500;
+  margin-bottom: 8px;
   line-height: 1.4;
+  letter-spacing: 0.5px;
 }
 
 .product-title a {
   color: var(--ltn__heading-color);
   text-decoration: none;
+  transition: color 0.3s;
 }
 
 .product-title a:hover {
@@ -99,7 +98,7 @@
 
 .product-price {
   font-family: var(--ltn__body-font);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--ltn__secondary-color);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ltn__paragraph-color);
 }

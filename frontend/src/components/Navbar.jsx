@@ -93,15 +93,7 @@ const Navbar = () => {
               <li className="has-mega-menu">
                 <Link to="/shop">SHOP <ChevronDown size={14} className="dropdown-icon" /></Link>
                 <div className="mega-menu">
-                  <div className="mega-menu-column">
-                    <h4>Men's Wear</h4>
-                    <ul>
-                      <li><Link to="/category/mens-tshirts">T-Shirts</Link></li>
-                      <li><Link to="/category/mens-shirts">Shirts</Link></li>
-                      <li><Link to="/category/mens-jeans">Jeans</Link></li>
-                      <li><Link to="/category/mens-jackets">Jackets</Link></li>
-                    </ul>
-                  </div>
+
                   <div className="mega-menu-column">
                     <h4>Women's Wear</h4>
                     <ul>
@@ -111,15 +103,7 @@ const Navbar = () => {
                       <li><Link to="/category/womens-outerwear">Outerwear</Link></li>
                     </ul>
                   </div>
-                  <div className="mega-menu-column">
-                    <h4>Accessories</h4>
-                    <ul>
-                      <li><Link to="/category/bags">Bags</Link></li>
-                      <li><Link to="/category/belts">Belts</Link></li>
-                      <li><Link to="/category/hats">Hats</Link></li>
-                      <li><Link to="/category/sunglasses">Sunglasses</Link></li>
-                    </ul>
-                  </div>
+
                 </div>
               </li>
               <li className="has-dropdown">

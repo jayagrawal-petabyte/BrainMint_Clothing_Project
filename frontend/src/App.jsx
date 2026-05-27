@@ -9,6 +9,7 @@ import About from './pages/About';
 import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
+        <ScrollToTop />
       </div>
     </Router>
   );

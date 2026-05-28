@@ -173,7 +173,7 @@ const ProductDetail = () => {
                     onClick={() => setSelectedColor(color)}
                     style={{ 
                       backgroundColor: color,
-                      border: (color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#f5f5dc') ? '1px solid #ddd' : 'none'
+                      border: (color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#f5f5dc') ? '1px solid var(--border-color-1)' : 'none'
                     }}
                   />
                 ))}

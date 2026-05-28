@@ -79,7 +79,7 @@ const About = () => {
   return (
     <div
       style={{
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "var(--section-bg-1)",
         minHeight: "100vh",
         padding: "50px 20px 80px",
       }}
@@ -89,7 +89,7 @@ const About = () => {
         style={{
           maxWidth: "1250px",
           margin: "0 auto",
-          background: "#fff",
+          background: "var(--white-7)",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
           overflow: "hidden",
@@ -108,20 +108,20 @@ const About = () => {
               transition: "all 0.3s ease",
               borderRight:
                 index !== features.length - 1
-                  ? "1px solid #ececec"
+                  ? "1px solid var(--border-color-1)"
                   : "none",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#fafafa";
+              e.currentTarget.style.background = "var(--section-bg-1)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#fff";
+              e.currentTarget.style.background = "var(--white-7)";
             }}
           >
             <div
               style={{
                 fontSize: "42px",
-                color: "#2a2a2a",
+                color: "var(--ltn__heading-color)",
                 minWidth: "55px",
               }}
             >
@@ -134,7 +134,7 @@ const About = () => {
                   margin: 0,
                   fontSize: "18px",
                   fontWeight: "700",
-                  color: "#111",
+                  color: "var(--ltn__heading-color)",
                   marginBottom: "6px",
                 }}
               >
@@ -145,7 +145,7 @@ const About = () => {
                 style={{
                   margin: 0,
                   fontSize: "15px",
-                  color: "#666",
+                  color: "var(--ltn__paragraph-color)",
                   lineHeight: "1.6",
                 }}
               >
@@ -290,11 +290,11 @@ const About = () => {
             }}
             onMouseEnter={(e) => {
               e.target.style.background = "transparent";
-              e.target.style.color = "#111";
+              e.target.style.color = "var(--ltn__heading-color)";
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = "#111";
-              e.target.style.color = "#fff";
+              e.target.style.background = "var(--ltn__primary-color)";
+              e.target.style.color = "var(--white-7)";
             }}
           >
             Explore Collection
@@ -310,7 +310,7 @@ const About = () => {
           <div
             style={{
               overflow: "hidden",
-              background: "#f3f3f3",
+              background: "var(--border-color-11)",
             }}
           >
             <img
@@ -331,7 +331,7 @@ const About = () => {
               position: "absolute",
               bottom: "-35px",
               left: "-35px",
-              background: "#fff",
+              background: "var(--white-7)",
               padding: "28px 32px",
               boxShadow:
                 "0 20px 40px rgba(0,0,0,0.08)",
@@ -390,7 +390,7 @@ const About = () => {
           style={{
             fontSize: "44px",
             marginBottom: "60px",
-            color: "#111",
+            color: "var(--ltn__heading-color)",
           }}
         >
           What Our Customers Say
@@ -421,7 +421,7 @@ const About = () => {
             <SwiperSlide key={index}>
               <div
                 style={{
-                  background: "#fff",
+                  background: "var(--white-7)",
                   padding: "40px 35px",
                   minHeight: "320px",
                   textAlign: "left",
@@ -441,7 +441,7 @@ const About = () => {
                 <p
                   style={{
                     fontSize: "16px",
-                    color: "#555",
+                    color: "var(--ltn__paragraph-color)",
                     lineHeight: "1.9",
                     marginBottom: "30px",
                   }}
@@ -478,7 +478,7 @@ const About = () => {
 
                 <p
                   style={{
-                    color: "#777",
+                    color: "var(--ltn__paragraph-color)",
                     fontSize: "14px",
                   }}
                 >

@@ -1,6 +1,6 @@
 .announcement-bar {
   background-color: var(--ltn__secondary-color);
-  color: #fff;
+  color: var(--white-7);
   text-align: center;
   padding: 8px 0;
   font-family: var(--ltn__body-font);

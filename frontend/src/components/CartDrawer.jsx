@@ -35,19 +35,20 @@ const CartDrawer = ({ isOpen, onClose }) => {
           right: isOpen ? 0 : "-450px",
           width: "420px",
           height: "100vh",
-          background: "#fff",
+          background: "var(--white-7)",
           boxShadow: "-10px 0 40px rgba(0,0,0,0.1)",
           transition: "all 0.35s ease",
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
+          color: "var(--ltn__heading-color)"
         }}
       >
         {/* Header */}
         <div
           style={{
             padding: "28px",
-            borderBottom: "1px solid #eee",
+            borderBottom: "1px solid var(--border-color-1)",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -67,7 +68,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <p
               style={{
                 fontSize: "14px",
-                color: "#777",
+                color: "var(--ltn__paragraph-color)",
               }}
             >
               {cartItems.length} item(s)
@@ -80,6 +81,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
               border: "none",
               background: "transparent",
               cursor: "pointer",
+              color: "var(--ltn__heading-color)",
             }}
           >
             <X size={28} />
@@ -111,7 +113,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
             <p
               style={{
-                color: "#777",
+                color: "var(--ltn__paragraph-color)",
                 lineHeight: "1.8",
               }}
             >
@@ -137,7 +139,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     gap: "18px",
                     marginBottom: "28px",
                     borderBottom:
-                      "1px solid #f2f2f2",
+                      "1px solid var(--border-color-1)",
                     paddingBottom: "22px",
                   }}
                 >
@@ -231,7 +233,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             {/* Footer */}
             <div
               style={{
-                borderTop: "1px solid #eee",
+                borderTop: "1px solid var(--border-color-1)",
                 padding: "28px",
               }}
             >
@@ -274,13 +276,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   e.target.style.background =
                     "transparent";
                   e.target.style.color =
-                    "#111";
+                    "var(--ltn__heading-color)";
                 }}
                 onMouseLeave={(e) => {
                   e.target.style.background =
-                    "#111";
+                    "var(--ltn__primary-color)";
                   e.target.style.color =
-                    "#fff";
+                    "var(--white-7)";
                 }}
               >
                 Proceed to Checkout
@@ -294,8 +296,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
 };
 
 const qtyBtn = {
-  border: "1px solid #ddd",
-  background: "#fff",
+  border: "1px solid var(--border-color-1)",
+  background: "var(--section-bg-1)",
+  color: "var(--ltn__heading-color)",
   width: "32px",
   height: "32px",
   cursor: "pointer",

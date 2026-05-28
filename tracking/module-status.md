@@ -20,3 +20,12 @@
 - Cart, Order, Payment, Product, and Wishlist models added
 - Cart, Checkout, Order, Payment, and Wishlist routes added
 - Render deployment configuration added
+
+
+## Recent Frontend Updates
+- CartDrawer component added
+- Navbar component updated
+- About page added
+- Contact page added
+- Wishlist page added
+- Product image asset added

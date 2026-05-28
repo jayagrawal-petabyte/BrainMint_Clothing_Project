@@ -15,10 +15,24 @@
   --white-7: #ffffff;
 }
 
+[data-theme="dark"] {
+  --ltn__primary-color: #F5F5F5;
+  --ltn__primary-color-2: #AAAAAA;
+  --ltn__secondary-color: #E89CA9;
+  --ltn__heading-color: #F5F5F5;
+  --ltn__paragraph-color: #AAAAAA;
+  --section-bg-1: #1A1A1A;
+  --border-color-1: #333333;
+  --border-color-7: #444444;
+  --border-color-11: #222222;
+  --white-7: #111111;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, fill 0.3s ease;
 }
 
 body {

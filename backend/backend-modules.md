@@ -66,3 +66,10 @@
 
 ## Deployment
 - render.yaml
+
+## Recent Backend File Updates
+- categoryController.js
+- productController.js
+- authMiddleware.js
+- errorMiddleware.js
+- app.js

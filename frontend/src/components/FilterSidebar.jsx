@@ -179,10 +179,6 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
                 type="button"
                 className={`size-pill ${filters.sizes.includes(size) ? 'active' : ''}`}
                 onClick={() => toggleArrayFilter('sizes', size)}
-                style={{
-                  backgroundColor: filters.sizes.includes(size) ? '#111' : '#f7f7f7',
-                  color: filters.sizes.includes(size) ? '#fff' : '#111'
-                }}
               >
                 {size}
               </button>
@@ -210,7 +206,7 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
                   />
                   <span className="color-swatch" style={{
                     backgroundColor: color.hex,
-                    border: color.name === 'White' || color.name === 'Beige' ? '1px solid #ddd' : 'none'
+                    border: color.name === 'White' || color.name === 'Beige' ? '1px solid var(--border-color-1)' : 'none'
                   }}></span>
                   <span className="filter-name">{color.name}</span>
                   <span className="filter-count">({count})</span>

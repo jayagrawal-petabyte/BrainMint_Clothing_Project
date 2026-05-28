@@ -156,7 +156,7 @@ const About = () => {
         ))}
       </div>
 
-      {/* Luxury About Section */}
+      {/* About Section */}
       <section
         style={{
           maxWidth: "1250px",

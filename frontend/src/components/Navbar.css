@@ -13,7 +13,7 @@
 
 .navbar-middle {
   padding: 30px 0;
-  background-color: #F9F9F9;
+  background-color: var(--section-bg-1);
 }
 
 .navbar-middle-content {
@@ -88,8 +88,8 @@
 .header-search input {
   width: 100%;
   height: 50px;
-  border: 1px solid var(--border-color-1, #f0f0f0);
-  background-color: #fff;
+  border: 1px solid var(--border-color-1);
+  background-color: var(--white-7);
   border-radius: 30px;
   padding: 0 50px 0 25px;
   font-size: 14px;
@@ -189,8 +189,8 @@
 }
 
 .navbar-bottom {
-  background-color: #fff;
-  border-top: 1px solid var(--border-color-1, #f0f0f0);
+  background-color: var(--white-7);
+  border-top: 1px solid var(--border-color-1);
 }
 
 .main-menu {
@@ -249,14 +249,26 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #fff;
+  background-color: var(--white-7);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
   opacity: 0;
   visibility: hidden;
   transform: translateY(15px);
-  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s ease;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s ease, background-color 0.3s ease;
   z-index: 99;
   border-top: 2px solid var(--ltn__secondary-color, #e55472);
+}
+
+[data-theme="dark"] .dropdown,
+[data-theme="dark"] .mega-menu {
+  background-color: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle-btn:hover {
+  color: var(--ltn__secondary-color) !important;
 }
 
 .main-menu > ul > li:hover > .dropdown,

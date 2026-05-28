@@ -8,11 +8,11 @@
 - Filter Sidebar
 - React/Vite setup
 - Cart Context setup
+- Wishlist Page
 
 ## In Progress
 - Cart Page
 - Checkout Page
-- Wishlist Page
 
 ## Pending
 - Backend API Integration

@@ -5,7 +5,7 @@
 | Navbar & Footer | Frontend | Completed |
 | Product Management Backend | Backend | In Progress |
 | Category Management Backend | Backend | In Progress |
-| Authentication module | Backend | Pending |
+| Authentication module | Backend | In Progress |
 | Cart & Orders | Backend | Pending |
 | Payment Integration | Backend | Pending |
 | Frontend - Backend Integration | Full Team | Pending |
@@ -15,3 +15,10 @@
 - Product model updated
 - Product routes updated
 - Cart and order integration helpers added
+
+## Authentication Backend Updates
+- Authentication controller added
+- User and Roles models added
+- Authentication routes added
+- Admin and authentication middleware added
+- JWT token generation utility added

@@ -55,7 +55,7 @@
   align-items: center;
   width: 44px;
   height: 44px;
-  background-color: #fff;
+  background-color: var(--white-7);
   color: var(--ltn__heading-color);
   border: none;
   border-radius: 50%;
@@ -63,6 +63,10 @@
   font-size: 14px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .product-hover-action li button {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .product-hover-action li button:hover {

@@ -1,12 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, ChevronDown, Phone, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useState } from "react";
+import CartDrawer from "./CartDrawer";
 import './Navbar.css';
 
 const Navbar = () => {
   const { cartCount, cartTotal } = useCart();
   const navigate = useNavigate();
-
+  const [isCartOpen, setIsCartOpen] =
+    useState(false);
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.elements.q.value.trim();
@@ -67,8 +70,16 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="mini-cart">
-                  <Link to="/cart" className="mini-cart-btn">
-                    <div className="mini-cart-icon">
+                  <button
+                        className="mini-cart-btn"
+                        onClick={() => setIsCartOpen(true)}
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                           cursor: "pointer",
+                        }}
+                      >
+                                          <div className="mini-cart-icon">
                       <ShoppingCart size={24} />
                       <sup><span className="cart-badge">{cartCount}</span></sup>
                     </div>
@@ -76,7 +87,7 @@ const Navbar = () => {
                       <h6>Your Cart</h6>
                       <span className="cart-total">₹{cartTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -140,6 +151,10 @@ const Navbar = () => {
           </nav>
         </div>
       </div>
+      <CartDrawer
+  isOpen={isCartOpen}
+  onClose={() => setIsCartOpen(false)}
+/>
     </header>
   );
 };

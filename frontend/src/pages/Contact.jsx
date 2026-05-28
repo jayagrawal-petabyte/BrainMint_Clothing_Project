@@ -247,7 +247,7 @@ const Contact = () => {
             }}
           />
 
-          <button
+          {/* <button
             type="submit"
             style={{
               marginTop: "28px",
@@ -264,7 +264,33 @@ const Contact = () => {
             }}
           >
             Send Message
-          </button>
+          </button> */}
+          <button
+  type="submit"
+  style={{
+    marginTop: "28px",
+    background: "var(--ltn__primary-color)",
+    color: "var(--white-7)",
+    border: "1px solid var(--ltn__primary-color)",
+    padding: "16px 38px",
+    fontSize: "14px",
+    fontWeight: "500",
+    letterSpacing: "1px",
+    cursor: "pointer",
+    transition: "all 0.4s ease",
+    display: "inline-block",
+  }}
+  onMouseEnter={(e) => {
+    e.target.style.background = "transparent";
+    e.target.style.color = "#111";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.background = "#111";
+    e.target.style.color = "#fff";
+  }}
+>
+  Send Message
+</button>
         </form>
       </section>
     </div>

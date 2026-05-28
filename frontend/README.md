@@ -69,7 +69,7 @@ frontend/
     ├── main.jsx            # React entry point
     ├── App.jsx             # Router setup (Home, Shop)
     ├── App.css             # App-level styles (intentionally empty)
-    ├── index.css           # Global reset + UrbanWear design tokens
+    ├── index.css           # Global reset + Brand design tokens
     ├── data/
     │   └── products.js     # Mock product data (shared across team)
     ├── pages/

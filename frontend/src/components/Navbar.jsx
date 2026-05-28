@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, ShoppingCart, ChevronDown, Phone, Heart, Sun, Moon } from 'lucide-react';
+import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useState } from "react";
 import CartDrawer from "./CartDrawer";
@@ -10,8 +10,8 @@ const Navbar = () => {
   const { cartCount, cartTotal } = useCart();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const [isCartOpen, setIsCartOpen] =
-    useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.elements.q.value.trim();
@@ -59,12 +59,6 @@ const Navbar = () => {
                   <Link to="/account">
                     <User size={24} />
                   </Link>
-                  <ul className="dropdown">
-                    <li><Link to="/login">Login</Link></li>
-                    <li><Link to="/register">Register</Link></li>
-                    <li><Link to="/wishlist">Wishlist</Link></li>
-                    <li><Link to="/account">My Account</Link></li>
-                  </ul>
                 </li>
                 <li className="user-menu">
                   <Link to="/wishlist" title="Wishlist">
@@ -78,15 +72,15 @@ const Navbar = () => {
                 </li>
                 <li className="mini-cart">
                   <button
-                        className="mini-cart-btn"
-                        onClick={() => setIsCartOpen(true)}
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                           cursor: "pointer",
-                        }}
-                      >
-                                          <div className="mini-cart-icon">
+                    className="mini-cart-btn"
+                    onClick={() => setIsCartOpen(true)}
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div className="mini-cart-icon">
                       <ShoppingCart size={24} />
                       <sup><span className="cart-badge">{cartCount}</span></sup>
                     </div>
@@ -109,47 +103,11 @@ const Navbar = () => {
               <li>
                 <Link to="/">HOME</Link>
               </li>
-              <li className="has-dropdown">
-                <Link to="/about">ABOUT US <ChevronDown size={14} className="dropdown-icon" /></Link>
-                <ul className="dropdown">
-                  <li><Link to="/about">About</Link></li>
-                  <li><Link to="/service">Service</Link></li>
-                  <li><Link to="/faq">Faq</Link></li>
-                  <li><Link to="/contact">Contact</Link></li>
-                </ul>
+              <li>
+                <Link to="/about">ABOUT US</Link>
               </li>
-              <li className="has-mega-menu">
-                <Link to="/shop">SHOP <ChevronDown size={14} className="dropdown-icon" /></Link>
-                <div className="mega-menu">
-
-                  <div className="mega-menu-column">
-                    <h4>Dresses</h4>
-                    <ul>
-                      <li><Link to="/shop">Maxi Dresses</Link></li>
-                      <li><Link to="/shop">Wrap Dresses</Link></li>
-                      <li><Link to="/shop">Evening Dresses</Link></li>
-                    </ul>
-                  </div>
-
-                  <div className="mega-menu-column">
-                    <h4>Tops & Blouses</h4>
-                    <ul>
-                      <li><Link to="/shop">Blouses</Link></li>
-                      <li><Link to="/shop">Crop Tops</Link></li>
-                      <li><Link to="/shop">Off-Shoulder Tops</Link></li>
-                    </ul>
-                  </div>
-
-                  <div className="mega-menu-column">
-                    <h4>Bottoms & Outerwear</h4>
-                    <ul>
-                      <li><Link to="/shop">Skirts</Link></li>
-                      <li><Link to="/shop">Trousers & Pants</Link></li>
-                      <li><Link to="/shop">Coats & Blazers</Link></li>
-                    </ul>
-                  </div>
-
-                </div>
+              <li>
+                <Link to="/shop">SHOP</Link>
               </li>
               <li>
                 <Link to="/contact">CONTACT</Link>
@@ -159,11 +117,12 @@ const Navbar = () => {
         </div>
       </div>
       <CartDrawer
-  isOpen={isCartOpen}
-  onClose={() => setIsCartOpen(false)}
-/>
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+      />
     </header>
   );
 };
 
 export default Navbar;
+

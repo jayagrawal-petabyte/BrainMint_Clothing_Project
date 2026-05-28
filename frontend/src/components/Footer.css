@@ -1,6 +1,6 @@
 .footer-area {
-  background-color: #393939;
-  color: #ddd;
+  background-color: var(--section-bg-1);
+  color: var(--ltn__paragraph-color);
   font-family: var(--ltn__body-font);
 }
 
@@ -34,7 +34,7 @@
   font-family: var(--ltn__heading-font);
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ltn__heading-color);
   margin-bottom: 25px;
   text-transform: capitalize;
 }
@@ -60,8 +60,8 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: var(--border-color-1);
+  color: var(--ltn__heading-color);
   border-radius: 50%;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -69,7 +69,7 @@
 
 .social-icons li a:hover {
   background-color: var(--ltn__secondary-color);
-  color: #fff;
+  color: var(--white-7);
 }
 
 /* Footer Links */
@@ -84,7 +84,7 @@
 }
 
 .footer-links li a {
-  color: #ddd;
+  color: var(--ltn__paragraph-color);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.3s ease;
@@ -104,7 +104,8 @@
   width: 100%;
   padding: 15px 50px 15px 20px;
   border: 1px solid var(--border-color-11);
-  background-color: #fff;
+  background-color: var(--white-7);
+  color: var(--ltn__heading-color);
   outline: none;
   font-family: var(--ltn__body-font);
   font-size: 14px;
@@ -117,7 +118,7 @@
   height: 100%;
   width: 50px;
   background-color: var(--ltn__secondary-color);
-  color: #fff;
+  color: var(--white-7);
   border: none;
   cursor: pointer;
   display: flex;
@@ -133,7 +134,7 @@
 /* Footer Bottom */
 .footer-bottom {
   padding: 25px 0;
-  background-color: #2b2b2b;
+  background-color: var(--border-color-11);
 }
 
 .footer-bottom-inner {
@@ -153,11 +154,11 @@
 .copyright-text {
   margin: 0;
   font-size: 14px;
-  color: #bbb;
+  color: var(--ltn__paragraph-color);
 }
 
 .payment-methods span {
   font-size: 14px;
   font-weight: 600;
-  color: #bbb;
+  color: var(--ltn__paragraph-color);
 }

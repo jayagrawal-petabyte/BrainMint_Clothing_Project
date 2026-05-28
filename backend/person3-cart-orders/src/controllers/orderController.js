@@ -13,7 +13,7 @@ const createOrder = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Shipping address is required');
   }
 
-  const cart = await Cart.findOne({ user: req.user._id }).populate(
+  const cart = await Cart.findOne({ user: req.user.id }).populate(
     'items.product'
   );
 
@@ -39,7 +39,7 @@ const createOrder = asyncHandler(async (req, res) => {
   }));
 
   const order = await Order.create({
-    user: req.user._id,
+    user: req.user.id,
     items: orderItems,
     shippingAddress,
     totalPrice: cart.totalPrice,
@@ -63,7 +63,7 @@ const createOrder = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private
 const getUserOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id }).sort({
+  const orders = await Order.find({ user: req.user.id }).sort({
     createdAt: -1
   });
 
@@ -84,7 +84,7 @@ const getOrderById = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Order not found');
   }
 
-  if (order.user.toString() !== req.user._id.toString()) {
+  if (order.user.toString() !== req.user.id.toString()) {
     throw new ApiError(403, 'Not authorized to view this order');
   }
 
@@ -105,7 +105,7 @@ const cancelOrder = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Order not found');
   }
 
-  if (order.user.toString() !== req.user._id.toString()) {
+  if (order.user.toString() !== req.user.id.toString()) {
     throw new ApiError(403, 'Not authorized to cancel this order');
   }
 

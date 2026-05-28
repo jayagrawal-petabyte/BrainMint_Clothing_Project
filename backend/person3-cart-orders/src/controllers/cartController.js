@@ -1,4 +1,5 @@
 const Cart = require('../models/Cart');
+const Product = require('../../person2-products/src/models/Product');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -6,7 +7,7 @@ const asyncHandler = require('../utils/asyncHandler');
 // @route   GET /api/cart
 // @access  Private
 const getCart = asyncHandler(async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user._id }).populate(
+  const cart = await Cart.findOne({ user: req.user.id }).populate(
     'items.product',
     'name price discountPrice images inventory.stock isActive'
   );
@@ -30,19 +31,28 @@ const getCart = asyncHandler(async (req, res) => {
 // @route   POST /api/cart
 // @access  Private
 const addToCart = asyncHandler(async (req, res) => {
-  const { productId, quantity, price } = req.body;
+  const { productId, quantity } = req.body;
 
-  if (!productId || !quantity || !price) {
-    throw new ApiError(400, 'productId, quantity and price are required');
+  if (!productId || !quantity) {
+    throw new ApiError(400, 'productId and quantity are required');
   }
 
-  let cart = await Cart.findOne({ user: req.user._id });
+  // Use Person 2's helper to validate product availability
+  const product = await Product.findAvailableForCart(productId, quantity);
+
+  if (!product) {
+    throw new ApiError(400, 'Product is unavailable or has insufficient stock');
+  }
+
+  const effectivePrice = product.discountPrice || product.price;
+
+  let cart = await Cart.findOne({ user: req.user.id });
 
   if (!cart) {
     cart = await Cart.create({
-      user: req.user._id,
-      items: [{ product: productId, quantity, price }],
-      totalPrice: quantity * price
+      user: req.user.id,
+      items: [{ product: productId, quantity, price: effectivePrice }],
+      totalPrice: quantity * effectivePrice
     });
   } else {
     const existingItem = cart.items.find(
@@ -50,9 +60,15 @@ const addToCart = asyncHandler(async (req, res) => {
     );
 
     if (existingItem) {
-      existingItem.quantity += quantity;
+      // Validate updated quantity against stock
+      const updatedQuantity = existingItem.quantity + quantity;
+      const revalidated = await Product.findAvailableForCart(productId, updatedQuantity);
+      if (!revalidated) {
+        throw new ApiError(400, 'Not enough stock available');
+      }
+      existingItem.quantity = updatedQuantity;
     } else {
-      cart.items.push({ product: productId, quantity, price });
+      cart.items.push({ product: productId, quantity, price: effectivePrice });
     }
 
     cart.totalPrice = cart.items.reduce(
@@ -81,7 +97,13 @@ const updateCartItem = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Valid quantity is required');
   }
 
-  const cart = await Cart.findOne({ user: req.user._id });
+  // Validate stock before updating
+  const product = await Product.findAvailableForCart(productId, quantity);
+  if (!product) {
+    throw new ApiError(400, 'Product is unavailable or has insufficient stock');
+  }
+
+  const cart = await Cart.findOne({ user: req.user.id });
 
   if (!cart) {
     throw new ApiError(404, 'Cart not found');
@@ -116,7 +138,7 @@ const updateCartItem = asyncHandler(async (req, res) => {
 const removeFromCart = asyncHandler(async (req, res) => {
   const { productId } = req.params;
 
-  const cart = await Cart.findOne({ user: req.user._id });
+  const cart = await Cart.findOne({ user: req.user.id });
 
   if (!cart) {
     throw new ApiError(404, 'Cart not found');
@@ -144,7 +166,7 @@ const removeFromCart = asyncHandler(async (req, res) => {
 // @route   DELETE /api/cart
 // @access  Private
 const clearCart = asyncHandler(async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user._id });
+  const cart = await Cart.findOne({ user: req.user.id });
 
   if (!cart) {
     throw new ApiError(404, 'Cart not found');

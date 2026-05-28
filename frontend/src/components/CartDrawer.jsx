@@ -13,7 +13,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Overlay */}
       <div
         onClick={onClose}
         style={{
@@ -27,7 +26,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
         }}
       />
 
-      {/* Drawer */}
       <div
         style={{
           position: "fixed",
@@ -44,7 +42,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
           color: "var(--ltn__heading-color)"
         }}
       >
-        {/* Header */}
         <div
           style={{
             padding: "28px",
@@ -88,7 +85,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Empty Cart */}
         {cartItems.length === 0 ? (
           <div
             style={{
@@ -123,7 +119,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
           </div>
         ) : (
           <>
-            {/* Items */}
             <div
               style={{
                 flex: 1,
@@ -230,7 +225,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
               ))}
             </div>
 
-            {/* Footer */}
             <div
               style={{
                 borderTop: "1px solid var(--border-color-1)",

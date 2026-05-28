@@ -27,17 +27,14 @@ const Shop = () => {
   const [gridSize, setGridSize] = useState(3);
   const itemsPerPage = gridSize * 4;
 
-  // Reset to page 1 when filters or search change
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, sortType, searchQuery]);
 
-  // Close filter drawer on route change
   useEffect(() => {
     setFilterOpen(false);
   }, [location]);
 
-  // Search filtering (applied first)
   let products = mockProducts;
   if (isSearchPage && searchQuery) {
     products = products.filter(product =>
@@ -45,7 +42,6 @@ const Shop = () => {
     );
   }
 
-  // Sidebar filtering
   let filteredProducts = products.filter(product => {
     const matchesCategory = filters.categories.length === 0 || 
       filters.categories.some(cat => product.name.toLowerCase().includes(cat.toLowerCase()));
@@ -62,7 +58,6 @@ const Shop = () => {
     return matchesCategory && matchesSize && matchesColor && matchesMinPrice && matchesMaxPrice;
   });
 
-  // Sorting Logic
   if (sortType === 'price-low') {
     filteredProducts.sort((a, b) => a.price - b.price);
   } else if (sortType === 'price-high') {
@@ -75,7 +70,6 @@ const Shop = () => {
     });
   }
 
-  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
@@ -88,7 +82,6 @@ const Shop = () => {
 
   return (
     <div className="shop-page">
-      {/* Page Title / Breadcrumb Area */}
       <div className="shop-page-header">
         <h1 className="page-title">
           {isSearchPage && searchQuery ? `Search: "${searchQuery}"` : 'Shop'}
@@ -103,14 +96,11 @@ const Shop = () => {
         </div>
       </div>
 
-      {/* Main Shop Layout */}
       <div className="shop-container">
-        {/* Left Sidebar (Desktop) */}
         <aside className="shop-sidebar">
           <FilterSidebar filters={filters} onFilterChange={setFilters} products={products} />
         </aside>
 
-        {/* Mobile Filter Drawer */}
         <AnimatePresence>
           {filterOpen && (
             <>
@@ -142,9 +132,7 @@ const Shop = () => {
           )}
         </AnimatePresence>
 
-        {/* Right Content Area */}
         <main className="shop-main">
-          {/* Toolbar */}
           <div className="shop-toolbar">
             <button className="filter-toggle-btn" onClick={() => setFilterOpen(true)}>
               <SlidersHorizontal size={18} />
@@ -181,21 +169,18 @@ const Shop = () => {
             </h4>
           </div>
 
-          {/* No Results Message */}
           {filteredProducts.length === 0 && (
             <div className="no-results">
               <p>No products found{isSearchPage && searchQuery ? ` for "${searchQuery}"` : ''}. Try adjusting your filters.</p>
             </div>
           )}
 
-          {/* Product Grid */}
           <div className={`product-grid grid-cols-${gridSize}`}>
             {currentItems.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="pagination">
               <button 

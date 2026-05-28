@@ -121,7 +121,6 @@
   transform: scale(1.02);
 }
 
-/* Common Section Title */
 .section-title {
   text-align: center;
   font-family: var(--ltn__heading-font);
@@ -131,7 +130,6 @@
   color: var(--ltn__heading-color);
 }
 
-/* Featured Categories */
 .featured-categories {
   padding: 0 8%;
 }
@@ -181,7 +179,6 @@
   letter-spacing: 1px;
 }
 
-/* New Arrivals */
 .new-arrivals {
   padding: 0 8%;
 }
@@ -221,9 +218,7 @@
   gap: 40px;
 }
 
-/* --- Premium UI Enhancements --- */
 
-/* Animations */
 @keyframes fadeUp {
   0% {
     opacity: 0;
@@ -261,7 +256,6 @@
   animation-delay: 1s;
 }
 
-/* Category Pills */
 .mini-category-pills {
   display: flex;
   flex-wrap: wrap;
@@ -287,7 +281,6 @@
   border-color: var(--ltn__primary-color);
 }
 
-/* Floating Stats */
 .hero-stats {
   margin-top: 40px;
   display: flex;
@@ -304,7 +297,6 @@
   font-weight: 300;
 }
 
-/* Floating Product Card */
 .hero-image-wrapper {
   position: relative;
 }

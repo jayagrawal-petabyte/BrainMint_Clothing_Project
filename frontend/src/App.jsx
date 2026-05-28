@@ -6,11 +6,12 @@ import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
 import About from './pages/About';
-import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import Contact from "./pages/Contact";
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
             <Footer />
             <ScrollToTop />

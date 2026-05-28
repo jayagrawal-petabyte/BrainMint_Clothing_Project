@@ -42,3 +42,27 @@
 - Category Management
 - JWT Authentication
 - Error Handling
+
+## Cart and Orders Module
+- cartController.js
+- checkoutController.js
+- orderController.js
+- paymentController.js
+- wishlistController.js
+
+## Models
+- Cart.js
+- Order.js
+- Payment.js
+- Product.js
+- Wishlist.js
+
+## Routes
+- cartRoutes.js
+- checkoutRoutes.js
+- orderRoutes.js
+- paymentRoutes.js
+- wishlistRoutes.js
+
+## Deployment
+- render.yaml

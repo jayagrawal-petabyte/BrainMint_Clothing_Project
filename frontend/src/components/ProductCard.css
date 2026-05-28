@@ -75,6 +75,14 @@
   transform: scale(1.05);
 }
 
+.product-hover-action li button.incart {
+  color: var(--ltn__primary-color);
+}
+
+.product-hover-action li button.incart:hover {
+  color: var(--white-7);
+}
+
 /* --- Product Info --- */
 .product-info {
   padding: 20px 0 5px;
@@ -106,3 +114,4 @@
   font-weight: 400;
   color: var(--ltn__paragraph-color);
 }
+

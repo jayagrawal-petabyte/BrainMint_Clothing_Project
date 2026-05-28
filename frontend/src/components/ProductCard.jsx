@@ -1,10 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Eye } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
+import { useSplat, SplatParticles } from './SplatEffect';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { toggleWishlist, isWishlisted } = useWishlist();
+  const { cartItems, addToCart, removeFromCart } = useCart();
+  const wishlisted = isWishlisted(product.id);
+  const inCart = cartItems.some(item => item.id === product.id);
+
+  const { trigger: triggerWishSplat, particles: wishParticles } = useSplat();
+  const { trigger: triggerCartSplat, particles: cartParticles } = useSplat();
+
+  const [wishSplat, setWishSplat] = useState(false);
+  const [cartSplat, setCartSplat] = useState(false);
+
+  const triggerSplat = (setter) => {
+    setter(true);
+    setTimeout(() => setter(false), 450);
+  };
 
   return (
     <div className="ltn__product-item">
@@ -20,23 +37,42 @@ const ProductCard = ({ product }) => {
                 <Eye size={16} />
               </button>
             </li>
-            <li>
-              <button 
-                type="button" 
-                title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-                className={isWishlisted ? 'wishlisted' : ''}
+            <li style={{ position: 'relative' }}>
+              <button
+                type="button"
+                title={wishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                className={`${wishlisted ? 'wishlisted' : ''} ${wishSplat ? 'splat-bounce' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  setIsWishlisted(!isWishlisted);
+                  toggleWishlist(product);
+                  triggerSplat(setWishSplat);
+                  triggerWishSplat(wishlisted ? '#aaaaaa' : '#f24c5c', 12);
                 }}
               >
-                <Heart size={16} />
+                <Heart size={16} fill={wishlisted ? 'currentColor' : 'none'} />
               </button>
+              <SplatParticles particles={wishParticles} />
             </li>
-            <li>
-              <button type="button" title="Add to Cart">
-                <ShoppingCart size={16} />
+            <li style={{ position: 'relative' }}>
+              <button
+                type="button"
+                title={inCart ? "Remove from Cart" : "Add to Cart"}
+                className={`${inCart ? 'incart' : ''} ${cartSplat ? 'splat-bounce' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (inCart) {
+                    removeFromCart(product.id);
+                    triggerCartSplat('#aaaaaa', 14);
+                  } else {
+                    addToCart(product, 1);
+                    triggerCartSplat('var(--ltn__primary-color)', 20);
+                  }
+                  triggerSplat(setCartSplat);
+                }}
+              >
+                <ShoppingCart size={16} fill={inCart ? 'currentColor' : 'none'} />
               </button>
+              <SplatParticles particles={cartParticles} />
             </li>
           </ul>
         </div>

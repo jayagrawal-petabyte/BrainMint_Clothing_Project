@@ -144,7 +144,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   }}
                 >
                   <img
-                    src={item.image}
+                    src={item.images ? item.images[0] : item.image}
                     alt={item.name}
                     style={{
                       width: "90px",

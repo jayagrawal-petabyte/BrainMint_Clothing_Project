@@ -7,7 +7,7 @@
   border: 1px solid var(--border-color-1);
   padding: 20px;
   margin-bottom: 30px;
-  background-color: #fff;
+  background-color: var(--white-7);
 }
 
 .ltn__menu-widget:last-child {
@@ -92,7 +92,7 @@
 
 .menu-list .count {
   font-size: 13px;
-  color: #999;
+  color: var(--ltn__paragraph-color);
 }
 
 /* --- Price Filter --- */
@@ -161,7 +161,7 @@
   letter-spacing: 1px;
   padding: 10px 107px;
   background-color: var(--ltn__secondary-color);
-  color: #fff;
+  color: var(--white-7);
   border: none;
   cursor: pointer;
   align-self: flex-start;
@@ -198,10 +198,11 @@
   cursor: pointer;
 }
 
-.size-pill:hover {
+.size-pill:hover,
+.size-pill.active {
   background-color: var(--ltn__secondary-color);
   border-color: var(--ltn__secondary-color);
-  color: #fff;
+  color: var(--white-7);
 }
 
 /* --- Color List (Checkboxes) --- */
@@ -244,7 +245,7 @@
 
 .filter-count {
   font-size: 13px;
-  color: #999;
+  color: var(--ltn__paragraph-color);
 }
 
 .color-swatch {
@@ -273,7 +274,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #f7f7f7;
+  background-color: var(--section-bg-1);
   padding: 6px 12px;
   font-family: var(--ltn__heading-font);
   font-size: 14px;
@@ -301,7 +302,7 @@
 
 .clear-all-btn {
   background-color: var(--ltn__secondary-color);
-  color: #fff;
+  color: var(--white-7);
   border: none;
   padding: 8px 16px;
   font-family: var(--ltn__heading-font);
@@ -329,7 +330,7 @@
 .selection-count {
   font-family: var(--ltn__body-font);
   font-size: 14px;
-  color: #888;
+  color: var(--ltn__paragraph-color);
 }
 
 .reset-btn {

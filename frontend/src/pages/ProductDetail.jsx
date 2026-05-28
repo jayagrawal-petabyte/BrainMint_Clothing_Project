@@ -3,6 +3,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, Heart } from 'lucide-react';
 import { mockProducts } from '../data/products';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import ProductCard from '../components/ProductCard';
+import ProductTabs from '../components/ProductTabs';
+import SizeGuideModal from '../components/SizeGuideModal';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -10,14 +15,21 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const product = mockProducts.find(p => p.id === id);
 
+  const { addToCart } = useCart();
+  const { toggleWishlist, isWishlisted } = useWishlist();
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [cartAdded, setCartAdded] = useState(false);
 
   useEffect(() => {
     if (product) {
       setSelectedImage(product.images[0]);
+      setQuantity(1);
+      setCartAdded(false);
       if (product.sizes && product.sizes.length > 0) {
         setSelectedSize(product.sizes[0]);
       }
@@ -44,9 +56,21 @@ const ProductDetail = () => {
     }
   };
 
-  const discount = product.originalPrice 
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+  const handleAddToCart = () => {
+    addToCart({ ...product, selectedSize, selectedColor }, quantity);
+    setCartAdded(true);
+    setTimeout(() => setCartAdded(false), 2000);
+  };
+
+  const discount = product.originalPrice
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  const wishlisted = isWishlisted(product.id);
+
+  const relatedProducts = mockProducts
+    .filter(p => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
 
   return (
     <div className="product-detail-page">
@@ -63,15 +87,15 @@ const ProductDetail = () => {
       </div>
 
       <div className="product-detail-container">
-        
+
         {/* Left: Image Gallery */}
         <div className="product-gallery">
           <div className="main-image-container">
             <AnimatePresence mode="wait">
-              <motion.img 
+              <motion.img
                 key={selectedImage}
-                src={selectedImage} 
-                alt={product.name} 
+                src={selectedImage}
+                alt={product.name}
                 className="main-image"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -85,12 +109,12 @@ const ProductDetail = () => {
               </svg>
             </button>
           </div>
-          
+
           {product.images.length > 1 && (
             <div className="thumbnail-strip">
               {product.images.map((img, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`thumbnail ${selectedImage === img ? 'active' : ''}`}
                   onClick={() => setSelectedImage(img)}
                 >
@@ -104,7 +128,7 @@ const ProductDetail = () => {
         {/* Right: Product Info */}
         <div className="product-detail-info">
           <h2 className="product-detail-title">{product.name}</h2>
-          
+
           <div className="product-price-row">
             <span className="current-price">₹{product.price.toLocaleString('en-IN')}</span>
             {product.originalPrice && (
@@ -144,13 +168,13 @@ const ProductDetail = () => {
 
           <hr className="divider" />
 
-          {/* Selectors */}
+          {/* Size selector + Size Guide link */}
           {product.sizes && (
             <div className="selector-group">
               <span className="selector-label">Size :</span>
               <div className="size-selector">
                 {product.sizes.map(size => (
-                  <button 
+                  <button
                     key={size}
                     className={`size-btn ${selectedSize === size ? 'active' : ''}`}
                     onClick={() => setSelectedSize(size)}
@@ -158,20 +182,24 @@ const ProductDetail = () => {
                     {size}
                   </button>
                 ))}
+                <button className="size-guide-link" onClick={() => setShowSizeGuide(true)}>
+                  Size Guide
+                </button>
               </div>
             </div>
           )}
 
+          {/* Color selector */}
           {product.colors && (
             <div className="selector-group">
               <span className="selector-label">Color :</span>
               <div className="color-selector">
                 {product.colors.map(color => (
-                  <button 
+                  <button
                     key={color}
                     className={`color-btn ${selectedColor === color ? 'active' : ''}`}
                     onClick={() => setSelectedColor(color)}
-                    style={{ 
+                    style={{
                       backgroundColor: color,
                       border: (color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#f5f5dc') ? '1px solid var(--border-color-1)' : 'none'
                     }}
@@ -190,23 +218,32 @@ const ProductDetail = () => {
               <input type="number" value={quantity} readOnly />
               <button onClick={() => handleQuantityChange('inc')}><Plus size={16} /></button>
             </div>
-            
-            <button className="add-to-cart-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '8px'}}>
+
+            <button
+              className={`add-to-cart-btn ${cartAdded ? 'added' : ''}`}
+              onClick={handleAddToCart}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
                 <circle cx="9" cy="21" r="1"></circle>
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
               </svg>
-              Add to cart
+              {cartAdded ? 'Added!' : 'Add to cart'}
             </button>
 
             <button className="buy-now-btn">Buy it now</button>
           </div>
 
           <div className="extra-actions">
-            <button className="action-link"><Heart size={16} /> Add to wishlist</button>
+            <button
+              className={`action-link ${wishlisted ? 'wishlisted' : ''}`}
+              onClick={() => toggleWishlist(product)}
+            >
+              <Heart size={16} fill={wishlisted ? 'currentColor' : 'none'} />
+              {wishlisted ? 'Wishlisted' : 'Add to wishlist'}
+            </button>
             <button className="action-link">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" /></svg>
               Compare
             </button>
             <button className="action-link">
@@ -229,7 +266,7 @@ const ProductDetail = () => {
               Twitter
             </button>
             <button className="share-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.168 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.624 0 12.017 0z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.168 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.624 0 12.017 0z" /></svg>
               Pinterest
             </button>
           </div>
@@ -238,18 +275,37 @@ const ProductDetail = () => {
           <div className="safe-checkout">
             <span className="safe-label">Guaranteed Safe Checkout</span>
             <div className="payment-icons">
-              {/* Using generic placeholders for the icons just for the look */}
-              <div className="pay-icon" style={{border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px'}}>Amazon</div>
-              <div className="pay-icon" style={{border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px'}}>Apple Pay</div>
-              <div className="pay-icon" style={{border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px'}}>Bitcoin</div>
-              <div className="pay-icon" style={{border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px'}}>G Pay</div>
-              <div className="pay-icon" style={{border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px'}}>PayPal</div>
-              <div className="pay-icon" style={{border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px'}}>VISA</div>
+              <div className="pay-icon" style={{ border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px' }}>Amazon</div>
+              <div className="pay-icon" style={{ border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px' }}>Apple Pay</div>
+              <div className="pay-icon" style={{ border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px' }}>Bitcoin</div>
+              <div className="pay-icon" style={{ border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px' }}>G Pay</div>
+              <div className="pay-icon" style={{ border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px' }}>PayPal</div>
+              <div className="pay-icon" style={{ border: '1px solid #ddd', padding: '2px 8px', borderRadius: '4px' }}>VISA</div>
             </div>
           </div>
-
         </div>
       </div>
+
+      {/* Product Info Tabs */}
+      <ProductTabs />
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <div className="related-products-section">
+          <div className="related-products-heading">
+            <h2>Related Products</h2>
+            <span className="related-heading-dash" />
+          </div>
+          <div className="related-products-grid">
+            {relatedProducts.map(p => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Size Guide Modal */}
+      {showSizeGuide && <SizeGuideModal onClose={() => setShowSizeGuide(false)} />}
     </div>
   );
 };

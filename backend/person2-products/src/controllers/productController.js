@@ -46,11 +46,16 @@ const getProducts = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    page,
-    pages: Math.ceil(total / limit),
-    total,
-    count: products.length,
-    data: products
+    message: 'Products fetched successfully',
+    data: {
+      products,
+      pagination: {
+        page,
+        pages: Math.ceil(total / limit),
+        total,
+        count: products.length
+      }
+    }
   });
 });
 
@@ -63,6 +68,7 @@ const getProductById = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
+    message: 'Product fetched successfully',
     data: product
   });
 });
@@ -121,7 +127,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Product deleted successfully'
+    message: 'Product deleted successfully',
+    data: {}
   });
 });
 
@@ -137,8 +144,11 @@ const getBestsellers = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    count: products.length,
-    data: products
+    message: 'Bestseller products fetched successfully',
+    data: {
+      count: products.length,
+      products
+    }
   });
 });
 
@@ -153,8 +163,11 @@ const getNewArrivals = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    count: products.length,
-    data: products
+    message: 'New arrival products fetched successfully',
+    data: {
+      count: products.length,
+      products
+    }
   });
 });
 

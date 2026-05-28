@@ -28,6 +28,27 @@ Update `MONGO_URI` inside `.env` before starting the server.
 http://localhost:5000/api
 ```
 
+## Shared Response Format
+
+Success response:
+
+```json
+{
+  "success": true,
+  "message": "Action completed successfully",
+  "data": {}
+}
+```
+
+Error response:
+
+```json
+{
+  "success": false,
+  "message": "Error message"
+}
+```
+
 ## Product APIs
 
 | Method | Endpoint | Access | Description |
@@ -138,10 +159,20 @@ So stock will never go below `0`. If it returns `null`, the product is inactive 
 
 ## Temporary Admin Testing
 
-Person 1 should replace `src/middleware/authMiddleware.js` with real JWT verification later. Until then, protected admin routes expect these headers:
+Person 1 should replace `src/middleware/authMiddleware.js` with real JWT verification later. The final auth contract is:
+
+```text
+Authorization: Bearer token
+req.user.id
+req.user.role
+role: "admin" | "user"
+```
+
+Until real JWT verification is connected, protected admin routes can be tested with these headers:
 
 ```text
 Authorization: Bearer test-token
+x-user-id: temporary-user-id
 x-user-role: admin
 ```
 

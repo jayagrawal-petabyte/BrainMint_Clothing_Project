@@ -18,7 +18,11 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 app.get('/health', (req, res) => {
-  res.json({ success: true, message: 'Person 2 product backend is running' });
+  res.json({
+    success: true,
+    message: 'Person 2 product backend is running',
+    data: {}
+  });
 });
 
 app.use('/api/products', productRoutes);

@@ -13,30 +13,47 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-left">
-          <span className="hero-badge">NEW COLLECTION</span>
+          <span className="hero-badge hero-text-animate">NEW COLLECTION</span>
 
-          <h1>
+          <h1 className="hero-text-animate fade-up-delay-0">
             Elegance <br />
             Redefined
           </h1>
 
-          <p>
+          <p className="hero-text-animate fade-up-delay-1">
             Discover curated collections of timeless essentials,
             delicate dresses, and modern silhouettes for
             the contemporary woman.
           </p>
 
-          <div className="hero-buttons">
+          <div className="mini-category-pills hero-text-animate fade-up-delay-2">
+            <Link to="/shop?category=dresses" className="mini-pill">Dresses</Link>
+            <Link to="/shop?category=essentials" className="mini-pill">Essentials</Link>
+            <Link to="/shop?category=jackets" className="mini-pill">Jackets</Link>
+            <Link to="/shop?category=accessories" className="mini-pill">Accessories</Link>
+          </div>
+
+          <div className="hero-buttons hero-text-animate fade-up-delay-3">
             <Link to="/shop" className="shop-btn">Shop Collection</Link>
             <Link to="/shop" className="explore-btn">Explore Trends</Link>
+          </div>
+
+          <div className="hero-stats hero-text-animate fade-up-delay-4">
+            <span>10K+ Customers</span>
+            <span className="stat-divider">|</span>
+            <span>4.9★ Reviews</span>
+            <span className="stat-divider">|</span>
+            <span>Worldwide Shipping</span>
           </div>
         </div>
 
         <div className="hero-right">
-          <img
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800"
-            alt="Fashion Model"
-          />
+          <div className="hero-image-wrapper floating-element">
+            <img
+              src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800"
+              alt="Fashion Model"
+            />
+          </div>
         </div>
       </section>
 

@@ -14,6 +14,24 @@
 - POST /register
 - POST /login
 - GET /profile
+- ## Cart APIs
+- POST /cart
+- GET /cart
+
+## Checkout APIs
+- POST /checkout
+
+## Order APIs
+- POST /orders
+- GET /orders
+
+## Payment APIs
+- Payment integration APIs
+
+## Wishlist APIs
+- POST /wishlist
+- GET /wishlist
+
 
 ## Middleware
 - Authentication middleware

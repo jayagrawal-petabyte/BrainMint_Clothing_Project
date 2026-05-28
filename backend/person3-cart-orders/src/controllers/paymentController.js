@@ -26,7 +26,7 @@ const createPaymentOrder = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Order not found');
   }
 
-  if (order.user.toString() !== req.user._id.toString()) {
+  if (order.user.toString() !== req.user.id.toString()) {
     throw new ApiError(403, 'Not authorized to pay for this order');
   }
 
@@ -42,7 +42,7 @@ const createPaymentOrder = asyncHandler(async (req, res) => {
 
   const payment = await Payment.create({
     order: orderId,
-    user: req.user._id,
+    user: req.user.id,
     razorpayOrderId: razorpayOrder.id,
     amount: order.totalPrice,
     currency: 'INR',
@@ -123,7 +123,7 @@ const getPaymentByOrder = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Payment not found for this order');
   }
 
-  if (payment.user.toString() !== req.user._id.toString()) {
+  if (payment.user.toString() !== req.user.id.toString()) {
     throw new ApiError(403, 'Not authorized to view this payment');
   }
 

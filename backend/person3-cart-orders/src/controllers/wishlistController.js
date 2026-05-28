@@ -6,7 +6,7 @@ const asyncHandler = require('../utils/asyncHandler');
 // @route   GET /api/wishlist
 // @access  Private
 const getWishlist = asyncHandler(async (req, res) => {
-  const wishlist = await Wishlist.findOne({ user: req.user._id }).populate(
+  const wishlist = await Wishlist.findOne({ user: req.user.id }).populate(
     'products',
     'name price discountPrice images inventory.stock isActive'
   );
@@ -32,11 +32,11 @@ const getWishlist = asyncHandler(async (req, res) => {
 const addToWishlist = asyncHandler(async (req, res) => {
   const { productId } = req.params;
 
-  let wishlist = await Wishlist.findOne({ user: req.user._id });
+  let wishlist = await Wishlist.findOne({ user: req.user.id });
 
   if (!wishlist) {
     wishlist = await Wishlist.create({
-      user: req.user._id,
+      user: req.user.id,
       products: [productId]
     });
   } else {
@@ -65,7 +65,7 @@ const addToWishlist = asyncHandler(async (req, res) => {
 const removeFromWishlist = asyncHandler(async (req, res) => {
   const { productId } = req.params;
 
-  const wishlist = await Wishlist.findOne({ user: req.user._id });
+  const wishlist = await Wishlist.findOne({ user: req.user.id });
 
   if (!wishlist) {
     throw new ApiError(404, 'Wishlist not found');
@@ -88,7 +88,7 @@ const removeFromWishlist = asyncHandler(async (req, res) => {
 // @route   DELETE /api/wishlist
 // @access  Private
 const clearWishlist = asyncHandler(async (req, res) => {
-  const wishlist = await Wishlist.findOne({ user: req.user._id });
+  const wishlist = await Wishlist.findOne({ user: req.user.id });
 
   if (!wishlist) {
     throw new ApiError(404, 'Wishlist not found');

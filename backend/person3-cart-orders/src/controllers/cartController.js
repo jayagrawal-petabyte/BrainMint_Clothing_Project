@@ -1,5 +1,5 @@
 const Cart = require('../models/Cart');
-const Product = require('../../person2-products/src/models/Product');
+const Product = require('../models/Product');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 

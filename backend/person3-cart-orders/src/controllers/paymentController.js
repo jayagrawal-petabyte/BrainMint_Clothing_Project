@@ -5,7 +5,7 @@ const Order = require('../models/Order');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 
-const razorpay = new Razorpay({
+const getRazorpayInstance = () => new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
@@ -34,8 +34,9 @@ const createPaymentOrder = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Order is already paid');
   }
 
+  const razorpay = getRazorpayInstance();
   const razorpayOrder = await razorpay.orders.create({
-    amount: Math.round(order.totalPrice * 100), // amount in paise
+    amount: Math.round(order.totalPrice * 100),
     currency: 'INR',
     receipt: `receipt_${orderId}`
   });
@@ -72,7 +73,6 @@ const verifyPayment = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'All payment verification fields are required');
   }
 
-  // Verify signature
   const body = razorpayOrderId + '|' + razorpayPaymentId;
   const expectedSignature = crypto
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -83,7 +83,6 @@ const verifyPayment = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Payment verification failed, invalid signature');
   }
 
-  // Update payment record
   const payment = await Payment.findOne({ razorpayOrderId });
 
   if (!payment) {
@@ -95,7 +94,6 @@ const verifyPayment = asyncHandler(async (req, res) => {
   payment.status = 'paid';
   await payment.save();
 
-  // Update order payment status
   const order = await Order.findById(orderId);
   order.paymentStatus = 'paid';
   order.paymentId = razorpayPaymentId;

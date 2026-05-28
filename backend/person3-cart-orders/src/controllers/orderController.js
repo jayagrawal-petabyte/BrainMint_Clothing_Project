@@ -1,5 +1,7 @@
+const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const Product = mongoose.model('Product');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -21,28 +23,42 @@ const createOrder = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Cart is empty, cannot place order');
   }
 
-  // Check stock availability for all items
+  // Build order snapshot using Person 2's decreaseStockForOrder helper
+  const orderItems = [];
+
   for (const item of cart.items) {
-    if (!item.product.isActive) {
-      throw new ApiError(400, `Product ${item.product.name} is no longer available`);
+    const updated = await Product.decreaseStockForOrder(
+      item.product._id,
+      item.quantity
+    );
+
+    if (!updated) {
+      throw new ApiError(
+        400,
+        `Product "${item.product.name}" is unavailable or has insufficient stock`
+      );
     }
-    if (item.product.inventory.stock < item.quantity) {
-      throw new ApiError(400, `Insufficient stock for ${item.product.name}`);
-    }
+
+    orderItems.push({
+      product: item.product._id,
+      name: item.product.name,
+      price: item.product.discountPrice || item.product.price,
+      discountPrice: item.product.discountPrice || null,
+      image: item.product.images[0]?.url || null,
+      quantity: item.quantity
+    });
   }
 
-  // Build order items as snapshot
-  const orderItems = cart.items.map((item) => ({
-    product: item.product._id,
-    quantity: item.quantity,
-    price: item.price
-  }));
+  const totalPrice = orderItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   const order = await Order.create({
     user: req.user.id,
     items: orderItems,
     shippingAddress,
-    totalPrice: cart.totalPrice,
+    totalPrice,
     status: 'pending',
     paymentStatus: 'unpaid'
   });

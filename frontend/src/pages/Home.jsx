@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import PromoBanner from '../components/PromoBanner';
+import TrustBadges from '../components/TrustBadges';
 import { mockProducts } from '../data/products';
 import './Home.css';
 
@@ -88,6 +90,9 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Promo Banner */}
+      <PromoBanner />
+
       {/* New Arrivals Row */}
       <section className="new-arrivals">
         <div className="section-header">
@@ -100,6 +105,9 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* Trust Badges */}
+      <TrustBadges />
     </div>
   );
 };

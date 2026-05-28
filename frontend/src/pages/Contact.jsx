@@ -9,7 +9,7 @@ const Contact = () => {
   return (
     <div
       style={{
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "var(--section-bg-1)",
         minHeight: "100vh",
         padding: "50px 20px 80px",
       }}
@@ -115,10 +115,9 @@ const Contact = () => {
             <div
               key={index}
               style={{
-                background: "#fff",
+                background: "var(--white-7)",
                 padding: "40px",
-                boxShadow:
-                  "0 15px 35px rgba(0,0,0,0.05)",
+                boxShadow: "0 15px 35px rgba(0,0,0,0.05)",
               }}
             >
               <div
@@ -161,10 +160,9 @@ const Contact = () => {
         style={{
           maxWidth: "1250px",
           margin: "100px auto 0",
-          background: "#fff",
+          background: "var(--white-7)",
           padding: "60px",
-          boxShadow:
-            "0 15px 35px rgba(0,0,0,0.05)",
+          boxShadow: "0 15px 35px rgba(0,0,0,0.05)",
         }}
       >
         <div
@@ -282,11 +280,11 @@ const Contact = () => {
   }}
   onMouseEnter={(e) => {
     e.target.style.background = "transparent";
-    e.target.style.color = "#111";
+    e.target.style.color = "var(--ltn__heading-color)";
   }}
   onMouseLeave={(e) => {
-    e.target.style.background = "#111";
-    e.target.style.color = "#fff";
+    e.target.style.background = "var(--ltn__primary-color)";
+    e.target.style.color = "var(--white-7)";
   }}
 >
   Send Message
@@ -300,11 +298,12 @@ const Contact = () => {
 const inputStyle = {
   width: "100%",
   padding: "18px 20px",
-  border: "1px solid #e5e5e5",
+  border: "1px solid var(--border-color-1)",
   outline: "none",
   fontSize: "15px",
   fontFamily: "var(--ltn__body-font)",
-  background: "#fafafa",
+  background: "var(--section-bg-1)",
+  color: "var(--ltn__heading-color)",
 };
 
 export default Contact;

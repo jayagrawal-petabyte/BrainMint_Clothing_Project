@@ -84,7 +84,6 @@ const About = () => {
         padding: "50px 20px 80px",
       }}
     >
-      {/* Features Section */}
       <div
         style={{
           maxWidth: "1250px",
@@ -156,7 +155,6 @@ const About = () => {
         ))}
       </div>
 
-      {/* About Section */}
       <section
         style={{
           maxWidth: "1250px",
@@ -168,7 +166,6 @@ const About = () => {
           alignItems: "center",
         }}
       >
-        {/* Left Content */}
         <div>
           <div
             style={{
@@ -248,7 +245,6 @@ const About = () => {
             confidence through elevated essentials.
           </p>
 
-          {/* Signature Statement */}
           <div
             style={{
               borderLeft:
@@ -301,7 +297,6 @@ const About = () => {
           </Link>
         </div>
 
-        {/* Right Image */}
         <div
           style={{
             position: "relative",
@@ -325,7 +320,6 @@ const About = () => {
             />
           </div>
 
-          {/* Floating Editorial Card */}
           <div
             style={{
               position: "absolute",
@@ -364,7 +358,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Testimonial Section */}
       <div
         style={{
           maxWidth: "1250px",

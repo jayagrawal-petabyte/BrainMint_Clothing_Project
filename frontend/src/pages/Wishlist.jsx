@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { mockProducts } from "../data/products";
 
 const Wishlist = () => {
-  // Temporary mock wishlist items
   const [wishlistItems, setWishlistItems] = useState(
     mockProducts.slice(0, 4)
   );

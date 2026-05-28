@@ -5,12 +5,10 @@ import { mockProducts } from '../data/products';
 import './Home.css';
 
 const Home = () => {
-  // Get 4 new arrivals
   const newArrivals = mockProducts.filter(p => p.isNew).slice(0, 4);
 
   return (
     <div className="home-container">
-      {/* Hero Section */}
       <section className="hero">
         <div className="hero-left">
           <span className="hero-badge hero-text-animate">NEW COLLECTION</span>
@@ -57,7 +55,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Categories Grid */}
       <section className="featured-categories">
         <h2 className="section-title">Shop by Category</h2>
         <div className="categories-grid">
@@ -88,7 +85,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* New Arrivals Row */}
       <section className="new-arrivals">
         <div className="section-header">
           <h2 className="section-title">New Arrivals</h2>

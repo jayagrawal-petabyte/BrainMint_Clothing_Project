@@ -45,7 +45,6 @@
   margin-bottom: 20px;
 }
 
-/* Social Icons */
 .social-icons ul {
   display: flex;
   gap: 10px;
@@ -72,7 +71,6 @@
   color: var(--white-7);
 }
 
-/* Footer Links */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -94,7 +92,6 @@
   color: var(--ltn__secondary-color);
 }
 
-/* Newsletter */
 .newsletter-form form {
   display: flex;
   position: relative;
@@ -131,7 +128,6 @@
   background-color: var(--ltn__heading-color);
 }
 
-/* Footer Bottom */
 .footer-bottom {
   padding: 25px 0;
   background-color: var(--border-color-11);

@@ -5,7 +5,6 @@ import './ScrollToTop.css';
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down
   const toggleVisibility = () => {
     if (window.scrollY > 300) {
       setIsVisible(true);
@@ -14,7 +13,6 @@ const ScrollToTop = () => {
     }
   };
 
-  // Scroll to top smooth
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

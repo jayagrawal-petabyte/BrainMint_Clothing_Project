@@ -2,7 +2,6 @@
   font-family: var(--ltn__body-font);
 }
 
-/* --- Widget Block --- */
 .ltn__menu-widget {
   border: 1px solid var(--border-color-1);
   padding: 20px;
@@ -14,7 +13,6 @@
   margin-bottom: 0;
 }
 
-/* --- Widget Header (Clickable) --- */
 .widget-header {
   display: flex;
   justify-content: space-between;
@@ -50,12 +48,10 @@
   color: var(--ltn__heading-color);
 }
 
-/* --- Widget Content --- */
 .widget-content {
   margin-top: 20px;
 }
 
-/* --- Menu List --- */
 .menu-list {
   padding: 0;
   margin: 0;
@@ -95,7 +91,6 @@
   color: var(--ltn__paragraph-color);
 }
 
-/* --- Price Filter --- */
 .price-filter {
   display: flex;
   flex-direction: column;
@@ -134,7 +129,6 @@
   background: transparent;
 }
 
-/* Hide number input spinners */
 .price-input::-webkit-outer-spin-button,
 .price-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -171,7 +165,6 @@
   background-color: var(--ltn__primary-color);
 }
 
-/* --- Size List (Inline Pills) --- */
 .size-list {
   display: flex;
   flex-wrap: wrap;
@@ -205,12 +198,10 @@
   color: var(--white-7);
 }
 
-/* --- Color List (Checkboxes) --- */
 .color-list li {
   margin-bottom: 0;
 }
 
-/* --- Filter Checkboxes (Categories & Colors) --- */
 .filter-checkbox {
   display: flex;
   align-items: center;
@@ -256,7 +247,6 @@
   flex-shrink: 0;
 }
 
-/* --- Active Filters Display --- */
 .active-filters-container {
   display: flex;
   align-items: center;
@@ -317,7 +307,6 @@
   background-color: var(--ltn__primary-color);
 }
 
-/* --- Filter Selection Info (Inside Widget) --- */
 .filter-selection-info {
   display: flex;
   justify-content: space-between;

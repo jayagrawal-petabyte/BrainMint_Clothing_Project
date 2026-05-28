@@ -86,7 +86,6 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
   return (
     <div className="ltn__sidebar-filter">
 
-      {/* Active Filters Display */}
       {activeFilters.length > 0 && (
         <div className="active-filters-container">
           <div className="active-filters-list">
@@ -105,7 +104,6 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
         </div>
       )}
 
-      {/* Categories */}
       <FilterSection 
         title="Categories" 
         selectedCount={filters.categories.length}
@@ -131,7 +129,6 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
         </ul>
       </FilterSection>
 
-      {/* Price Range */}
       <FilterSection 
         title="Price"
         selectedCount={(filters.minPrice !== '' || filters.maxPrice !== '') ? 1 : 0}
@@ -166,7 +163,6 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
         </div>
       </FilterSection>
 
-      {/* Size */}
       <FilterSection 
         title="Size"
         selectedCount={filters.sizes.length}
@@ -187,7 +183,6 @@ const FilterSidebar = ({ filters, onFilterChange, products = [] }) => {
         </ul>
       </FilterSection>
 
-      {/* Color */}
       <FilterSection 
         title="Color"
         selectedCount={filters.colors.length}

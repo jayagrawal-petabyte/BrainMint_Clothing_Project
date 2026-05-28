@@ -1,12 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, ShoppingCart, ChevronDown, Phone, Heart } from 'lucide-react';
+import { Search, User, ShoppingCart, ChevronDown, Phone, Heart, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useState } from "react";
 import CartDrawer from "./CartDrawer";
+import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const { cartCount, cartTotal } = useCart();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] =
     useState(false);
@@ -68,6 +70,11 @@ const Navbar = () => {
                   <Link to="/wishlist" title="Wishlist">
                     <Heart size={24} />
                   </Link>
+                </li>
+                <li className="user-menu">
+                  <button onClick={toggleTheme} className="theme-toggle-btn" title="Toggle Theme" style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: 'var(--ltn__heading-color)', transition: 'all 0.3s ease' }}>
+                    {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+                  </button>
                 </li>
                 <li className="mini-cart">
                   <button

@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 
 const crypto = require("crypto");
 
+const generateToken =
+require("../utils/generateToken");
+
 exports.register = async (req, res) => {
 
   try {
@@ -85,16 +88,7 @@ exports.login = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign(
-      {
-        id: user._id,
-        role: user.role
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d"
-      }
-    );
+    const token = generateToken(user);
 
     res.status(200).json({
     success: true,

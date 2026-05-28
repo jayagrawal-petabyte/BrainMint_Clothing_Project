@@ -22,3 +22,10 @@
 - Authentication routes added
 - Admin and authentication middleware added
 - JWT token generation utility added
+
+
+## Additional Backend Updates
+- Product controller updated
+- Category controller updated
+- Authentication middleware updated
+- Error middleware updated

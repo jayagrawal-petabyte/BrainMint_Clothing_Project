@@ -71,7 +71,7 @@
 
 .product-hover-action li button:hover {
   background-color: var(--ltn__primary-color);
-  color: #fff;
+  color: var(--white-7);
   transform: scale(1.05);
 }
 

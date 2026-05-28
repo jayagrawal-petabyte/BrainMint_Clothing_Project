@@ -8,6 +8,7 @@
 - Checkout Page
 - Wishlist Page
 - About Page
+- Contact Page
 
 ## Components
 - Navbar
@@ -15,6 +16,7 @@
 - Product Card
 - Filter Sidebar
 - Announcement Bar
+- CartDrawer
 
 ## Context
 - Cart Context

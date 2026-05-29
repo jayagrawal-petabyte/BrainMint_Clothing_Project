@@ -30,6 +30,15 @@
 - Wishlist page added
 - Product image asset added
 
+## Frontend Integration Updates
+- Backend API integrated in FilterSidebar component
+- Backend API integrated in Home page
+- Backend API integrated in Shop page
+- API service layer added using api.js
+- Safe fallback handling implemented
+- About page UI issues fixed
+- ProductDetail page indentation issue fixed
+
 
 ## Additional Backend Maintenance Updates
 - Authentication module package configuration updated

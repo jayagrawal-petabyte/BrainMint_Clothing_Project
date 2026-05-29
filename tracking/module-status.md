@@ -29,3 +29,17 @@
 - Category controller updated
 - Authentication middleware updated
 - Error middleware updated
+
+
+## Major Frontend Updates
+- Product tabs component added
+- Promo banner component added
+- Scroll-to-top component added
+- Size guide modal added
+- Trust badges component added
+- Theme context added
+- Wishlist context added
+- Admin page added
+- Product detail page updated
+- Home page updated
+- Shop page updated

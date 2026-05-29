@@ -8,8 +8,11 @@ const getCategories = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    count: categories.length,
-    data: categories
+    message: 'Categories fetched successfully',
+    data: {
+      count: categories.length,
+      categories
+    }
   });
 });
 
@@ -55,7 +58,8 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Category deleted successfully'
+    message: 'Category deleted successfully',
+    data: {}
   });
 });
 

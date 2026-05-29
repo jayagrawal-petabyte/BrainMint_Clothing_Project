@@ -84,6 +84,7 @@ frontend/
         ├── ProductCard.jsx     # Individual product card
         └── ProductCard.css     # Product card styles
 ```
+
 ## Build for Production
 
 ```bash
@@ -91,3 +92,4 @@ npm run build
 ```
 
 The output will be in the `dist/` folder, ready to be deployed.
+

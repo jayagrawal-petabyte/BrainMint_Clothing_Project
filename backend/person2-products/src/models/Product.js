@@ -54,6 +54,14 @@ const productSchema = new mongoose.Schema(
       type: [imageSchema],
       default: []
     },
+    sizes: {
+      type: [String],
+      default: []
+    },
+    colors: {
+      type: [String],
+      default: []
+    },
     inventory: {
       sku: {
         type: String,
@@ -110,6 +118,55 @@ const productSchema = new mongoose.Schema(
 
 productSchema.index({ name: 'text', description: 'text', brand: 'text' });
 productSchema.index({ category: 1, price: 1 });
+productSchema.index({ sizes: 1 });
+productSchema.index({ colors: 1 });
 productSchema.index({ isActive: 1, isBestseller: 1 });
+productSchema.index({ isActive: 1, 'inventory.stock': 1 });
+
+productSchema.methods.toOrderSnapshot = function toOrderSnapshot() {
+  const primaryImage = this.images && this.images.length > 0 ? this.images[0] : null;
+
+  return {
+    productId: this._id,
+    name: this.name,
+    price: this.price,
+    discountPrice: this.discountPrice,
+    image: primaryImage
+      ? {
+          url: primaryImage.url,
+          alt: primaryImage.alt
+        }
+      : null
+  };
+};
+
+productSchema.statics.findAvailableForCart = function findAvailableForCart(productId, quantity = 1) {
+  return this.findOne({
+    _id: productId,
+    isActive: true,
+    'inventory.stock': { $gte: quantity }
+  }).select('_id name price discountPrice images sizes colors inventory.stock inventory.sku isActive');
+};
+
+productSchema.statics.decreaseStockForOrder = function decreaseStockForOrder(productId, quantity, options = {}) {
+  return this.findOneAndUpdate(
+    {
+      _id: productId,
+      isActive: true,
+      'inventory.stock': { $gte: quantity }
+    },
+    {
+      $inc: {
+        'inventory.stock': -quantity,
+        soldCount: quantity
+      }
+    },
+    {
+      new: true,
+      runValidators: true,
+      ...options
+    }
+  );
+};
 
 module.exports = mongoose.model('Product', productSchema);

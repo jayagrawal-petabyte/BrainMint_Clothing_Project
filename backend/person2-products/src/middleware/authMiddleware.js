@@ -8,9 +8,15 @@ const protect = (req, res, next) => {
   }
 
   // Person 1 should replace this placeholder with real JWT verification.
+  const role = req.headers['x-user-role'] || 'user';
+
+  if (!['admin', 'user'].includes(role)) {
+    throw new ApiError(403, 'Invalid user role');
+  }
+
   req.user = {
-    id: 'temporary-user-id',
-    role: req.headers['x-user-role'] || 'user'
+    id: req.headers['x-user-id'] || 'temporary-user-id',
+    role
   };
 
   next();

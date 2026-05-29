@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   FaTruck,
@@ -76,19 +76,22 @@ const testimonials = [
 ];
 
 const About = () => {
+  const swiperRef = useRef(null);
+
   return (
     <div
       style={{
-        backgroundColor: "var(--section-bg-1)",
+        background: "var(--white-7)",
         minHeight: "100vh",
-        padding: "50px 20px 80px",
+        padding: "50px 20px 120px",
       }}
     >
       <div
         style={{
           maxWidth: "1250px",
           margin: "0 auto",
-          background: "var(--white-7)",
+          background: "#faf8f5",
+          border: "1px solid rgba(0,0,0,0.05)",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
           overflow: "hidden",
@@ -364,6 +367,16 @@ const About = () => {
           margin: "140px auto 0",
           textAlign: "center",
         }}
+        onMouseEnter={() => {
+          if (swiperRef.current && swiperRef.current.swiper) {
+            swiperRef.current.swiper.autoplay.stop();
+          }
+        }}
+        onMouseLeave={() => {
+          if (swiperRef.current && swiperRef.current.swiper) {
+            swiperRef.current.swiper.autoplay.start();
+          }
+        }}
       >
         <p
           style={{
@@ -390,6 +403,7 @@ const About = () => {
         </h2>
 
         <Swiper
+          ref={swiperRef}
           modules={[Autoplay]}
           spaceBetween={30}
           slidesPerView={3}
@@ -414,13 +428,25 @@ const About = () => {
             <SwiperSlide key={index}>
               <div
                 style={{
-                  background: "var(--white-7)",
+                  background: "var(--section-bg-1)",
                   padding: "40px 35px",
                   minHeight: "320px",
                   textAlign: "left",
                   boxShadow:
-                    "0 15px 35px rgba(0,0,0,0.05)",
+                    "0 15px 35px rgba(0,0,0,0.08), 0 8px 16px rgba(242, 76, 92, 0.08)",
                   transition: "0.3s ease",
+                  border: "1px solid rgba(242, 76, 92, 0.15)",
+                  borderRadius: "6px",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow =
+                    "0 20px 45px rgba(0,0,0,0.12), 0 12px 20px rgba(242, 76, 92, 0.15)";
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow =
+                    "0 15px 35px rgba(0,0,0,0.08), 0 8px 16px rgba(242, 76, 92, 0.08)";
+                  e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 <FaQuoteLeft

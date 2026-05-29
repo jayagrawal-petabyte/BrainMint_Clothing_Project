@@ -8,10 +8,10 @@ export const fetchProducts = async (params = "") => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/products${params}`);
     const data = await response.json();
-    return data.data?.products || [];
+    return data.data || { products: [], pagination: { total: 0, pages: 0, page: 1 } };
   } catch (error) {
     console.error("Error fetching products:", error);
-    return [];
+    return { products: [], pagination: { total: 0, pages: 0, page: 1 } };
   }
 };
 

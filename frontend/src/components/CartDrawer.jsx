@@ -126,9 +126,11 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 padding: "20px",
               }}
             >
-              {cartItems.map((item) => (
+              {cartItems.map((item) => {
+                const itemId = item._id || item.id;
+                return (
                 <div
-                  key={item.id}
+                  key={itemId}
                   style={{
                     display: "flex",
                     gap: "18px",
@@ -139,7 +141,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   }}
                 >
                   <img
-                    src={item.images ? item.images[0] : item.image}
+                    src={item.images ? item.images[0]?.url || item.images[0] : item.image}
                     alt={item.name}
                     style={{
                       width: "90px",
@@ -164,7 +166,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         marginBottom: "18px",
                       }}
                     >
-                      ₹{item.price}
+                      ₹{item.discountPrice || item.price}
                     </p>
 
                     <div
@@ -177,7 +179,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                       <button
                         onClick={() =>
                           updateQuantity(
-                            item.id,
+                            itemId,
                             item.quantity - 1
                           )
                         }
@@ -193,7 +195,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                       <button
                         onClick={() =>
                           updateQuantity(
-                            item.id,
+                            itemId,
                             item.quantity + 1
                           )
                         }
@@ -204,7 +206,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
                       <button
                         onClick={() =>
-                          removeFromCart(item.id)
+                          removeFromCart(itemId)
                         }
                         style={{
                           border: "none",
@@ -222,7 +224,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
 
             <div
@@ -249,38 +251,66 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 </h3>
               </div>
 
-              <Link
-                to="/checkout"
-                onClick={onClose}
-                style={{
-                  background:
-                    "var(--ltn__primary-color)",
-                  color: "#fff",
-                  width: "100%",
-                  padding: "16px",
-                  display: "block",
-                  textAlign: "center",
-                  textDecoration: "none",
-                  transition:
-                    "all 0.4s ease",
-                  border:
-                    "1px solid var(--ltn__primary-color)",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background =
-                    "transparent";
-                  e.target.style.color =
-                    "var(--ltn__heading-color)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background =
-                    "var(--ltn__primary-color)";
-                  e.target.style.color =
-                    "var(--white-7)";
-                }}
-              >
-                Proceed to Checkout
-              </Link>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <Link
+                  to="/cart"
+                  onClick={onClose}
+                  style={{
+                    background: "var(--ltn__heading-color)",
+                    color: "var(--white-7)",
+                    width: "100%",
+                    padding: "16px",
+                    display: "block",
+                    textAlign: "center",
+                    textDecoration: "none",
+                    transition: "all 0.4s ease",
+                    border: "1px solid var(--ltn__heading-color)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "transparent";
+                    e.target.style.color = "var(--ltn__heading-color)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "var(--ltn__heading-color)";
+                    e.target.style.color = "var(--white-7)";
+                  }}
+                >
+                  View Cart
+                </Link>
+
+                <Link
+                  to="/checkout"
+                  onClick={onClose}
+                  style={{
+                    background:
+                      "var(--ltn__primary-color)",
+                    color: "#fff",
+                    width: "100%",
+                    padding: "16px",
+                    display: "block",
+                    textAlign: "center",
+                    textDecoration: "none",
+                    transition:
+                      "all 0.4s ease",
+                    border:
+                      "1px solid var(--ltn__primary-color)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background =
+                      "transparent";
+                    e.target.style.color =
+                      "var(--ltn__heading-color)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background =
+                      "var(--ltn__primary-color)";
+                    e.target.style.color =
+                      "var(--white-7)";
+                  }}
+                >
+                  Proceed to Checkout
+                </Link>
+              </div>
             </div>
           </>
         )}

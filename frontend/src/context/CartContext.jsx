@@ -18,12 +18,15 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('urbanwear_cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const getId = (item) => item?._id || item?.id;
+  const getPrice = (item) => item?.discountPrice || item?.price || 0;
+
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+      const existingItem = prevItems.find(item => getId(item) === getId(product));
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          getId(item) === getId(product) ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
       return [...prevItems, { ...product, quantity }];
@@ -31,7 +34,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+    setCartItems(prevItems => prevItems.filter(item => getId(item) !== productId));
   };
 
   const updateQuantity = (productId, quantity) => {
@@ -41,7 +44,7 @@ export const CartProvider = ({ children }) => {
     }
     setCartItems(prevItems =>
       prevItems.map(item =>
-        item.id === productId ? { ...item, quantity } : item
+        getId(item) === productId ? { ...item, quantity } : item
       )
     );
   };
@@ -50,7 +53,7 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
   };
 
-  const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const cartTotal = cartItems.reduce((total, item) => total + getPrice(item) * item.quantity, 0);
   const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
   return (

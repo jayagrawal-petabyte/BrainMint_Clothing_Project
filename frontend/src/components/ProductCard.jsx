@@ -95,16 +95,9 @@ const ProductCard = ({ product }) => {
 
   const handleCart = e => {
     e.preventDefault();
-
-    if (inCart) {
-      removeFromCart(productId);
-      triggerCartSplat('#aaaaaa', 14);
-    } else {
-      addToCart(product, 1);
-      triggerCartSplat('var(--ltn__primary-color)', 20);
-      setShowPopup(true);
-    }
-
+    addToCart(product, 1);
+    triggerCartSplat('var(--ltn__primary-color)', 20);
+    setShowPopup(true);
     triggerSplat(setCartSplat);
   };
 
@@ -190,11 +183,7 @@ const ProductCard = ({ product }) => {
             >
               <button
                 type="button"
-                title={
-                  inCart
-                    ? 'Remove from Cart'
-                    : 'Add to Cart'
-                }
+                title="Add to Cart"
                 className={`
                   ${
                     inCart

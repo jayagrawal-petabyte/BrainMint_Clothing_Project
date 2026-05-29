@@ -25,11 +25,14 @@
 - API service layer implemented
 - Safe fallback handling implemented
 - UI fixes completed for About and ProductDetail pages
+- Cart Page
+- Checkout Page
+- AddToCart popup
+- Returns Page
+- Not Found Page
 
 
 ## In Progress
-- Cart Page
-- Checkout Page
 - Backend API Integration
 
 ## Pending

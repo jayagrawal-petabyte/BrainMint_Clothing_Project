@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { SlidersHorizontal, X, Grid3X3 } from 'lucide-react';
 import FilterSidebar from '../components/FilterSidebar';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts } from '../services/api';
@@ -242,8 +242,12 @@ const Shop = () => {
             </button>
 
             <div className="grid-size-slider">
+              <span className="grid-icon">
+                <Grid3X3 size={20} />
+              </span>
               <input
                 type="range"
+                className="grid-range"
                 min="2"
                 max="4"
                 step="1"

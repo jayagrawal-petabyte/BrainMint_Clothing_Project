@@ -21,6 +21,10 @@
 - Wishlist Context
 - Theme Context
 - React/Vite setup
+- Backend API integration started
+- API service layer implemented
+- Safe fallback handling implemented
+- UI fixes completed for About and ProductDetail pages
 
 
 ## In Progress

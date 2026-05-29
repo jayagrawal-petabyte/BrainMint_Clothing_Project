@@ -54,6 +54,14 @@ const productSchema = new mongoose.Schema(
       type: [imageSchema],
       default: []
     },
+    sizes: {
+      type: [String],
+      default: []
+    },
+    colors: {
+      type: [String],
+      default: []
+    },
     inventory: {
       sku: {
         type: String,
@@ -110,6 +118,8 @@ const productSchema = new mongoose.Schema(
 
 productSchema.index({ name: 'text', description: 'text', brand: 'text' });
 productSchema.index({ category: 1, price: 1 });
+productSchema.index({ sizes: 1 });
+productSchema.index({ colors: 1 });
 productSchema.index({ isActive: 1, isBestseller: 1 });
 productSchema.index({ isActive: 1, 'inventory.stock': 1 });
 
@@ -135,7 +145,7 @@ productSchema.statics.findAvailableForCart = function findAvailableForCart(produ
     _id: productId,
     isActive: true,
     'inventory.stock': { $gte: quantity }
-  }).select('_id name price discountPrice images inventory.stock isActive');
+  }).select('_id name price discountPrice images sizes colors inventory.stock inventory.sku isActive');
 };
 
 productSchema.statics.decreaseStockForOrder = function decreaseStockForOrder(productId, quantity, options = {}) {

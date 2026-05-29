@@ -22,6 +22,14 @@ npm run dev
 
 Update `MONGO_URI` inside `.env` before starting the server.
 
+To add sample products for frontend testing:
+
+```bash
+npm run seed
+```
+
+If `GET /api/products` returns an empty array, the connected MongoDB database does not have products yet. Run the seed command above or create products through the admin API.
+
 ## API Base URL
 
 ```text
@@ -68,9 +76,42 @@ Error response:
 GET /api/products?page=1&limit=10
 GET /api/products?search=shirt
 GET /api/products?category=categoryId&minPrice=500&maxPrice=2000
+GET /api/products?category=Hoodie
+GET /api/products?size=M
+GET /api/products?color=%23000000
 GET /api/products?brand=nike&inStock=true
 GET /api/products?sort=price
 GET /api/products?sort=-createdAt
+```
+
+Frontend product response fields:
+
+```json
+{
+  "_id": "product_id",
+  "name": "Oversized Hoodie",
+  "description": "Product description",
+  "price": 2499,
+  "discountPrice": 1999,
+  "category": "Hoodie",
+  "categoryId": "category_id",
+  "sizes": ["S", "M", "L", "XL"],
+  "colors": ["#000000", "#FFFFFF"],
+  "images": [
+    {
+      "url": "image_url"
+    }
+  ],
+  "rating": {
+    "average": 4.5,
+    "count": 120
+  },
+  "inventory": {
+    "stock": 20,
+    "sku": "HD-101"
+  },
+  "brand": "UrbanWear"
+}
 ```
 
 ## Cart and Order Integration for Person 3
@@ -193,6 +234,8 @@ x-user-role: admin
       "alt": "Classic Cotton T-Shirt"
     }
   ],
+  "sizes": ["S", "M", "L", "XL"],
+  "colors": ["#000000", "#FFFFFF"],
   "inventory": {
     "sku": "TSHIRT-001",
     "stock": 50,

@@ -267,21 +267,21 @@ const Shop = () => {
 
             <h4 className="product-count">
               Showing{' '}
-              {filteredProducts.length === 0
+              {totalProducts === 0
                 ? 0
                 : indexOfFirstItem + 1}
               {' - '}
               {Math.min(
                 indexOfLastItem,
-                filteredProducts.length
+                totalProducts
               )}{' '}
-              of {filteredProducts.length}{' '}
+              of {totalProducts}{' '}
               results
             </h4>
           </div>
 
           {/* Empty State */}
-          {filteredProducts.length === 0 ? (
+          {totalProducts === 0 ? (
             <div className="no-results">
               <h3>No Products Found</h3>
               <p>

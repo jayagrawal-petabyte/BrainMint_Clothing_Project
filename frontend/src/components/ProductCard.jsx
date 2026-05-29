@@ -38,6 +38,9 @@ const ProductCard = ({ product }) => {
     product?.images?.[0]?.url ||
     'https://placehold.co/400x500?text=No+Image';
 
+  const productImage2 =
+    product?.images?.[1]?.url;
+
   const productPrice =
     product?.discountPrice ||
     product?.price ||
@@ -113,7 +116,16 @@ const ProductCard = ({ product }) => {
             src={productImage}
             alt={productName}
             loading="lazy"
+            className={productImage2 ? "primary-img" : ""}
           />
+          {productImage2 && (
+            <img
+              src={productImage2}
+              alt={`${productName} alternate`}
+              loading="lazy"
+              className="hover-img"
+            />
+          )}
         </Link>
 
         {/* Hover Actions */}

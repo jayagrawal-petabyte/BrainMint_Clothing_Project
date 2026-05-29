@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CartDrawer from "./CartDrawer";
 import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
@@ -11,6 +11,25 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 150) {
+        setIsNavbarHidden(true);
+      } else {
+        setIsNavbarHidden(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -22,7 +41,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="navbar-container">
+    <header className={`navbar-container ${isNavbarHidden ? 'navbar-hidden' : ''}`}>
       <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">

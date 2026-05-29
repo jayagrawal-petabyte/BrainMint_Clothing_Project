@@ -16,14 +16,16 @@ const Shop = () => {
   const [sortType, setSortType] = useState('default');
   const [filterOpen, setFilterOpen] = useState(false);
 
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  const initialCategory = searchParams.get('category');
+
   const [filters, setFilters] = useState({
-    categories: [],
+    categories: initialCategory ? [initialCategory] : [],
     minPrice: '',
     maxPrice: ''
   });
-
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
 
   const searchQuery = searchParams.get('q') || '';
   const isSearchPage = location.pathname === '/search';

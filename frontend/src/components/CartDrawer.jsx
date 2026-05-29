@@ -1,6 +1,7 @@
 import React from "react";
 import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 
 const CartDrawer = ({ isOpen, onClose }) => {
@@ -12,36 +13,42 @@ const CartDrawer = ({ isOpen, onClose }) => {
   } = useCart();
 
   return (
-    <>
-      <div
-        onClick={onClose}
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "rgba(0,0,0,0.45)",
-          opacity: isOpen ? 1 : 0,
-          visibility: isOpen ? "visible" : "hidden",
-          transition: "all 0.3s ease",
-          zIndex: 999,
-        }}
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={onClose}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.45)",
+              zIndex: 999,
+            }}
+          />
 
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          right: isOpen ? 0 : "-450px",
-          width: "420px",
-          height: "100vh",
-          background: "var(--white-7)",
-          boxShadow: "-10px 0 40px rgba(0,0,0,0.1)",
-          transition: "all 0.35s ease",
-          zIndex: 1000,
-          display: "flex",
-          flexDirection: "column",
-          color: "var(--ltn__heading-color)"
-        }}
-      >
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "tween", duration: 0.35, ease: "easeOut" }}
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              width: "420px",
+              height: "100vh",
+              background: "var(--white-7)",
+              boxShadow: "-10px 0 40px rgba(0,0,0,0.1)",
+              zIndex: 1000,
+              display: "flex",
+              flexDirection: "column",
+              color: "var(--ltn__heading-color)"
+            }}
+          >
         <div
           style={{
             padding: "28px",
@@ -314,8 +321,10 @@ const CartDrawer = ({ isOpen, onClose }) => {
             </div>
           </>
         )}
-      </div>
-    </>
+        </motion.div>
+      </>
+      )}
+    </AnimatePresence>
   );
 };
 

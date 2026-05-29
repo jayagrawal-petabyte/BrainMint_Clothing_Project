@@ -18,6 +18,8 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
 
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
@@ -119,7 +121,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    addToCart(product, quantity, selectedSize, selectedColor);
     setShowPopup(true);
   };
 
@@ -310,6 +312,56 @@ const ProductDetail = () => {
               </tr>
             </tbody>
           </table>
+
+          <hr className="divider" />
+
+          {/* Selectors */}
+          {(product.sizes?.length > 0 || product.colors?.length > 0) && (
+            <div className="product-selectors" style={{ marginBottom: '20px' }}>
+              {product.sizes?.length > 0 && (
+                <div style={{ marginBottom: '15px' }}>
+                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>Size:</span>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {product.sizes.map(size => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        style={{
+                          minWidth: '40px', height: '40px', padding: '0 10px',
+                          border: `2px solid ${selectedSize === size ? 'var(--ltn__secondary-color)' : 'var(--border-color-11)'}`,
+                          backgroundColor: selectedSize === size ? 'var(--ltn__secondary-color)' : 'transparent',
+                          color: selectedSize === size ? 'var(--white-7)' : 'var(--ltn__heading-color)',
+                          cursor: 'pointer', transition: 'all 0.3s'
+                        }}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {product.colors?.length > 0 && (
+                <div>
+                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>Color:</span>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    {product.colors.map(color => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        style={{
+                          width: '30px', height: '30px', borderRadius: '50%',
+                          backgroundColor: color, cursor: 'pointer',
+                          border: selectedColor === color ? '2px solid var(--ltn__secondary-color)' : '1px solid #ccc',
+                          boxShadow: selectedColor === color ? '0 0 0 2px #fff inset' : 'none'
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <hr className="divider" />
 

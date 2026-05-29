@@ -370,6 +370,57 @@ const FilterSidebar = ({
         </ul>
       </FilterSection>
 
+      {/* Size */}
+      <FilterSection 
+        title="Size"
+        selectedCount={safeFilters.sizes.length}
+        onReset={() => onFilterChange({ ...safeFilters, sizes: [] })}
+      >
+        <ul className="menu-list size-list">
+          {['S', 'M', 'L', 'XL', '30', '32', '34', '36'].map(size => (
+            <li key={size}>
+              <button
+                type="button"
+                className={`size-pill ${safeFilters.sizes.includes(size) ? 'active' : ''}`}
+                onClick={() => toggleArrayFilter('sizes', size)}
+              >
+                {size}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </FilterSection>
+
+      {/* Color */}
+      <FilterSection 
+        title="Color"
+        selectedCount={safeFilters.colors.length}
+        onReset={() => onFilterChange({ ...safeFilters, colors: [] })}
+      >
+        <ul className="menu-list color-list">
+          {colors.map(color => {
+            const count = products.filter(p => p.colors && p.colors.includes(color.hex)).length;
+            return (
+              <li key={color.name}>
+                <label className="filter-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={safeFilters.colors.includes(color.hex)}
+                    onChange={() => toggleArrayFilter('colors', color.hex)}
+                  />
+                  <span className="color-swatch" style={{
+                    backgroundColor: color.hex,
+                    border: color.name === 'White' || color.name === 'Beige' ? '1px solid var(--border-color-1)' : 'none'
+                  }}></span>
+                  <span className="filter-name">{color.name}</span>
+                  <span className="filter-count">({count})</span>
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+      </FilterSection>
+
       {/* Price */}
       <FilterSection
         title="Price"

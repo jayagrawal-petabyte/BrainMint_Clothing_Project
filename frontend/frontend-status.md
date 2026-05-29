@@ -1,20 +1,33 @@
 # Frontend Status
 
 ## Completed
-- Shop Page UI
+- Home Page
+- Shop Page
+- Product Detail Page
+- Wishlist Page
+- About Page
+- Contact Page
+- Admin Page
 - Navbar
 - Footer
 - Product Card
 - Filter Sidebar
+- Product Tabs
+- Promo Banner
+- Scroll To Top
+- Size Guide Modal
+- Trust Badges
+- Cart Context
+- Wishlist Context
+- Theme Context
 - React/Vite setup
-- Cart Context setup
-- Wishlist Page
+
 
 ## In Progress
 - Cart Page
 - Checkout Page
+- Backend API Integration
 
 ## Pending
-- Backend API Integration
 - Authentication UI
 - Payment Integration

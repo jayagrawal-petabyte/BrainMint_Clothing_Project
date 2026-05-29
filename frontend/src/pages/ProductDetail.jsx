@@ -6,6 +6,7 @@ import { fetchProductById } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import ProductTabs from '../components/ProductTabs';
+import AddToCartPopup from '../components/AddToCartPopup';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -16,7 +17,9 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [cartAdded, setCartAdded] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
 
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
@@ -118,13 +121,8 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
-
-    setCartAdded(true);
-
-    setTimeout(() => {
-      setCartAdded(false);
-    }, 2000);
+    addToCart(product, quantity, selectedSize, selectedColor);
+    setShowPopup(true);
   };
 
   return (
@@ -317,6 +315,56 @@ const ProductDetail = () => {
 
           <hr className="divider" />
 
+          {/* Selectors */}
+          {(product.sizes?.length > 0 || product.colors?.length > 0) && (
+            <div className="product-selectors" style={{ marginBottom: '20px' }}>
+              {product.sizes?.length > 0 && (
+                <div style={{ marginBottom: '15px' }}>
+                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>Size:</span>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {product.sizes.map(size => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        style={{
+                          minWidth: '40px', height: '40px', padding: '0 10px',
+                          border: `2px solid ${selectedSize === size ? 'var(--ltn__secondary-color)' : 'var(--border-color-11)'}`,
+                          backgroundColor: selectedSize === size ? 'var(--ltn__secondary-color)' : 'transparent',
+                          color: selectedSize === size ? 'var(--white-7)' : 'var(--ltn__heading-color)',
+                          cursor: 'pointer', transition: 'all 0.3s'
+                        }}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {product.colors?.length > 0 && (
+                <div>
+                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>Color:</span>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    {product.colors.map(color => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        style={{
+                          width: '30px', height: '30px', borderRadius: '50%',
+                          backgroundColor: color, cursor: 'pointer',
+                          border: selectedColor === color ? '2px solid var(--ltn__secondary-color)' : '1px solid #ccc',
+                          boxShadow: selectedColor === color ? '0 0 0 2px #fff inset' : 'none'
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <hr className="divider" />
+
           {/* Cart Actions */}
           <div className="cart-actions-row">
             <div className="quantity-selector">
@@ -349,13 +397,13 @@ const ProductDetail = () => {
 
             <button
               className={`add-to-cart-btn ${
-                cartAdded
+                showPopup
                   ? 'added'
                   : ''
               }`}
               onClick={handleAddToCart}
             >
-              {cartAdded
+              {showPopup
                 ? 'Added!'
                 : 'Add to Cart'}
             </button>
@@ -424,6 +472,14 @@ const ProductDetail = () => {
       </div>
 
       <ProductTabs />
+
+      {showPopup && (
+        <AddToCartPopup
+          product={product}
+          quantity={quantity}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };

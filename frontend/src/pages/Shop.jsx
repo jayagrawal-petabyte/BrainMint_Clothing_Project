@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { SlidersHorizontal, X, Grid3X3 } from 'lucide-react';
 import FilterSidebar from '../components/FilterSidebar';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts } from '../services/api';
@@ -9,6 +9,7 @@ import './Shop.css';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,11 +35,47 @@ const Shop = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProducts();
+        setLoading(true);
+
+        const params = new URLSearchParams();
+
+        if (filters.categories?.length > 0) {
+          params.append('category', filters.categories.join(','));
+        }
+        if (filters.sizes?.length > 0) {
+          params.append('size', filters.sizes.join(','));
+        }
+        if (filters.colors?.length > 0) {
+          params.append('color', filters.colors.join(','));
+        }
+        if (filters.minPrice) {
+          params.append('minPrice', filters.minPrice);
+        }
+        if (filters.maxPrice) {
+          params.append('maxPrice', filters.maxPrice);
+        }
+        if (isSearchPage && searchQuery) {
+          params.append('search', searchQuery);
+        }
+
+        if (sortType === 'price-low') {
+          params.append('sort', 'price');
+        } else if (sortType === 'price-high') {
+          params.append('sort', '-price');
+        } else if (sortType === 'latest') {
+          params.append('sort', '-createdAt');
+        }
+
+        params.append('page', currentPage);
+        params.append('limit', itemsPerPage);
+
+        const queryStr = params.toString() ? `?${params.toString()}` : '';
+        const data = await fetchProducts(queryStr);
 
         console.log('Fetched Products:', data);
 
-        setProducts(Array.isArray(data) ? data : []);
+        setProducts(Array.isArray(data.products) ? data.products : []);
+        setTotalProducts(data.pagination?.total || 0);
       } catch (error) {
         console.error('Failed to fetch products:', error);
       } finally {
@@ -47,7 +84,7 @@ const Shop = () => {
     };
 
     loadProducts();
-  }, []);
+  }, [filters, sortType, searchQuery, currentPage, itemsPerPage, isSearchPage]);
 
   // Reset page on filter/search
   useEffect(() => {
@@ -59,67 +96,10 @@ const Shop = () => {
     setFilterOpen(false);
   }, [location]);
 
-  // Search
-  let searchedProducts = [...products];
-
-  if (isSearchPage && searchQuery) {
-    searchedProducts = searchedProducts.filter(product =>
-      product.name
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase())
-    );
-  }
-
-  // Filter
-  let filteredProducts = searchedProducts.filter(product => {
-    const matchesCategory =
-      filters.categories.length === 0 ||
-      filters.categories.includes(product.category?.name);
-
-    const matchesMinPrice =
-      filters.minPrice === '' ||
-      product.price >= Number(filters.minPrice);
-
-    const matchesMaxPrice =
-      filters.maxPrice === '' ||
-      product.price <= Number(filters.maxPrice);
-
-    return (
-      matchesCategory &&
-      matchesMinPrice &&
-      matchesMaxPrice
-    );
-  });
-
-  // Sorting
-  if (sortType === 'price-low') {
-    filteredProducts.sort((a, b) => a.price - b.price);
-  } else if (sortType === 'price-high') {
-    filteredProducts.sort((a, b) => b.price - a.price);
-  } else if (sortType === 'latest') {
-    filteredProducts.sort((a, b) => {
-      if (a.isFeatured && !b.isFeatured) return -1;
-      if (!a.isFeatured && b.isFeatured) return 1;
-      return 0;
-    });
-  }
-
-  // Pagination
-  const indexOfLastItem =
-    currentPage * itemsPerPage;
-
-  const indexOfFirstItem =
-    indexOfLastItem - itemsPerPage;
-
-  const currentItems =
-    filteredProducts.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    );
-
-  const totalPages = Math.ceil(
-    filteredProducts.length / itemsPerPage
-  );
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+  const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
+  const indexOfLastItem = Math.min(currentPage * itemsPerPage, totalProducts);
+  const currentItems = products;
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber);
@@ -242,8 +222,12 @@ const Shop = () => {
             </button>
 
             <div className="grid-size-slider">
+              <span className="grid-icon">
+                <Grid3X3 size={20} />
+              </span>
               <input
                 type="range"
+                className="grid-range"
                 min="2"
                 max="4"
                 step="1"
@@ -283,21 +267,21 @@ const Shop = () => {
 
             <h4 className="product-count">
               Showing{' '}
-              {filteredProducts.length === 0
+              {totalProducts === 0
                 ? 0
                 : indexOfFirstItem + 1}
               {' - '}
               {Math.min(
                 indexOfLastItem,
-                filteredProducts.length
+                totalProducts
               )}{' '}
-              of {filteredProducts.length}{' '}
+              of {totalProducts}{' '}
               results
             </h4>
           </div>
 
           {/* Empty State */}
-          {filteredProducts.length === 0 ? (
+          {totalProducts === 0 ? (
             <div className="no-results">
               <h3>No Products Found</h3>
               <p>

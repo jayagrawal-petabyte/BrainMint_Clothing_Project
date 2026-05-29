@@ -12,6 +12,7 @@ import {
   useSplat,
   SplatParticles
 } from './SplatEffect';
+import AddToCartPopup from './AddToCartPopup';
 
 import './ProductCard.css';
 
@@ -65,11 +66,9 @@ const ProductCard = ({ product }) => {
     particles: cartParticles
   } = useSplat();
 
-  const [wishSplat, setWishSplat] =
-    useState(false);
-
-  const [cartSplat, setCartSplat] =
-    useState(false);
+  const [wishSplat, setWishSplat] = useState(false);
+  const [cartSplat, setCartSplat] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const triggerSplat = setter => {
     setter(true);
@@ -96,28 +95,15 @@ const ProductCard = ({ product }) => {
 
   const handleCart = e => {
     e.preventDefault();
-
-    if (inCart) {
-      removeFromCart(productId);
-
-      triggerCartSplat(
-        '#aaaaaa',
-        14
-      );
-    } else {
-      addToCart(product, 1);
-
-      triggerCartSplat(
-        'var(--ltn__primary-color)',
-        20
-      );
-    }
-
+    addToCart(product, 1);
+    triggerCartSplat('var(--ltn__primary-color)', 20);
+    setShowPopup(true);
     triggerSplat(setCartSplat);
   };
 
   return (
-    <div className="ltn__product-item">
+    <>
+      <div className="ltn__product-item">
       {/* Product Image */}
       <div className="product-img">
         <Link
@@ -197,11 +183,7 @@ const ProductCard = ({ product }) => {
             >
               <button
                 type="button"
-                title={
-                  inCart
-                    ? 'Remove from Cart'
-                    : 'Add to Cart'
-                }
+                title="Add to Cart"
                 className={`
                   ${
                     inCart
@@ -272,6 +254,15 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
     </div>
+
+      {showPopup && (
+        <AddToCartPopup
+          product={product}
+          quantity={1}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
+    </>
   );
 };
 

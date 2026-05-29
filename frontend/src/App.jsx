@@ -7,6 +7,9 @@ import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
 import About from './pages/About';
 import Admin from './pages/Admin';
+import Returns from './pages/Returns';
+import Terms from './pages/Terms';
+import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
@@ -20,24 +23,34 @@ function App() {
     <CartProvider>
       <WishlistProvider>
         <Router>
-          <div className="app">
-            <AnnouncementBar />
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/search" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<Admin />} />
-            </Routes>
-            <Footer />
-            <ScrollToTop />
-          </div>
+          <Routes>
+            {/* Secure checkout — no Navbar or Footer */}
+            <Route path="/checkout" element={<Checkout />} />
+
+            {/* All other pages get the standard layout */}
+            <Route path="*" element={
+              <div className="app">
+                <AnnouncementBar />
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/search" element={<Shop />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/returns" element={<Returns />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <Footer />
+                <ScrollToTop />
+              </div>
+            } />
+          </Routes>
         </Router>
       </WishlistProvider>
     </CartProvider>

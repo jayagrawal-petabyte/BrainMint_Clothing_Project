@@ -103,40 +103,26 @@
   gap: 10px;
 }
 
-.price-field {
-  display: flex;
-  align-items: center;
-  border: 2px solid var(--border-color-11);
-  padding: 0 10px;
-  flex: 1;
-}
-
-.price-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ltn__heading-color);
-  margin-right: 4px;
-}
-
-.price-input {
+.price-inputs input {
   width: 100%;
-  border: none;
+  border: 1px solid var(--border-color-1);
   outline: none;
   font-family: var(--ltn__body-font);
   font-size: 14px;
-  padding: 8px 0;
-  color: var(--ltn__primary-color);
+  padding: 8px 10px;
+  color: var(--ltn__heading-color);
   background: transparent;
+  border-radius: 4px;
 }
 
-.price-input::-webkit-outer-spin-button,
-.price-input::-webkit-inner-spin-button {
+.price-inputs input::-webkit-outer-spin-button,
+.price-inputs input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }
 
-.price-input[type=number] {
+.price-inputs input[type=number] {
   -moz-appearance: textfield;
   appearance: textfield;
 }

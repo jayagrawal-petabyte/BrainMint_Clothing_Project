@@ -1,46 +1,50 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Returns.css';
+import './Returns.css'; // Reusing static page CSS
 
 const Returns = () => {
   return (
     <div className="static-page">
       <div className="static-header">
-        <h1>Returns Policy</h1>
+        <h1>Return & Refund Policy</h1>
         <div className="breadcrumb">
           <Link to="/">Home</Link>
           <span className="separator">{'>'}</span>
-          <span className="current">Returns Policy</span>
+          <span className="current">Return & Refund Policy</span>
         </div>
       </div>
 
       <div className="static-content">
-        <h2>Our 30-Day Return Guarantee</h2>
+        <h2>General Returns</h2>
         <p>
-          We want you to be completely satisfied with your purchase. If for any reason you are not entirely happy, you may return your item(s) within 30 days of receiving your order for a full refund or exchange.
+          We grant a period of 15 days from the date of delivery to return or exchange products (except those products mentioned below, for which the right to return / exchange is excluded). In case you return the goods within the said period, you will be reimbursed with the amount paid for the products.
         </p>
 
-        <h3>Eligibility for Returns</h3>
+        <h3>Conditions for Return</h3>
         <ul>
-          <li>Items must be unworn, unwashed, and in their original condition.</li>
-          <li>All original tags must still be attached to the garment.</li>
-          <li>Intimates, swimwear, and pierced jewelry are final sale for hygiene reasons.</li>
-          <li>Sale items marked as "Final Sale" cannot be returned or exchanged.</li>
+          <li>Products must be returned in their original condition, unwashed, and unworn.</li>
+          <li>All original tags, packaging, and labels must be completely intact.</li>
+          <li>Footwear must be returned in the original shoe box without any damage to the box.</li>
         </ul>
 
-        <h3>How to Initiate a Return</h3>
-        <p>
-          To start a return, please visit our <Link to="/contact">Contact Page</Link> and provide your order number along with the reason for return. Our customer care team will email you a prepaid shipping label within 24 hours.
-        </p>
+        <h3>Non-Returnable Items</h3>
+        <p>For hygiene and safety reasons, the following items are strictly non-returnable and non-exchangeable:</p>
+        <ul>
+          <li>Lingerie, innerwear, and sleepwear</li>
+          <li>Swimwear</li>
+          <li>Cosmetics and perfumes</li>
+          <li>Jewelry and hair accessories</li>
+          <li>Products purchased on clearance or marked as "Final Sale"</li>
+        </ul>
 
         <h3>Refund Process</h3>
         <p>
-          Once your return is received and inspected at our warehouse, we will notify you of the approval or rejection of your refund. If approved, your refund will be processed automatically to your original method of payment within 5-7 business days. Please note that shipping costs are non-refundable.
+          Once your return reaches our warehouse and passes the quality check, a refund will be initiated to your original payment method. Please allow 5-7 business days for the amount to reflect in your bank account or credit card statement. Shipping charges and cash-on-delivery fees (if applicable) are non-refundable.
         </p>
 
-        <h3>Exchanges</h3>
+        <h3>Store Exchanges</h3>
         <p>
-          If you need a different size or color, the fastest way to ensure you get what you want is to return the item you have, and once the return is accepted, make a separate purchase for the new item.
+          Online purchases can also be exchanged at any of our physical retail stores within 15 days of delivery, provided you carry the original invoice and the items meet our return conditions.
         </p>
       </div>
     </div>

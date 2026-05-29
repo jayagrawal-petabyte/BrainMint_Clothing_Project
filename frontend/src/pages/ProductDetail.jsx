@@ -345,13 +345,13 @@ const ProductDetail = () => {
 
             <button
               className={`add-to-cart-btn ${
-                cartAdded
+                showPopup
                   ? 'added'
                   : ''
               }`}
               onClick={handleAddToCart}
             >
-              {cartAdded
+              {showPopup
                 ? 'Added!'
                 : 'Add to Cart'}
             </button>

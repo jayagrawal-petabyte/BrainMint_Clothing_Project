@@ -3,13 +3,19 @@
 ## Pages
 - About Page
 - Admin Page
+- Cart Page
+- Checkout Page
 - Contact Page
 - Home Page
+- Not Found Page
 - Product Detail Page
+- Returns Page
 - Shop Page
 - Wishlist Page
 
+
 ## Components
+- AddToCartPopup
 - Announcement Bar
 - CartDrawer
 - Filter Sidebar

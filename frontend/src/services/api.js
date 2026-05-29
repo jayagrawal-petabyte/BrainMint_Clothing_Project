@@ -19,7 +19,7 @@ export const fetchProductById = async (id) => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/products/${id}`);
     const data = await response.json();
-    return data.data?.product || null;
+    return data.data || null;
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;

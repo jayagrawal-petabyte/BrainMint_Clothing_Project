@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
+import AddToCartPopup from "../components/AddToCartPopup";
 import "./Wishlist.css";
 
 const Wishlist = () => {
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   return (
     <div className="wishlist-page">
@@ -31,14 +33,19 @@ const Wishlist = () => {
         </div>
       ) : (
         <div className="wishlist-grid">
-          {wishlistItems.map((item) => (
-            <div key={item.id} className="wishlist-card">
+          {wishlistItems.map((item) => {
+            const itemId = item._id || item.id;
+            const itemImage = item?.images?.[0]?.url || item?.images?.[0] || 'https://placehold.co/400x500?text=No+Image';
+            const itemPrice = item?.discountPrice || item?.price || 0;
+
+            return (
+            <div key={itemId} className="wishlist-card">
               {/* Image */}
               <div className="wishlist-card-img">
-                <img src={item.images[0]} alt={item.name} />
+                <img src={itemImage} alt={item.name} />
                 <button
                   className="wishlist-remove-btn"
-                  onClick={() => removeFromWishlist(item.id)}
+                  onClick={() => removeFromWishlist(itemId)}
                   title="Remove from wishlist"
                 >
                   <Heart size={18} fill="#f24c5c" color="#f24c5c" />
@@ -49,19 +56,30 @@ const Wishlist = () => {
               <div className="wishlist-card-body">
                 <h3 className="wishlist-card-name">{item.name}</h3>
                 <p className="wishlist-card-price">
-                  ₹{item.price.toLocaleString("en-IN")}
+                  ₹{itemPrice.toLocaleString("en-IN")}
                 </p>
                 <button
                   className="wishlist-move-btn"
-                  onClick={() => addToCart(item, 1)}
+                  onClick={() => {
+                    addToCart(item, 1);
+                    setSelectedProduct(item);
+                  }}
                 >
                   <ShoppingCart size={18} />
                   Move to Cart
                 </button>
               </div>
             </div>
-          ))}
+          )})}
         </div>
+      )}
+
+      {selectedProduct && (
+        <AddToCartPopup
+          product={selectedProduct}
+          quantity={1}
+          onClose={() => setSelectedProduct(null)}
+        />
       )}
     </div>
   );

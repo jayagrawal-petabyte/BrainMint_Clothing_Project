@@ -14,6 +14,7 @@ import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import ScrollToTopRoute from './components/ScrollToTopRoute';
 import Contact from "./pages/Contact";
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -23,6 +24,7 @@ function App() {
     <CartProvider>
       <WishlistProvider>
         <Router>
+          <ScrollToTopRoute />
           <Routes>
             {/* Secure checkout — no Navbar or Footer */}
             <Route path="/checkout" element={<Checkout />} />

@@ -13,7 +13,9 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/autoplay";
-import { Autoplay } from "swiper/modules";
+import "swiper/css/navigation";
+import { Autoplay, Navigation } from "swiper/modules";
+import "./About.css";
 
 const features = [
   {
@@ -417,7 +419,7 @@ const { theme } = useTheme();
 
         <Swiper
           ref={swiperRef}
-          modules={[Autoplay]}
+          modules={[Autoplay, Navigation]}
           spaceBetween={30}
           slidesPerView={3}
           autoplay={{
@@ -425,6 +427,8 @@ const { theme } = useTheme();
             disableOnInteraction: false,
           }}
           loop={true}
+          navigation={true}
+          className="testimonials-swiper"
           breakpoints={{
             320: {
               slidesPerView: 1,

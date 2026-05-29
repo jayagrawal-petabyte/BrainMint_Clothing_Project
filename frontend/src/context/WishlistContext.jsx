@@ -18,27 +18,29 @@ export const WishlistProvider = ({ children }) => {
     localStorage.setItem('urbanwear_wishlist', JSON.stringify(wishlistItems));
   }, [wishlistItems]);
 
+  const getId = (item) => item?._id || item?.id;
+
   const addToWishlist = (product) => {
     setWishlistItems(prev => {
-      if (prev.find(item => item.id === product.id)) return prev;
+      if (prev.find(item => getId(item) === getId(product))) return prev;
       return [...prev, product];
     });
   };
 
   const removeFromWishlist = (productId) => {
-    setWishlistItems(prev => prev.filter(item => item.id !== productId));
+    setWishlistItems(prev => prev.filter(item => getId(item) !== productId));
   };
 
   const toggleWishlist = (product) => {
-    if (wishlistItems.find(item => item.id === product.id)) {
-      removeFromWishlist(product.id);
+    if (wishlistItems.find(item => getId(item) === getId(product))) {
+      removeFromWishlist(getId(product));
     } else {
       addToWishlist(product);
     }
   };
 
   const isWishlisted = (productId) => {
-    return wishlistItems.some(item => item.id === productId);
+    return wishlistItems.some(item => getId(item) === productId);
   };
 
   return (

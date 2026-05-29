@@ -7,8 +7,14 @@
 
 .navbar-container {
   background-color: var(--section-bg-1, #F9F9F9);
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 999;
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%);
 }
 
 .navbar-middle {

@@ -1,25 +1,32 @@
 # Frontend Pages Documentation
 
 ## Pages
-- Home Page
-- Shop Page
-- Product Detail Page
-- Cart Page
-- Checkout Page
-- Wishlist Page
 - About Page
+- Admin Page
 - Contact Page
+- Home Page
+- Product Detail Page
+- Shop Page
+- Wishlist Page
 
 ## Components
-- Navbar
-- Footer
-- Product Card
-- Filter Sidebar
 - Announcement Bar
 - CartDrawer
+- Filter Sidebar
+- Footer
+- Navbar
+- Product Card
+- Product Tabs
+- Promo Banner
+- Scroll To Top
+- Size Guide Modal
+- Splat Effect
+- Trust Badges
 
 ## Context
 - Cart Context
+- Wishlist Context
+- Theme Context
 
 ## Current Status
 Initial frontend pages and UI components implemented successfully.

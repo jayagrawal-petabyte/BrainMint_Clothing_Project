@@ -7,6 +7,9 @@ import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
 import About from './pages/About';
 import Admin from './pages/Admin';
+import Returns from './pages/Returns';
+import Shipping from './pages/Shipping';
+import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
@@ -38,7 +41,10 @@ function App() {
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/returns" element={<Returns />} />
+                  <Route path="/shipping" element={<Shipping />} />
                   <Route path="/admin" element={<Admin />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />
                 <ScrollToTop />

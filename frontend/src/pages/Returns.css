@@ -1,0 +1,74 @@
+.static-page {
+  background: var(--section-bg-1);
+  min-height: 60vh;
+  padding-bottom: 80px;
+}
+
+.static-header {
+  background: var(--white-7);
+  border-bottom: 1px solid var(--border-color-1);
+  padding: 50px 8%;
+  text-align: center;
+}
+
+.static-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ltn__heading-color);
+  margin-bottom: 12px;
+}
+
+.static-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 8%;
+  background: var(--white-7);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 40px;
+  border-radius: 8px;
+}
+
+.static-content h2 {
+  font-size: 24px;
+  color: var(--ltn__heading-color);
+  margin-bottom: 16px;
+  margin-top: 30px;
+}
+
+.static-content h2:first-child {
+  margin-top: 0;
+}
+
+.static-content h3 {
+  font-size: 18px;
+  color: var(--ltn__heading-color);
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+
+.static-content p {
+  color: var(--ltn__paragraph-color);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.static-content ul {
+  padding-left: 20px;
+  margin-bottom: 24px;
+}
+
+.static-content li {
+  color: var(--ltn__paragraph-color);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.static-content a {
+  color: var(--ltn__secondary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.static-content a:hover {
+  text-decoration: underline;
+}

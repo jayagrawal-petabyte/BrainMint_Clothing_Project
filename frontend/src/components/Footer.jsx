@@ -54,8 +54,8 @@ const Footer = () => {
             <div className="footer-widget">
               <h4 className="footer-title">Customer Care</h4>
               <ul className="footer-links">
-                <li><Link to="/login">Login</Link></li>
-                <li><Link to="/account">My Account</Link></li>
+                <li><Link to="/returns">Returns Policy</Link></li>
+                <li><Link to="/shipping">Shipping Info</Link></li>
                 <li><Link to="/wishlist">Wishlist</Link></li>
                 <li><Link to="/cart">Order Tracking</Link></li>
               </ul>

@@ -15,34 +15,67 @@ const Terms = () => {
       </div>
 
       <div className="static-content">
-        <h2>Introduction</h2>
+        <h2>1. Introduction</h2>
         <p>
-          Welcome to UrbanWear. These Terms & Conditions govern your use of our website and services. By accessing or using this website, you agree to be bound by these terms. If you do not agree with any part of these terms, please do not use our website.
+          Welcome to UrbanWear. These Terms & Conditions ("Terms") govern your access to and use of our website, mobile application, and the services provided by UrbanWear (collectively, the "Platform"). By accessing, browsing, or placing an order on the Platform, you acknowledge that you have read, understood, and agree to be bound by these Terms. 
+        </p>
+        <p>
+          If you do not agree with any part of these Terms, you must immediately cease all use of our Platform. UrbanWear reserves the right to update, modify, or replace any part of these Terms at our sole discretion by posting updates to our website. It is your responsibility to check this page periodically for changes.
         </p>
 
-        <h3>Use of Website</h3>
+        <h2>2. User Accounts and Security</h2>
         <p>
-          You may use our website only for lawful purposes. You must not use our site in any way that causes, or may cause, damage to the website or impairment of the availability or accessibility of the website.
+          While you may browse our Platform as a guest, placing an order may require you to register and create an account. You agree to provide accurate, current, and complete information during the registration process. 
+        </p>
+        <p>
+          You are solely responsible for safeguarding the password that you use to access your account and for any activities or actions under your password. UrbanWear will not be liable for any loss or damage arising from your failure to comply with this security obligation. We reserve the right to suspend or terminate accounts, refuse service, or cancel orders at our sole discretion if we suspect fraudulent or malicious activity.
         </p>
 
-        <h3>Intellectual Property Rights</h3>
+        <h2>3. Intellectual Property Rights</h2>
         <p>
-          Unless otherwise stated, we or our licensors own the intellectual property rights in the website and material on the website. All these intellectual property rights are reserved. You may view, download for caching purposes only, and print pages from the website for your own personal use.
+          All content included on the Platform, such as text, graphics, logos, images, audio clips, digital downloads, data compilations, and software, is the property of UrbanWear or its content suppliers and is protected by international copyright, trademark, and intellectual property laws.
+        </p>
+        <p>
+          You may view, download for caching purposes only, and print pages from the website for your own personal, non-commercial use, subject to the restrictions set out below and elsewhere in these Terms. You must not:
+        </p>
+        <ul>
+          <li>Republish material from this website (including republication on another website).</li>
+          <li>Sell, rent, or sub-license material from the website.</li>
+          <li>Reproduce, duplicate, copy, or otherwise exploit material on this website for a commercial purpose.</li>
+          <li>Edit or otherwise modify any material on the website.</li>
+        </ul>
+
+        <h2>4. Pricing and Availability</h2>
+        <p>
+          All prices displayed on the Platform are in Indian Rupees (INR) and are inclusive of applicable Goods and Services Tax (GST). We make every effort to ensure that all details, descriptions, and prices are accurate; however, errors (including processing errors) may occur.
+        </p>
+        <p>
+          If we discover an error in the price or availability of any goods which you have ordered, we will inform you of this as soon as possible and give you the option of reconfirming your order at the correct price or cancelling it. If we are unable to contact you, we will treat the order as cancelled. If you cancel and you have already paid for the goods, you will receive a full refund.
         </p>
 
-        <h3>Pricing & Availability</h3>
+        <h2>5. Product Descriptions and Colors</h2>
         <p>
-          All prices are inclusive of VAT/GST. We try to ensure that all details, descriptions, and prices which appear on this website are accurate, however errors may occur. If we discover an error in the price of any goods which you have ordered, we will inform you of this as soon as possible and give you the option of reconfirming your order at the correct price or cancelling it.
+          We have made every effort to display as accurately as possible the colors and images of our products that appear on the store. We cannot guarantee that your computer monitor's display of any color will be accurate. We do not warrant that product descriptions or other content is accurate, complete, reliable, current, or error-free.
         </p>
 
-        <h3>Limitation of Liability</h3>
+        <h2>6. Prohibited Uses</h2>
         <p>
-          UrbanWear will not be liable to you in relation to the contents of, or use of, or otherwise in connection with, this website for any indirect, special, or consequential loss; or for any business losses, loss of revenue, income, profits, or anticipated savings.
+          In addition to other prohibitions as set forth in the Terms, you are prohibited from using the site or its content: 
+          (a) for any unlawful purpose; 
+          (b) to solicit others to perform or participate in any unlawful acts; 
+          (c) to violate any international, federal, provincial or state regulations, rules, laws, or local ordinances; 
+          (d) to infringe upon or violate our intellectual property rights or the intellectual property rights of others; 
+          (e) to harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate based on gender, sexual orientation, religion, ethnicity, race, age, national origin, or disability.
         </p>
 
-        <h3>Governing Law</h3>
+        <h2>7. Limitation of Liability</h2>
         <p>
-          These Terms & Conditions shall be governed by and construed in accordance with the laws of India. Any disputes relating to these terms and conditions will be subject to the exclusive jurisdiction of the courts of India.
+          In no case shall UrbanWear, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service.
+        </p>
+
+        <h2>8. Governing Law and Jurisdiction</h2>
+        <p>
+          These Terms & Conditions and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes relating to these terms and conditions will be subject to the exclusive jurisdiction of the courts of Mumbai, Maharashtra.
         </p>
       </div>
     </div>

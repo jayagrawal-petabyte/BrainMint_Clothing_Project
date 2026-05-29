@@ -1,3 +1,4 @@
+import { useTheme } from "../context/ThemeContext";
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -8,6 +9,7 @@ import {
   FaQuoteLeft,
   FaStar,
 } from "react-icons/fa";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -77,290 +79,300 @@ const testimonials = [
 
 const About = () => {
   const swiperRef = useRef(null);
+const { theme } = useTheme();
 
+  const isDark =
+    theme === "dark";
   return (
     <div
       style={{
         background: "var(--white-7)",
         minHeight: "100vh",
-        padding: "50px 20px 120px",
+        paddingBottom: "120px",
       }}
     >
-      <div
+      {/* HERO SECTION */}
+      <section
         style={{
-          maxWidth: "1250px",
-          margin: "0 auto",
-          background: "#faf8f5",
-          border: "1px solid rgba(0,0,0,0.05)",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          overflow: "hidden",
-          boxShadow:
-            "-8px 12px 30px rgba(0,0,0,0.05), 0px 6px 15px rgba(0,0,0,0.04)",
+          padding: "50px 20px 120px",
+          background: isDark
+            ? "linear-gradient(135deg, rgba(26,26,26,1) 0%, rgba(17,17,17,1) 100%)"
+            : "linear-gradient(135deg, rgba(246,244,241,1) 0%, rgba(250,249,246,1) 100%)",
         }}
       >
-        {features.map((item, index) => (
+        {/* FEATURES */}
+        <div
+          style={{
+            maxWidth: "1250px",
+            margin: "0 auto",
+            background: isDark ? "#1e1e1e" : "#faf8f5",
+            border: "1px solid rgba(0,0,0,0.05)",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            overflow: "hidden",
+            boxShadow:
+              "-8px 12px 30px rgba(0,0,0,0.05), 0px 6px 15px rgba(0,0,0,0.04)",
+          }}
+        >
+          {features.map((item, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "22px",
+                padding: "42px 34px",
+                transition: "all 0.3s ease",
+                borderRight:
+                  index !== features.length - 1
+                    ? "1px solid var(--border-color-1)"
+                    : "none",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "42px",
+                  color: "var(--ltn__heading-color)",
+                  minWidth: "55px",
+                }}
+              >
+                {item.icon}
+              </div>
+
+              <div>
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: "18px",
+                    fontWeight: "700",
+                    color: "var(--ltn__heading-color)",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {item.title}
+                </h3>
+
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "15px",
+                    color: "var(--ltn__paragraph-color)",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  {item.text}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ABOUT CONTENT */}
+        <section
+          style={{
+            maxWidth: "1250px",
+            margin: "70px auto 0",
+            padding: "0 20px",
+            display: "grid",
+            gridTemplateColumns: "1.1fr 1fr",
+            gap: "55px",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "14px",
+                marginBottom: "28px",
+              }}
+            >
+              <div
+                style={{
+                  width: "42px",
+                  height: "1px",
+                  background: "var(--ltn__secondary-color)",
+                }}
+              />
+
+              <span
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "400",
+                  letterSpacing: "2px",
+                  textTransform: "uppercase",
+                  color: "var(--ltn__heading-color)",
+                  fontFamily: "var(--ltn__heading-font)",
+                }}
+              >
+                About Us
+              </span>
+            </div>
+
+            <h1
+              style={{
+                fontFamily: "var(--ltn__heading-font)",
+                fontSize: "62px",
+                fontWeight: "400",
+                lineHeight: "1.1",
+                color: "var(--ltn__heading-color)",
+                marginBottom: "30px",
+                letterSpacing: "-1px",
+              }}
+            >
+              Style That <br />
+              Speaks Quietly.
+            </h1>
+
+            <p
+              style={{
+                fontSize: "16px",
+                color: "var(--ltn__paragraph-color)",
+                lineHeight: "1.9",
+                fontWeight: "300",
+                marginBottom: "20px",
+                maxWidth: "520px",
+              }}
+            >
+              At UrbanWear, we believe fashion should feel effortless,
+              timeless, and personal. Our collections are thoughtfully
+              curated to bring together comfort, elegance, and modern
+              silhouettes for individuals who value understated style.
+            </p>
+
+            <p
+              style={{
+                fontSize: "16px",
+                color: "var(--ltn__paragraph-color)",
+                lineHeight: "1.9",
+                fontWeight: "300",
+                marginBottom: "28px",
+                maxWidth: "520px",
+              }}
+            >
+              Every piece is designed with intention from carefully
+              selected fabrics to refined detailing helping you build a
+              wardrobe that feels as confident as it looks. UrbanWear is
+              more than fashion; it’s about creating everyday moments of
+              confidence through elevated essentials.
+            </p>
+
+            <div
+              style={{
+                borderLeft: "2px solid var(--ltn__secondary-color)",
+                paddingLeft: "24px",
+                marginBottom: "45px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "300",
+                  lineHeight: "1.8",
+                  color: "var(--ltn__heading-color)",
+                  fontStyle: "italic",
+                  maxWidth: "500px",
+                }}
+              >
+                “We design timeless essentials that feel effortless,
+                refined, and beautifully lived in.”
+              </p>
+            </div>
+
+            <Link
+              to="/shop"
+              style={{
+                background: "var(--ltn__primary-color)",
+                color: "var(--white-7)",
+                border: "1px solid var(--ltn__primary-color)",
+                padding: "16px 36px",
+                fontSize: "14px",
+                fontWeight: "500",
+                transition: "all 0.4s ease",
+                textDecoration: "none",
+                display: "inline-block",
+                letterSpacing: "1px",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "transparent";
+                e.target.style.color = "var(--ltn__heading-color)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "var(--ltn__primary-color)";
+                e.target.style.color = "var(--white-7)";
+              }}
+            >
+              Explore Collection
+            </Link>
+          </div>
+
+          {/* IMAGE SIDE */}
           <div
-            key={index}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "22px",
-              padding: "42px 34px",
-              transition: "all 0.3s ease",
-              borderRight:
-                index !== features.length - 1
-                  ? "1px solid var(--border-color-1)"
-                  : "none",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--section-bg-1)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--white-7)";
+              position: "relative",
             }}
           >
             <div
               style={{
-                fontSize: "42px",
-                color: "var(--ltn__heading-color)",
-                minWidth: "55px",
+                overflow: "hidden",
+                background: "var(--border-color-11)",
               }}
             >
-              {item.icon}
+              <img
+                src="/cloth1.jpg"
+                alt="UrbanWear Fashion"
+                style={{
+                  width: "100%",
+                  height: "580px",
+                  objectFit: "cover",
+                  transition: "transform 0.8s ease",
+                }}
+              />
             </div>
 
-            <div>
+            {/* FLOATING CARD */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "-35px",
+                left: "-35px",
+                background: isDark ? "#1f1f1f" : "var(--white-7)",
+                padding: "28px 32px",
+                boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+                maxWidth: "280px",
+              }}
+            >
               <h3
                 style={{
-                  margin: 0,
-                  fontSize: "18px",
-                  fontWeight: "700",
+                  fontFamily: "var(--ltn__heading-font)",
+                  fontSize: "24px",
+                  fontWeight: "400",
+                  marginBottom: "10px",
                   color: "var(--ltn__heading-color)",
-                  marginBottom: "6px",
                 }}
               >
-                {item.title}
+                Crafted Thoughtfully
               </h3>
 
               <p
                 style={{
-                  margin: 0,
-                  fontSize: "15px",
                   color: "var(--ltn__paragraph-color)",
-                  lineHeight: "1.6",
+                  fontSize: "14px",
+                  lineHeight: "1.8",
+                  fontWeight: "300",
                 }}
               >
-                {item.text}
+                Every collection reflects modern simplicity with timeless
+                elegance.
               </p>
             </div>
           </div>
-        ))}
-      </div>
-
-      <section
-        style={{
-          maxWidth: "1250px",
-          margin: "70px auto 0",
-          padding: "0 20px",
-          display: "grid",
-          gridTemplateColumns: "1.1fr 1fr",
-          gap: "55px",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "14px",
-              marginBottom: "28px",
-            }}
-          >
-            <div
-              style={{
-                width: "42px",
-                height: "1px",
-                background: "var(--ltn__secondary-color)",
-              }}
-            />
-
-            <span
-              style={{
-                fontSize: "15px",
-                fontWeight: "400",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                color: "var(--ltn__heading-color)",
-                fontFamily: "var(--ltn__heading-font)",
-              }}
-            >
-              About Us
-            </span>
-          </div>
-
-          <h1
-            style={{
-              fontFamily: "var(--ltn__heading-font)",
-              fontSize: "62px",
-              fontWeight: "400",
-              lineHeight: "1.1",
-              color: "var(--ltn__heading-color)",
-              marginBottom: "30px",
-              letterSpacing: "-1px",
-            }}
-          >
-            Style That <br />
-            Speaks Quietly.
-          </h1>
-
-          <p
-            style={{
-              fontSize: "16px",
-              color: "var(--ltn__paragraph-color)",
-              lineHeight: "1.9",
-              fontWeight: "300",
-              marginBottom: "20px",
-              maxWidth: "520px",
-            }}
-          >
-            At UrbanWear, we believe fashion should feel effortless,
-            timeless, and personal. Our collections are thoughtfully
-            curated to bring together comfort, elegance, and modern
-            silhouettes for individuals who value understated style.
-          </p>
-
-          <p
-            style={{
-              fontSize: "16px",
-              color: "var(--ltn__paragraph-color)",
-              lineHeight: "1.9",
-              fontWeight: "300",
-              marginBottom: "28px",
-              maxWidth: "520px",
-            }}
-          >
-            Every piece is designed with intention from carefully
-            selected fabrics to refined detailing helping you build a
-            wardrobe that feels as confident as it looks. UrbanWear is
-            more than fashion; it’s about creating everyday moments of
-            confidence through elevated essentials.
-          </p>
-
-          <div
-            style={{
-              borderLeft:
-                "2px solid var(--ltn__secondary-color)",
-              paddingLeft: "24px",
-              marginBottom: "45px",
-            }}
-          >
-            <p
-              style={{
-                fontSize: "20px",
-                fontWeight: "300",
-                lineHeight: "1.8",
-                color: "var(--ltn__heading-color)",
-                fontStyle: "italic",
-                maxWidth: "500px",
-              }}
-            >
-              “We design timeless essentials that feel
-              effortless, refined, and beautifully lived in.”
-            </p>
-          </div>
-
-          <Link
-            to="/shop"
-            style={{
-              background: "var(--ltn__primary-color)",
-              color: "var(--white-7)",
-              border:
-                "1px solid var(--ltn__primary-color)",
-              padding: "16px 36px",
-              fontSize: "14px",
-              fontWeight: "500",
-              transition: "all 0.4s ease",
-              textDecoration: "none",
-              display: "inline-block",
-              letterSpacing: "1px",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "transparent";
-              e.target.style.color = "var(--ltn__heading-color)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "var(--ltn__primary-color)";
-              e.target.style.color = "var(--white-7)";
-            }}
-          >
-            Explore Collection
-          </Link>
-        </div>
-
-        <div
-          style={{
-            position: "relative",
-          }}
-        >
-          <div
-            style={{
-              overflow: "hidden",
-              background: "var(--border-color-11)",
-            }}
-          >
-            <img
-              src="/cloth1.jpg"
-              alt="UrbanWear Fashion"
-              style={{
-                width: "100%",
-                height: "580px",
-                objectFit: "cover",
-                transition: "transform 0.8s ease",
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-35px",
-              left: "-35px",
-              background: "var(--white-7)",
-              padding: "28px 32px",
-              boxShadow:
-                "0 20px 40px rgba(0,0,0,0.08)",
-              maxWidth: "280px",
-            }}
-          >
-            <h3
-              style={{
-                fontFamily: "var(--ltn__heading-font)",
-                fontSize: "24px",
-                fontWeight: "400",
-                marginBottom: "10px",
-              }}
-            >
-              Crafted Thoughtfully
-            </h3>
-
-            <p
-              style={{
-                color: "var(--ltn__paragraph-color)",
-                fontSize: "14px",
-                lineHeight: "1.8",
-                fontWeight: "300",
-              }}
-            >
-              Every collection reflects modern simplicity
-              with timeless elegance.
-            </p>
-          </div>
-        </div>
+        </section>
       </section>
 
+      {/* TESTIMONIALS */}
       <div
         style={{
           maxWidth: "1250px",
@@ -438,16 +450,6 @@ const About = () => {
                   border: "1px solid rgba(242, 76, 92, 0.15)",
                   borderRadius: "6px",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    "0 20px 45px rgba(0,0,0,0.12), 0 12px 20px rgba(242, 76, 92, 0.15)";
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    "0 15px 35px rgba(0,0,0,0.08), 0 8px 16px rgba(242, 76, 92, 0.08)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
               >
                 <FaQuoteLeft
                   style={{
@@ -490,6 +492,7 @@ const About = () => {
                   style={{
                     fontSize: "20px",
                     marginBottom: "4px",
+                    color: "var(--ltn__heading-color)",
                   }}
                 >
                   {item.name}

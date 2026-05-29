@@ -19,9 +19,10 @@
 }
 
 .static-content {
-  max-width: 900px;
+  max-width: 1400px;
+  width: 92%;
   margin: 0 auto;
-  padding: 60px 8%;
+  padding: 60px 5%;
   background: var(--white-7);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
   margin-top: 40px;

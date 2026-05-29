@@ -40,4 +40,4 @@ productSchema.statics.decreaseStockForOrder = function (productId, quantity) {
   );
 };
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);

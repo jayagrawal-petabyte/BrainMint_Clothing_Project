@@ -6,6 +6,7 @@ import { fetchProductById } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import ProductTabs from '../components/ProductTabs';
+import AddToCartPopup from '../components/AddToCartPopup';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -16,7 +17,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [cartAdded, setCartAdded] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
@@ -119,12 +120,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
-
-    setCartAdded(true);
-
-    setTimeout(() => {
-      setCartAdded(false);
-    }, 2000);
+    setShowPopup(true);
   };
 
   return (
@@ -424,6 +420,14 @@ const ProductDetail = () => {
       </div>
 
       <ProductTabs />
+
+      {showPopup && (
+        <AddToCartPopup
+          product={product}
+          quantity={quantity}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };

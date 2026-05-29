@@ -21,6 +21,15 @@
 - Cart, Checkout, Order, Payment, and Wishlist routes added
 - Render deployment configuration added
 
+## Cart and Checkout Frontend Updates
+- AddToCart popup component added
+- Cart drawer updated
+- Cart page added
+- Checkout page added
+- Returns page added
+- Not Found page added
+- Product card and filter sidebar updated
+- Cart context updated
 
 ## Recent Frontend Updates
 - CartDrawer component added

@@ -122,7 +122,8 @@ const { theme } = useTheme();
                 alignItems: "center",
                 gap: "22px",
                 padding: "42px 34px",
-                transition: "all 0.3s ease",
+                transition: "none",
+                transform: "none",
                 borderRight:
                   index !== features.length - 1
                     ? "1px solid var(--border-color-1)"

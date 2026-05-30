@@ -211,9 +211,4 @@ const Contact = () => {
     </div>
   );
 };
-
-  background: "var(--section-bg-1)",
-  color: "var(--ltn__heading-color)",
-};
-
 export default Contact;

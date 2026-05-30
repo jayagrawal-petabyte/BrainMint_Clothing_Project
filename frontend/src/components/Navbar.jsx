@@ -48,6 +48,9 @@ const Navbar = () => {
       <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">
+            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '10px' }}>
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
             <div className="site-logo">
               <Link to="/" className="theme-logo">
                 <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
@@ -133,11 +136,6 @@ const Navbar = () => {
                       <h6>Your Cart</h6>
                       <span className="cart-total">₹{cartTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
-                  </button>
-                </li>
-                <li className="d-lg-none">
-                  <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: 'var(--ltn__heading-color)' }}>
-                    {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                   </button>
                 </li>
               </ul>

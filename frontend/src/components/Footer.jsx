@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Send } from 'lucide-react';
 import './Footer.css';
@@ -82,7 +82,7 @@ const Footer = () => {
         <div className="container">
           <div className="footer-bottom-inner">
             <p className="copyright-text">
-              © {new Date().getFullYear()} UrbanWear. All Rights Reserved.
+              Â© {new Date().getFullYear()} UrbanWear. All Rights Reserved.
             </p>
             <div className="payment-methods">
               {/* Placeholders for payment icons */}

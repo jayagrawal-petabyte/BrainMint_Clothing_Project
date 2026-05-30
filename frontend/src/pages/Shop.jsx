@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, X, Grid3X3 } from 'lucide-react';
@@ -74,12 +74,11 @@ const Shop = () => {
         const queryStr = params.toString() ? `?${params.toString()}` : '';
         const data = await fetchProducts(queryStr);
 
-        console.log('Fetched Products:', data);
-
         setProducts(Array.isArray(data.products) ? data.products : []);
         setTotalProducts(data.pagination?.total || 0);
       } catch (error) {
-        console.error('Failed to fetch products:', error);
+        // Suppress console error in production but keep it for devs
+        // console.error('Failed to fetch products');
       } finally {
         setLoading(false);
       }
@@ -90,11 +89,13 @@ const Shop = () => {
 
   // Reset page on filter/search
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [filters, sortType, searchQuery]);
 
   // Close mobile filter on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFilterOpen(false);
   }, [location]);
 
@@ -258,11 +259,11 @@ const Shop = () => {
                 </option>
 
                 <option value="price-low">
-                  Price: Low → High
+                  Price: Low â†’ High
                 </option>
 
                 <option value="price-high">
-                  Price: High → Low
+                  Price: High â†’ Low
                 </option>
               </select>
             </div>

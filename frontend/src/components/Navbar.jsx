@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon } from 'lucide-react';
+import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon, Menu, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useState, useEffect } from "react";
 import CartDrawer from "./CartDrawer";
@@ -13,6 +13,7 @@ const Navbar = () => {
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -52,6 +53,10 @@ const Navbar = () => {
                 <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
               </Link>
             </div>
+
+            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
 
             <div className="header-contact-search d-none-lg">
               <div className="header-feature-item">
@@ -139,7 +144,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="navbar-bottom d-none-lg">
+      <div className={`navbar-bottom ${isMobileMenuOpen ? 'mobile-menu-active' : 'd-none-lg'}`}>
         <div className="container">
           <nav className="main-menu">
             <ul>

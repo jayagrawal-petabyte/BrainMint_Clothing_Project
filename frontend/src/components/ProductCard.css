@@ -12,6 +12,7 @@
   position: relative;
   overflow: hidden;
   background-color: var(--white-7);
+  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .product-img img {
@@ -24,6 +25,14 @@
 
 .ltn__product-item:hover .product-img img {
   transform: scale(1.05);
+}
+
+.ltn__product-item:hover .product-img {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+
+[data-theme="dark"] .ltn__product-item:hover .product-img {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
 }
 
 .product-img img.primary-img {

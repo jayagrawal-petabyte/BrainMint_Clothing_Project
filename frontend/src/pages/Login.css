@@ -206,3 +206,82 @@
   border-radius: 0.25rem;
   margin-bottom: 10px;
 }
+
+/* --- Dark Mode Styles --- */
+[data-theme="dark"] .auth-page {
+  background-color: #1a1a1a;
+}
+
+[data-theme="dark"] .auth-header h1 {
+  color: #f5f5f5;
+}
+
+[data-theme="dark"] .auth-breadcrumb {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .auth-breadcrumb a {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .auth-breadcrumb a:hover {
+  color: #e89ca9;
+}
+
+[data-theme="dark"] .stitch-card {
+  background: rgba(45, 45, 45, 0.7);
+  box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .auth-form-header h2 {
+  color: #f5f5f5;
+}
+
+[data-theme="dark"] .auth-form-header p {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .stitch-input input {
+  color: #f5f5f5;
+  border-bottom-color: #444444;
+}
+
+[data-theme="dark"] .stitch-input label {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .stitch-input input:focus,
+[data-theme="dark"] .stitch-input input:not(:placeholder-shown) {
+  border-bottom-color: #e89ca9;
+}
+
+[data-theme="dark"] .stitch-input input:focus + label,
+[data-theme="dark"] .stitch-input input:not(:placeholder-shown) + label {
+  color: #e89ca9;
+}
+
+[data-theme="dark"] .stitch-btn {
+  background-color: #f5f5f5;
+  color: #111111;
+}
+
+[data-theme="dark"] .stitch-btn:hover {
+  background-color: #ffffff;
+  box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .stitch-link,
+[data-theme="dark"] .auth-footer-link {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .stitch-link:hover,
+[data-theme="dark"] .auth-footer-link:hover {
+  color: #e89ca9;
+}
+
+[data-theme="dark"] .auth-error {
+  background-color: #3b0000;
+  border-color: #93000a;
+  color: #ffdad6;
+}

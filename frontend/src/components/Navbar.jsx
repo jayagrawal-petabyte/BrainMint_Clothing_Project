@@ -54,9 +54,6 @@ const Navbar = () => {
               </Link>
             </div>
 
-            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
 
             <div className="header-contact-search d-none-lg">
               <div className="header-feature-item">
@@ -136,6 +133,11 @@ const Navbar = () => {
                       <h6>Your Cart</h6>
                       <span className="cart-total">₹{cartTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
+                  </button>
+                </li>
+                <li className="d-lg-none">
+                  <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: 'var(--ltn__heading-color)' }}>
+                    {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                   </button>
                 </li>
               </ul>

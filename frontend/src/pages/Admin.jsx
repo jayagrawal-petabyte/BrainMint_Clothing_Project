@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { mockProducts } from "../data/products";
 import "./Admin.css";
@@ -17,7 +17,7 @@ const activityFeed = [
   { dot: "blue", text: <>New product <strong>Ruffle Blouse</strong> added to inventory</>, time: "1 hr ago" },
   { dot: "orange", text: <><strong>Denim Mini Skirt</strong> stock below threshold (3 left)</>, time: "2 hrs ago" },
   { dot: "green", text: <><strong>Order #UW-1042</strong> delivered successfully</>, time: "3 hrs ago" },
-  { dot: "", text: <><strong>Priya Mehta</strong> left a 5★ review on Silk Blouse</>, time: "4 hrs ago" },
+  { dot: "", text: <><strong>Priya Mehta</strong> left a 5â˜… review on Silk Blouse</>, time: "4 hrs ago" },
 ];
 
 const Admin = () => {
@@ -62,16 +62,16 @@ const Admin = () => {
             {/* Stats */}
             <div className="admin-stats">
               {[
-                { icon: "📦", value: "1,284", label: "Total Orders", trend: "+12.5%", dir: "up" },
-                { icon: "💰", value: "₹18.4L", label: "Revenue", trend: "+8.2%", dir: "up" },
-                { icon: "👥", value: "3,842", label: "Customers", trend: "+15.3%", dir: "up" },
-                { icon: "👗", value: mockProducts.length.toString(), label: "Products", trend: "+2", dir: "up" },
+                { icon: "ðŸ“¦", value: "1,284", label: "Total Orders", trend: "+12.5%", dir: "up" },
+                { icon: "ðŸ’°", value: "₹18.4L", label: "Revenue", trend: "+8.2%", dir: "up" },
+                { icon: "ðŸ‘¥", value: "3,842", label: "Customers", trend: "+15.3%", dir: "up" },
+                { icon: "ðŸ‘—", value: mockProducts.length.toString(), label: "Products", trend: "+2", dir: "up" },
               ].map((stat, i) => (
                 <div className="stat-card" key={i}>
                   <div className="stat-card-header">
                     <div className="stat-card-icon">{stat.icon}</div>
                     <span className={`stat-trend ${stat.dir}`}>
-                      {stat.dir === "up" ? "↑" : "↓"} {stat.trend}
+                      {stat.dir === "up" ? "â†‘" : "â†“"} {stat.trend}
                     </span>
                   </div>
                   <div className="stat-value">{stat.value}</div>
@@ -104,7 +104,7 @@ const Admin = () => {
                         <td>{order.customer}</td>
                         <td>
                           <div className="order-product">
-                            <div className="order-product-thumb">👗</div>
+                            <div className="order-product-thumb">ðŸ‘—</div>
                             <span className="order-product-name">{order.product}</span>
                           </div>
                         </td>
@@ -145,10 +145,10 @@ const Admin = () => {
               {topProducts.map((product) => (
                 <div className="admin-product-card" key={product.id}>
                   <div className="admin-product-img">
-                    👗
+                    ðŸ‘—
                     <div className="admin-product-overlay">
-                      <button title="Edit">✏️</button>
-                      <button title="Delete">🗑️</button>
+                      <button title="Edit">âœï¸</button>
+                      <button title="Delete">ðŸ—‘ï¸</button>
                     </div>
                   </div>
                   <div className="admin-product-info">

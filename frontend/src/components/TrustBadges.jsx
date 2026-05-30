@@ -1,4 +1,4 @@
-import React from 'react';
+
 import {
   FaTruck,
   FaMoneyBillWave,
@@ -12,7 +12,7 @@ const TrustBadges = () => {
     {
       icon: <FaTruck />,
       title: "Free Shipping",
-      text: "On all orders over $49.00",
+      text: "On all orders over ₹49.00",
     },
     {
       icon: <FaMoneyBillWave />,

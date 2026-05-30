@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, Heart } from 'lucide-react';
@@ -45,10 +45,7 @@ const ProductDetail = () => {
             'https://placehold.co/600x800'
         );
       } catch (error) {
-        console.error(
-          'Error loading product:',
-          error
-        );
+        console.error('Error fetching product:', error);
       } finally {
         setLoading(false);
       }
@@ -227,7 +224,7 @@ const ProductDetail = () => {
               color: '#777'
             }}
           >
-            ⭐{' '}
+            â­{' '}
             {product.rating
               ?.average || 0}{' '}
             (

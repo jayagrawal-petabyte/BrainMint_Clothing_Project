@@ -30,6 +30,11 @@
 - AddToCart popup
 - Returns Page
 - Not Found Page
+- ScrollToTopRoute functionality
+- Wishlist functionality improvements
+- Navbar UI improvements
+- ProductCard UI improvements
+
 
 
 ## In Progress

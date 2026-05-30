@@ -8,9 +8,7 @@ import { ThemeProvider } from './context/ThemeContext.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
+      <App />
     </ThemeProvider>
   </StrictMode>,
 )

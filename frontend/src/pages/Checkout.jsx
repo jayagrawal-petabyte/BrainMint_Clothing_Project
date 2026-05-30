@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { placeOrder } from '../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -15,7 +17,12 @@ const INDIAN_STATES = [
 ];
 
 const Checkout = () => {
-  const { cartItems, cartTotal } = useCart();
+  const { cartItems, cartTotal, clearCart } = useCart();
+  const { isLoggedIn, token } = useAuth();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderStatus, setOrderStatus] = useState(null);
+
   const [form, setForm] = useState({
     email: '', newsletter: false,
     firstName: '', lastName: '',
@@ -23,6 +30,13 @@ const Checkout = () => {
     city: '', state: 'Uttar Pradesh', pincode: '',
     saveInfo: false,
   });
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Redirect to login but save the current location so they come back after login
+      navigate('/login', { state: { from: { pathname: '/checkout' } } });
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,6 +49,48 @@ const Checkout = () => {
   const getPrice = (item) => item?.discountPrice || item?.price || 0;
 
   const getId = (item) => item?._id || item?.id;
+
+  const handlePlaceOrder = async () => {
+    if (cartItems.length === 0) return;
+
+    setIsSubmitting(true);
+    setOrderStatus(null);
+
+    // Format order payload
+    const orderData = {
+      orderItems: cartItems.map(item => ({
+        product: getId(item),
+        name: item.name,
+        quantity: item.quantity,
+        price: getPrice(item),
+        image: getImage(item)
+      })),
+      shippingAddress: {
+        address: form.address,
+        city: form.city,
+        postalCode: form.pincode,
+        country: "India" // Default for now
+      },
+      paymentMethod: "PayPal", // Hardcoded mock
+      taxPrice: 0,
+      shippingPrice: 0,
+      totalPrice: cartTotal
+    };
+
+    const response = await placeOrder(orderData, token);
+
+    setIsSubmitting(false);
+
+    // The backend person3 implementation might return different shapes, assuming standard here:
+    if (response && response.success !== false) {
+      setOrderStatus('success');
+      clearCart();
+    } else {
+      setOrderStatus('error');
+    }
+  };
+
+  if (!isLoggedIn) return null; // Prevent flicker before redirect
 
   return (
     <div className="checkout-page">
@@ -167,7 +223,25 @@ const Checkout = () => {
             </div>
           </section>
 
-          <button className="checkout-pay-btn" disabled>Pay now</button>
+          <button 
+            className="checkout-pay-btn" 
+            onClick={handlePlaceOrder}
+            disabled={cartItems.length === 0 || isSubmitting}
+            style={{ opacity: cartItems.length === 0 || isSubmitting ? 0.7 : 1, cursor: cartItems.length === 0 || isSubmitting ? 'not-allowed' : 'pointer' }}
+          >
+            {isSubmitting ? 'Processing...' : 'Place Order'}
+          </button>
+
+          {orderStatus === 'success' && (
+             <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#e6ffe6', color: '#006600', border: '1px solid #00cc00', borderRadius: '4px' }}>
+                Successfully placed order! You will be redirected shortly.
+             </div>
+          )}
+          {orderStatus === 'error' && (
+             <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#ffe6e6', color: '#cc0000', border: '1px solid #ff0000', borderRadius: '4px' }}>
+                Failed to place order. Please try again.
+             </div>
+          )}
 
           <p className="checkout-footer-note">All rights reserved UrbanWear</p>
         </div>

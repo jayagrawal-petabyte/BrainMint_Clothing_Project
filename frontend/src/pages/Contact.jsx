@@ -1,9 +1,11 @@
-
+import React from "react";
 import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+import './Login.css';
+import './Contact.css';
 
 const Contact = () => {
   return (
@@ -156,140 +158,55 @@ const Contact = () => {
       </section>
 
       {/* Contact Form */}
-      <section
-        style={{
-          maxWidth: "1250px",
-          margin: "100px auto 0",
-          background: "var(--white-7)",
-          padding: "60px",
-          boxShadow: "0 15px 35px rgba(0,0,0,0.05)",
-        }}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "50px",
-          }}
-        >
-          <p
-            style={{
-              color:
-                "var(--ltn__secondary-color)",
-              fontSize: "14px",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              marginBottom: "10px",
-              fontWeight: "600",
-            }}
-          >
-            Have A Doubt?
-          </p>
-
-          <h2
-            style={{
-              fontSize: "44px",
-              fontWeight: "400",
-            }}
-          >
-            Send Us A Message
-          </h2>
-        </div>
-
-        <form>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "24px",
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Your Name"
-              style={inputStyle}
-            />
-
-            <input
-              type="email"
-              placeholder="Email Address"
-              style={inputStyle}
-            />
-
-            <select style={inputStyle}>
-              <option>
-                Select Query Type
-              </option>
-              <option>Order Issue</option>
-              <option>Return</option>
-              <option>Payment</option>
-              <option>Product Query</option>
-              <option>Other</option>
-            </select>
-
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              style={inputStyle}
-            />
+      <section className="contact-form-section">
+        <div className="contact-form-card stitch-card">
+          <div className="contact-form-header">
+            <p className="contact-form-subtitle">Have A Doubt?</p>
+            <h2 className="contact-form-title">Send Us A Message</h2>
           </div>
 
-          <textarea
-            rows="6"
-            placeholder="Describe your query..."
-            style={{
-              ...inputStyle,
-              marginTop: "24px",
-              width: "100%",
-              resize: "none",
-            }}
-          />
+          <form className="contact-form">
+            <div className="contact-form-grid">
+              <div className="stitch-input">
+                <input type="text" id="contactName" placeholder=" " required />
+                <label htmlFor="contactName">Your Name</label>
+              </div>
 
-          {/* <button
-            type="submit"
-            style={{
-              marginTop: "28px",
-              background:
-                "var(--ltn__primary-color)",
-              color: "#fff",
-              border:
-                "1px solid var(--ltn__primary-color)",
-              padding: "16px 38px",
-              fontSize: "14px",
-              cursor: "pointer",
-              letterSpacing: "1px",
-              transition: "0.3s ease",
-            }}
-          >
-            Send Message
-          </button> */}
-          <button
-  type="submit"
-  style={{
-    marginTop: "28px",
-    background: "var(--ltn__primary-color)",
-    color: "var(--white-7)",
-    border: "1px solid var(--ltn__primary-color)",
-    padding: "16px 38px",
-    fontSize: "14px",
-    fontWeight: "500",
-    letterSpacing: "1px",
-    cursor: "pointer",
-    transition: "all 0.4s ease",
-    display: "inline-block",
-  }}
-  onMouseEnter={(e) => {
-    e.target.style.background = "transparent";
-    e.target.style.color = "var(--ltn__heading-color)";
-  }}
-  onMouseLeave={(e) => {
-    e.target.style.background = "var(--ltn__primary-color)";
-    e.target.style.color = "var(--white-7)";
-  }}
->
-  Send Message
-</button>
-        </form>
+              <div className="stitch-input">
+                <input type="email" id="contactEmail" placeholder=" " required />
+                <label htmlFor="contactEmail">Email Address</label>
+              </div>
+
+              <div className="stitch-input">
+                <select id="contactQuery" required defaultValue="">
+                  <option value="" disabled hidden></option>
+                  <option value="Order Issue">Order Issue</option>
+                  <option value="Return">Return</option>
+                  <option value="Payment">Payment</option>
+                  <option value="Product Query">Product Query</option>
+                  <option value="Other">Other</option>
+                </select>
+                <label htmlFor="contactQuery">Select Query Type</label>
+              </div>
+
+              <div className="stitch-input">
+                <input type="tel" id="contactPhone" placeholder=" " required />
+                <label htmlFor="contactPhone">Phone Number</label>
+              </div>
+            </div>
+
+            <div className="stitch-input">
+              <textarea id="contactMessage" rows="6" placeholder=" " required style={{ resize: 'none' }}></textarea>
+              <label htmlFor="contactMessage">Describe your query...</label>
+            </div>
+
+            <div className="contact-form-actions">
+              <button type="submit" className="stitch-btn">
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
       </section>
     </div>
   );

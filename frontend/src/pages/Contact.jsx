@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from 'react';
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -212,13 +212,6 @@ const Contact = () => {
   );
 };
 
-const inputStyle = {
-  width: "100%",
-  padding: "18px 20px",
-  border: "1px solid var(--border-color-1)",
-  outline: "none",
-  fontSize: "15px",
-  fontFamily: "var(--ltn__body-font)",
   background: "var(--section-bg-1)",
   color: "var(--ltn__heading-color)",
 };

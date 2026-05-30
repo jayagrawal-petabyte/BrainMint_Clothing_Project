@@ -1,145 +1,281 @@
-.ltn__product-item {
-  margin-bottom: 0;
-  transition: transform 0.4s ease;
-}
+﻿import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Heart,
+  ShoppingCart,
+  Eye
+} from 'lucide-react';
 
-.ltn__product-item:hover {
-  transform: translateY(-5px);
-}
+import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
+import {
+  useSplat,
+  SplatParticles
+} from './SplatEffect';
+import AddToCartPopup from './AddToCartPopup';
 
-/* --- Product Image Area --- */
-.product-img {
-  position: relative;
-  overflow: hidden;
-  background-color: var(--white-7);
-  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+import './ProductCard.css';
 
-.product-img img {
-  width: 100%;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-}
+const ProductCard = ({ product }) => {
+  const { toggleWishlist, isWishlisted } =
+    useWishlist();
 
-.ltn__product-item:hover .product-img img {
-  transform: scale(1.05);
-}
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart
+  } = useCart();
 
-.ltn__product-item:hover .product-img {
-  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-}
+  // Support backend _id
+  const productId =
+    product?._id || product?.id;
 
-[data-theme="dark"] .ltn__product-item:hover .product-img {
-  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-}
+  // Safe values
+  const productName =
+    product?.name || 'Unnamed Product';
 
-.product-img img.primary-img {
-  opacity: 1;
-}
-.ltn__product-item:hover .product-img img.primary-img {
-  opacity: 0;
-}
+  const productImage =
+    product?.images?.[0]?.url ||
+    'https://placehold.co/400x500?text=No+Image';
 
-.product-img img.hover-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-.ltn__product-item:hover .product-img img.hover-img {
-  opacity: 1;
-}
+  const productImage2 =
+    product?.images?.[1]?.url;
 
-/* --- Hover Action Icons --- */
-.product-hover-action {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: max-content;
-  text-align: center;
-  opacity: 0;
-  transition: all 0.4s ease;
-}
+  const productPrice =
+    product?.discountPrice ||
+    product?.price ||
+    0;
 
-.ltn__product-item:hover .product-hover-action {
-  opacity: 1;
-  top: 50%;
-}
+  const originalPrice =
+    product?.price || 0;
 
-.product-hover-action ul {
-  display: inline-flex;
-  gap: 8px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
+  const wishlisted =
+    isWishlisted(productId);
 
-.product-hover-action li button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 44px;
-  height: 44px;
-  background-color: var(--white-7);
-  color: var(--ltn__heading-color);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
-}
+  const inCart = cartItems.some(
+    item =>
+      (item._id || item.id) ===
+      productId
+  );
 
-[data-theme="dark"] .product-hover-action li button {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
+  // Particle effects
+  const {
+    trigger: triggerWishSplat,
+    particles: wishParticles
+  } = useSplat();
 
-.product-hover-action li button:hover {
-  background-color: var(--ltn__primary-color);
-  color: var(--white-7);
-  transform: scale(1.05);
-}
+  const {
+    trigger: triggerCartSplat,
+    particles: cartParticles
+  } = useSplat();
 
-.product-hover-action li button.incart {
-  color: var(--ltn__primary-color);
-}
+  const [wishSplat, setWishSplat] = useState(false);
+  const [cartSplat, setCartSplat] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
-.product-hover-action li button.incart:hover {
-  color: var(--white-7);
-}
+  const triggerSplat = setter => {
+    setter(true);
 
-/* --- Product Info --- */
-.product-info {
-  padding: 20px 0 5px;
-  text-align: center; /* Center aligning product info for a more editorial look */
-}
+    setTimeout(() => {
+      setter(false);
+    }, 450);
+  };
 
-.product-title {
-  font-family: var(--ltn__heading-font);
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 8px;
-  line-height: 1.4;
-  letter-spacing: 0.5px;
-}
+  const handleWishlist = e => {
+    e.preventDefault();
 
-.product-title a {
-  color: var(--ltn__heading-color);
-  text-decoration: none;
-  transition: color 0.3s;
-}
+    toggleWishlist(product);
 
-.product-title a:hover {
-  color: var(--ltn__secondary-color);
-}
+    triggerSplat(setWishSplat);
 
-.product-price {
-  font-family: var(--ltn__body-font);
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--ltn__paragraph-color);
-}
+    triggerWishSplat(
+      wishlisted
+        ? '#aaaaaa'
+        : '#f24c5c',
+      12
+    );
+  };
 
+  const handleCart = e => {
+    e.preventDefault();
+    addToCart(product, 1);
+    triggerCartSplat('var(--ltn__primary-color)', 20);
+    setShowPopup(true);
+    triggerSplat(setCartSplat);
+  };
+
+  return (
+    <>
+      <div className="ltn__product-item">
+      {/* Product Image */}
+      <div className="product-img">
+        <Link
+          to={`/product/${productId}`}
+        >
+          <img
+            src={productImage}
+            alt={productName}
+            loading="lazy"
+            className={productImage2 ? "primary-img" : ""}
+          />
+          {productImage2 && (
+            <img
+              src={productImage2}
+              alt={`${productName} alternate`}
+              loading="lazy"
+              className="hover-img"
+            />
+          )}
+        </Link>
+
+        {/* Hover Actions */}
+        <div className="product-hover-action">
+          <ul>
+            {/* Quick View */}
+            <li>
+              <button
+                type="button"
+                title="Quick View"
+              >
+                <Eye size={16} />
+              </button>
+            </li>
+
+            {/* Wishlist */}
+            <li
+              style={{
+                position: 'relative'
+              }}
+            >
+              <button
+                type="button"
+                title={
+                  wishlisted
+                    ? 'Remove from Wishlist'
+                    : 'Add to Wishlist'
+                }
+                className={`
+                  ${
+                    wishlisted
+                      ? 'wishlisted'
+                      : ''
+                  }
+                  ${
+                    wishSplat
+                      ? 'splat-bounce'
+                      : ''
+                  }
+                `}
+                onClick={
+                  handleWishlist
+                }
+              >
+                <Heart
+                  size={16}
+                  fill={
+                    wishlisted
+                      ? 'currentColor'
+                      : 'none'
+                  }
+                />
+              </button>
+
+              <SplatParticles
+                particles={
+                  wishParticles
+                }
+              />
+            </li>
+
+            {/* Cart */}
+            <li
+              style={{
+                position: 'relative'
+              }}
+            >
+              <button
+                type="button"
+                title="Add to Cart"
+                className={`
+                  ${
+                    inCart
+                      ? 'incart'
+                      : ''
+                  }
+                  ${
+                    cartSplat
+                      ? 'splat-bounce'
+                      : ''
+                  }
+                `}
+                onClick={handleCart}
+              >
+                <ShoppingCart
+                  size={16}
+                  fill={
+                    inCart
+                      ? 'currentColor'
+                      : 'none'
+                  }
+                />
+              </button>
+
+              <SplatParticles
+                particles={
+                  cartParticles
+                }
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="product-info">
+        <h2 className="product-title">
+          <Link
+            to={`/product/${productId}`}
+          >
+            {productName}
+          </Link>
+        </h2>
+
+        <div className="product-price">
+          <span>
+            ₹
+            {productPrice.toLocaleString(
+              'en-IN'
+            )}
+          </span>
+
+          {product.discountPrice &&
+            originalPrice >
+              product.discountPrice && (
+              <del
+                style={{
+                  marginLeft: '10px',
+                  opacity: 0.7
+                }}
+              >
+                ₹
+                {originalPrice.toLocaleString(
+                  'en-IN'
+                )}
+              </del>
+            )}
+        </div>
+      </div>
+    </div>
+
+      {showPopup && (
+        <AddToCartPopup
+          product={product}
+          quantity={1}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
+    </>
+  );
+};
+
+export default ProductCard;

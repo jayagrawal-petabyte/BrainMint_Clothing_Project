@@ -1,0 +1,63 @@
+.contact-form-section {
+  max-width: 1000px;
+  margin: 100px auto 0;
+}
+
+.contact-form-card {
+  padding: 60px;
+}
+
+.contact-form-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.contact-form-subtitle {
+  color: #b71e36;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.contact-form-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 44px;
+  font-weight: 800;
+  color: #1a1c1c;
+  letter-spacing: -0.02em;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* extra gap for floating labels */
+}
+
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px 24px; 
+}
+
+.contact-form-actions {
+  margin-top: 10px;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .contact-form-card {
+    padding: 40px 20px;
+  }
+}
+
+/* Dark mode overrides for Contact */
+[data-theme="dark"] .contact-form-title {
+  color: #f5f5f5;
+}
+
+[data-theme="dark"] .contact-form-subtitle {
+  color: #e89ca9;
+}

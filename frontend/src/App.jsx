@@ -31,7 +31,7 @@ function App() {
         <Router>
           <ScrollToTopRoute />
           <Routes>
-            {/* Secure checkout â€” no Navbar or Footer */}
+            {/* Secure checkout — no Navbar or Footer */}
             <Route path="/checkout" element={<Checkout />} />
 
             {/* All other pages get the standard layout */}

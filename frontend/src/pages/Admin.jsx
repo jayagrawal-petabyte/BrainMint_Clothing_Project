@@ -17,7 +17,7 @@ const activityFeed = [
   { dot: "blue", text: <>New product <strong>Ruffle Blouse</strong> added to inventory</>, time: "1 hr ago" },
   { dot: "orange", text: <><strong>Denim Mini Skirt</strong> stock below threshold (3 left)</>, time: "2 hrs ago" },
   { dot: "green", text: <><strong>Order #UW-1042</strong> delivered successfully</>, time: "3 hrs ago" },
-  { dot: "", text: <><strong>Priya Mehta</strong> left a 5â˜… review on Silk Blouse</>, time: "4 hrs ago" },
+  { dot: "", text: <><strong>Priya Mehta</strong> left a 5★ review on Silk Blouse</>, time: "4 hrs ago" },
 ];
 
 const Admin = () => {
@@ -71,7 +71,7 @@ const Admin = () => {
                   <div className="stat-card-header">
                     <div className="stat-card-icon">{stat.icon}</div>
                     <span className={`stat-trend ${stat.dir}`}>
-                      {stat.dir === "up" ? "â†‘" : "â†“"} {stat.trend}
+                      {stat.dir === "up" ? "↑" : "↓"} {stat.trend}
                     </span>
                   </div>
                   <div className="stat-value">{stat.value}</div>

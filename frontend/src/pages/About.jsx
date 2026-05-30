@@ -257,7 +257,7 @@ const { theme } = useTheme();
               Every piece is designed with intention from carefully
               selected fabrics to refined detailing helping you build a
               wardrobe that feels as confident as it looks. UrbanWear is
-              more than fashion; itâ€™s about creating everyday moments of
+              more than fashion; it’s about creating everyday moments of
               confidence through elevated essentials.
             </p>
 
@@ -278,8 +278,8 @@ const { theme } = useTheme();
                   maxWidth: "500px",
                 }}
               >
-                â€œWe design timeless essentials that feel effortless,
-                refined, and beautifully lived in.â€
+                “We design timeless essentials that feel effortless,
+                refined, and beautifully lived in.”
               </p>
             </div>
 

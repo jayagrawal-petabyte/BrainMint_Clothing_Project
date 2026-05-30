@@ -1,9 +1,9 @@
-// â”€â”€â”€ Backend Service URLs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const AUTH_URL    = "https://brainmint-clothing-project-final.onrender.com/api";      // Person 1 â€“ Auth
-const PRODUCTS_URL = "https://brainmint-clothing-project-person2.onrender.com/api";   // Person 2 â€“ Products
-const CART_URL    = "https://brainmint-clothing-project-1.onrender.com/api";          // Person 3 â€“ Cart, Orders, Wishlist
+// ─── Backend Service URLs ────────────────────────────────────────────────────
+const AUTH_URL    = "https://brainmint-clothing-project-final.onrender.com/api";      // Person 1 – Auth
+const PRODUCTS_URL = "https://brainmint-clothing-project-person2.onrender.com/api";   // Person 2 – Products
+const CART_URL    = "https://brainmint-clothing-project-1.onrender.com/api";          // Person 3 – Cart, Orders, Wishlist
 
-// â”€â”€â”€ Products â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Products ─────────────────────────────────────────────────────────────────
 export const fetchProducts = async (params = "") => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/products${params}`);
@@ -48,7 +48,7 @@ export const fetchCategories = async () => {
   }
 };
 
-// â”€â”€â”€ Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Auth ─────────────────────────────────────────────────────────────────────
 export const loginUser = async (email, password) => {
   try {
     const response = await fetch(`${AUTH_URL}/auth/login`, {
@@ -77,7 +77,7 @@ export const registerUser = async (name, email, password) => {
   }
 };
 
-// â”€â”€â”€ Cart / Orders â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Cart / Orders ─────────────────────────────────────────────────────────────
 export const placeOrder = async (orderData, token) => {
   try {
     const response = await fetch(`${CART_URL}/orders`, {

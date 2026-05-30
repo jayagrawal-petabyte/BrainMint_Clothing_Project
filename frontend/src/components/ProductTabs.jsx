@@ -41,9 +41,9 @@ const ProductTabs = () => {
         {activeTab === 'Shipping Policy' && (
           <div className="tab-pane">
             <h4>Free Standard Shipping</h4>
-            <p>We offer free standard shipping on all orders above ₹999. Orders are processed within 1â€“2 business days and typically arrive within 5â€“7 business days.</p>
+            <p>We offer free standard shipping on all orders above ₹999. Orders are processed within 1–2 business days and typically arrive within 5–7 business days.</p>
             <h4>Express Shipping</h4>
-            <p>Express shipping is available for an additional fee. Express orders are delivered within 2â€“3 business days.</p>
+            <p>Express shipping is available for an additional fee. Express orders are delivered within 2–3 business days.</p>
             <h4>Returns</h4>
             <p>We accept returns within 30 days of purchase. Items must be unworn, unwashed, and in their original packaging.</p>
           </div>

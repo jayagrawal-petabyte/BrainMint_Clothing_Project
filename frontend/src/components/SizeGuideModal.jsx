@@ -3,11 +3,11 @@ import { X } from 'lucide-react';
 import './SizeGuideModal.css';
 
 const SIZE_DATA = [
-  { size: 'XS', chest: '76â€“81',  waist: '61â€“66',  hip: '84â€“89'  },
-  { size: 'S',  chest: '84â€“89',  waist: '69â€“74',  hip: '91â€“97'  },
-  { size: 'M',  chest: '91â€“97',  waist: '76â€“81',  hip: '99â€“104' },
-  { size: 'L',  chest: '99â€“104', waist: '84â€“89',  hip: '107â€“112'},
-  { size: 'XL', chest: '107â€“112',waist: '91â€“97',  hip: '114â€“119'},
+  { size: 'XS', chest: '76–81',  waist: '61–66',  hip: '84–89'  },
+  { size: 'S',  chest: '84–89',  waist: '69–74',  hip: '91–97'  },
+  { size: 'M',  chest: '91–97',  waist: '76–81',  hip: '99–104' },
+  { size: 'L',  chest: '99–104', waist: '84–89',  hip: '107–112'},
+  { size: 'XL', chest: '107–112',waist: '91–97',  hip: '114–119'},
 ];
 
 const SizeGuideModal = ({ onClose }) => {

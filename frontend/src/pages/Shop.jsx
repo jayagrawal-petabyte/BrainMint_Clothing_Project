@@ -259,11 +259,11 @@ const Shop = () => {
                 </option>
 
                 <option value="price-low">
-                  Price: Low â†’ High
+                  Price: Low → High
                 </option>
 
                 <option value="price-high">
-                  Price: High â†’ Low
+                  Price: High → Low
                 </option>
               </select>
             </div>

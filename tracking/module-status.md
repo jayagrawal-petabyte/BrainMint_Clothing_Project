@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 | Module | Team | Status |
 |--------|------|--------|
 | Frontend Setup | Frontend | Completed |

@@ -46,44 +46,48 @@ const Login = () => {
 
       {/* Login Form */}
       <div className="auth-container">
-        <div className="auth-form-wrapper">
+        <div className="auth-form-wrapper stitch-card">
           <div className="auth-form-header">
             <h2>Login</h2>
-            <p>Please login using account detail bellow.</p>
+            <p>Please login using account details below.</p>
           </div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             {error && <div className="auth-error">{error}</div>}
             
-            <div className="auth-input-group">
+            <div className="auth-input-group stitch-input">
               <input 
                 type="email" 
-                placeholder="Email" 
+                id="email"
+                placeholder=" " 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+              <label htmlFor="email">Email</label>
             </div>
             
-            <div className="auth-input-group">
+            <div className="auth-input-group stitch-input">
               <input 
                 type="password" 
-                placeholder="Password" 
+                id="password"
+                placeholder=" " 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <label htmlFor="password">Password</label>
             </div>
 
             <div className="auth-actions">
               <button 
                 type="submit" 
-                className="auth-submit-btn"
+                className="auth-submit-btn stitch-btn"
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing In...' : 'Sign In'}
               </button>
-              <Link to="/forgot-password" className="auth-forgot-link">
+              <Link to="/forgot-password" className="auth-forgot-link stitch-link">
                 Forgot your password?
               </Link>
             </div>

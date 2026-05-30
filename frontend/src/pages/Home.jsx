@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -135,6 +135,7 @@ const Home = () => {
           <Link
             to="/shop?category=Dress"
             className="category-tile"
+            aria-label="Shop Dresses"
           >
             <img
               src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"
@@ -148,6 +149,7 @@ const Home = () => {
           <Link
             to="/shop?category=Top"
             className="category-tile"
+            aria-label="Shop Tops"
           >
             <img
               src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=500"
@@ -161,6 +163,7 @@ const Home = () => {
           <Link
             to="/shop?category=Skirt"
             className="category-tile"
+            aria-label="Shop Skirts"
           >
             <img
               src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500"
@@ -174,6 +177,7 @@ const Home = () => {
           <Link
             to="/shop?category=Coat"
             className="category-tile"
+            aria-label="Shop Coats"
           >
             <img
               src="https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500"

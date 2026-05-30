@@ -67,6 +67,15 @@
 ## Deployment
 - render.yaml
 
+## Category Management Module
+- Category.js
+- categoryRoutes.js
+
+## Supporting Files
+- db.js
+- ApiError.js
+- asyncHandler.js
+- server.js
 ## Recent Backend File Updates
 - categoryController.js
 - productController.js

@@ -137,25 +137,36 @@
   position: relative;
 }
 
-.user-menu > a {
+.user-menu > a,
+.navbar-icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 45px;
   height: 45px;
   border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
   color: var(--ltn__heading-color, #010101);
   transition: all 0.3s ease;
 }
 
-.user-menu > a:hover {
+.user-menu > a:hover,
+.navbar-icon-btn:hover {
   color: var(--ltn__secondary-color, #e55472);
+}
+
+.navbar-icon-btn.logged-in {
+  color: var(--ltn__primary-color);
 }
 
 .mini-cart-btn {
   display: flex;
   align-items: center;
   gap: 15px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 .mini-cart-icon {

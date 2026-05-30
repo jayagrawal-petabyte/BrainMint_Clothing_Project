@@ -1,26 +1,45 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const WishlistContext = createContext();
 
 export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlistItems, setWishlistItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('urbanwear_wishlist');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
+  const { user, isLoggedIn } = useAuth();
+  const [wishlistItems, setWishlistItems] = useState([]);
 
+  // When user auth changes, load their specific wishlist from localStorage
   useEffect(() => {
-    localStorage.setItem('urbanwear_wishlist', JSON.stringify(wishlistItems));
-  }, [wishlistItems]);
+    if (!isLoggedIn) {
+      setWishlistItems([]);
+      return;
+    }
+
+    const storageKey = `urbanwear_wishlist_${user?.email}`;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      setWishlistItems(saved ? JSON.parse(saved) : []);
+    } catch (e) {
+      setWishlistItems([]);
+    }
+  }, [isLoggedIn, user]);
+
+  // When wishlistItems changes, save to their specific localStorage (only if logged in)
+  useEffect(() => {
+    if (isLoggedIn && user?.email) {
+      const storageKey = `urbanwear_wishlist_${user.email}`;
+      localStorage.setItem(storageKey, JSON.stringify(wishlistItems));
+    }
+  }, [wishlistItems, isLoggedIn, user]);
 
   const getId = (item) => item?._id || item?.id;
 
   const addToWishlist = (product) => {
+    if (!isLoggedIn) {
+      alert("Please login to add items to your wishlist!");
+      return;
+    }
     setWishlistItems(prev => {
       if (prev.find(item => getId(item) === getId(product))) return prev;
       return [...prev, product];
@@ -32,6 +51,10 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const toggleWishlist = (product) => {
+    if (!isLoggedIn) {
+      alert("Please login to use the wishlist!");
+      return;
+    }
     if (wishlistItems.find(item => getId(item) === getId(product))) {
       removeFromWishlist(getId(product));
     } else {

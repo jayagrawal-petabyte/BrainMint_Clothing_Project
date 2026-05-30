@@ -5,6 +5,9 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Account from './pages/Account';
 import About from './pages/About';
 import Admin from './pages/Admin';
 import Returns from './pages/Returns';
@@ -16,13 +19,15 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopRoute from './components/ScrollToTopRoute';
 import Contact from "./pages/Contact";
+import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
 function App() {
   return (
-    <CartProvider>
-      <WishlistProvider>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
         <Router>
           <ScrollToTopRoute />
           <Routes>
@@ -41,6 +46,9 @@ function App() {
                   <Route path="/product/:id" element={<ProductDetail />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/account" element={<Account />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/returns" element={<Returns />} />
@@ -56,6 +64,7 @@ function App() {
         </Router>
       </WishlistProvider>
     </CartProvider>
+    </AuthProvider>
   );
 }
 

@@ -4,11 +4,13 @@ import { useCart } from '../context/CartContext';
 import { useState, useEffect } from "react";
 import CartDrawer from "./CartDrawer";
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const { cartCount, cartTotal } = useCart();
   const { theme, toggleTheme } = useTheme();
+  const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
@@ -75,9 +77,31 @@ const Navbar = () => {
             <div className="header-options">
               <ul>
                 <li className="user-menu">
-                  <Link to="/account">
-                    <User size={24} />
-                  </Link>
+                  <div className="user-dropdown-container">
+                    <button className="theme-toggle-btn" style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: isLoggedIn ? 'var(--ltn__primary-color)' : 'var(--ltn__heading-color)', transition: 'all 0.3s ease' }}>
+                      <User size={24} />
+                    </button>
+                    <div className="user-dropdown-menu">
+                      {isLoggedIn ? (
+                        <>
+                          <div className="user-dropdown-header">
+                            <Link to="/account" style={{ color: 'inherit', textDecoration: 'none' }}>
+                              {user?.name || user?.email?.split('@')[0] || 'My Account'}
+                            </Link>
+                          </div>
+                          <button className="user-dropdown-menu-item" onClick={logout}>
+                            Logout
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <Link to="/login" className="user-dropdown-menu-item">Login</Link>
+                          <Link to="/register" className="user-dropdown-menu-item">Register</Link>
+                          <Link to="/account" className="user-dropdown-menu-item">My Account</Link>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </li>
                 <li className="user-menu">
                   <Link to="/wishlist" title="Wishlist">

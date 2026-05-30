@@ -1,0 +1,147 @@
+.auth-page {
+  padding: 0 0 100px;
+}
+
+.auth-header {
+  background-color: var(--section-bg-1);
+  padding: 60px 0;
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.auth-header h1 {
+  font-size: 42px;
+  margin-bottom: 15px;
+  color: var(--ltn__heading-color);
+}
+
+.auth-breadcrumb {
+  font-size: 14px;
+  color: var(--ltn__paragraph-color);
+}
+
+.auth-breadcrumb a {
+  color: var(--ltn__paragraph-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.auth-breadcrumb a:hover {
+  color: var(--ltn__primary-color);
+}
+
+.auth-breadcrumb span {
+  margin: 0 10px;
+}
+
+.auth-container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.auth-form-wrapper {
+  background: #fff;
+}
+
+.auth-form-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.auth-form-header h2 {
+  font-size: 36px;
+  margin-bottom: 15px;
+  color: var(--ltn__heading-color);
+}
+
+.auth-form-header p {
+  color: var(--ltn__paragraph-color);
+  font-size: 15px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.auth-input-group {
+  position: relative;
+}
+
+.auth-input-group input {
+  width: 100%;
+  padding: 18px 25px;
+  border: 1px solid #e5e5e5;
+  background-color: transparent;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  color: var(--ltn__paragraph-color);
+  outline: none;
+}
+
+.auth-input-group input:focus {
+  border-color: var(--ltn__primary-color);
+}
+
+.auth-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.auth-submit-btn {
+  background-color: var(--ltn__primary-color);
+  color: #fff;
+  border: none;
+  padding: 15px 45px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-submit-btn:hover {
+  background-color: var(--ltn__heading-color);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.auth-forgot-link {
+  color: var(--ltn__paragraph-color);
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.auth-forgot-link:hover {
+  color: var(--ltn__primary-color);
+}
+
+.auth-footer-link {
+  display: inline-block;
+  margin-top: 30px;
+  color: var(--ltn__paragraph-color);
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.auth-footer-link:hover {
+  color: var(--ltn__primary-color);
+}
+
+.auth-error {
+  background-color: #fce4e4;
+  border: 1px solid #fccacb;
+  color: #cc0033;
+  padding: 12px 20px;
+  margin-bottom: 25px;
+  font-size: 14px;
+  border-radius: 2px;
+}

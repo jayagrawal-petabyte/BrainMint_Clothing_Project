@@ -1,0 +1,116 @@
+.account-page {
+  padding: 0 0 100px;
+}
+
+.account-header {
+  background-color: var(--section-bg-1);
+  padding: 60px 0;
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.account-header h1 {
+  font-size: 42px;
+  margin-bottom: 15px;
+  color: var(--ltn__heading-color);
+}
+
+.account-breadcrumb {
+  font-size: 14px;
+  color: var(--ltn__paragraph-color);
+}
+
+.account-breadcrumb a {
+  color: var(--ltn__paragraph-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.account-breadcrumb a:hover {
+  color: var(--ltn__primary-color);
+}
+
+.account-breadcrumb span {
+  margin: 0 10px;
+}
+
+.account-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.account-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 15px;
+  margin-bottom: 40px;
+}
+
+.account-top-bar h2 {
+  font-size: 32px;
+  color: var(--ltn__heading-color);
+  margin: 0;
+}
+
+.account-logout-link {
+  color: var(--ltn__heading-color);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.account-logout-link:hover {
+  color: var(--ltn__primary-color);
+}
+
+.account-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+}
+
+@media (max-width: 768px) {
+  .account-content-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.account-section h3 {
+  font-size: 18px;
+  color: var(--ltn__heading-color);
+  margin-bottom: 20px;
+}
+
+.account-section p {
+  color: var(--ltn__paragraph-color);
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.account-user-name {
+  font-weight: 700;
+  color: var(--ltn__heading-color);
+  margin-bottom: 30px !important;
+}
+
+.account-address-link {
+  display: inline-block;
+  margin-top: 15px;
+  color: var(--ltn__heading-color);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.account-address-link:hover {
+  color: var(--ltn__primary-color);
+}

@@ -42,6 +42,12 @@ body {
   color: var(--ltn__paragraph-color);
   background-color: var(--white-7);
   line-height: 1.8;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {

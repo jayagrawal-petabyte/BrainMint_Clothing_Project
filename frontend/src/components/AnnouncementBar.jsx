@@ -1,11 +1,11 @@
-﻿
+
 import './AnnouncementBar.css';
 
 const AnnouncementBar = () => {
   return (
     <div className="announcement-bar">
       <div className="container">
-        <h2 style={{ color: 'white' }}>Free Shipping over ₹1,999</h2>
+        <p style={{ color: 'white', margin: 0, fontWeight: 500 }}>Free Shipping over ₹1,999</p>
       </div>
     </div>
   );

@@ -137,6 +137,8 @@
   display: flex;
   flex-direction: column;
   box-shadow: 5px 0 20px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .drawer-header {
@@ -321,8 +323,11 @@
 }
 
 @media (max-width: 575px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .product-grid,
+  .product-grid.grid-cols-2,
+  .product-grid.grid-cols-3,
+  .product-grid.grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 15px;
   }
 

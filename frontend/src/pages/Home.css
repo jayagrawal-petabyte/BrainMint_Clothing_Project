@@ -448,3 +448,29 @@
     margin-top: 4rem;
   }
 }
+
+@media (max-width: 768px) {
+  .hero-text-content h1 {
+    font-size: 44px;
+  }
+  .hero-text-content p {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-text-content h1 {
+    font-size: 32px;
+  }
+  .hero-text-content p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .hero-slide-content.align-left,
+  .hero-slide-content.align-center,
+  .hero-slide-content.align-right {
+    text-align: center;
+    justify-content: center;
+  }
+}

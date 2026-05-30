@@ -434,6 +434,12 @@
 
 @media (max-width: 991px) {
   .d-none-lg {
-    display: none;
+    display: none !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .d-lg-none {
+    display: none !important;
   }
 }

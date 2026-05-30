@@ -95,4 +95,13 @@
 - Product module environment configuration updated
 - Product model updated in cart-orders module
 - Backend package configuration updated
+
+## Category Module Updates
+- Database configuration reviewed/updated
+- Category model added/updated
+- Category routes added/updated
+- API error handling utilities updated
+- Async handler utilities updated
+- Server configuration updated
+
 >>>>>>> origin/main

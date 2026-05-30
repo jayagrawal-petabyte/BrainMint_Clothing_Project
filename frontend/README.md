@@ -1,5 +1,12 @@
 # Clothing Store — Frontend
 
+This folder contains:
+- UI pages
+- Components
+- Responsive design details
+- Frontend module tracking
+- Frontend feature implementation
+
 A React + Vite frontend for a clothing store.
 
 ## Tech Stack

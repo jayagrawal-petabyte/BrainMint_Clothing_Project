@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./person1-auth/src/routes/authRoutes');
 const productRoutes = require('./person2-products/src/routes/productRoutes');
 const categoryRoutes = require('./person2-products/src/routes/categoryRoutes');
+const adminProductRoutes = require('./person2-products/src/routes/adminRoutes');
 const cartRoutes = require('./person3-cart-orders/src/routes/cartRoutes');
 const wishlistRoutes = require('./person3-cart-orders/src/routes/wishlistRoutes');
 const orderRoutes = require('./person3-cart-orders/src/routes/orderRoutes');
@@ -37,6 +38,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/admin/products', adminProductRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/orders', orderRoutes);

@@ -28,7 +28,7 @@ To add sample products for frontend testing:
 npm run seed
 ```
 
-If `GET /api/products` returns an empty array, the connected MongoDB database does not have products yet. Run the seed command above or create products through the admin API.
+The seed command now upserts 6 categories and 10+ products across hoodies, t-shirts, jeans, shirts, jackets, and joggers, including featured, bestseller, and low-stock examples. If `GET /api/products` returns an empty array, the connected MongoDB database does not have products yet. Run the seed command above or create products through the admin API.
 
 ## API Base URL
 
@@ -69,6 +69,27 @@ Error response:
 | DELETE | `/products/:id` | Admin | Delete product |
 | GET | `/products/bestsellers` | Public | Bestseller products |
 | GET | `/products/new-arrivals` | Public | Latest products |
+
+## Admin Product Panel
+
+Open the built-in admin panel at:
+
+```text
+GET /api/admin/products/panel
+```
+
+The panel loads products, category options, product stats, low-stock indicators, and create/edit/delete controls. It calls the protected admin API below and includes the temporary testing headers documented later in this file.
+
+Protected admin endpoints:
+
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| GET | `/admin/products/dashboard` | Admin | Product, inventory, and catalog summary stats |
+| GET | `/admin/products` | Admin | Admin product list including inactive products and categories |
+| GET | `/admin/products/:id` | Admin | Fetch one product for editing |
+| POST | `/admin/products` | Admin | Create product |
+| PUT | `/admin/products/:id` | Admin | Update product |
+| DELETE | `/admin/products/:id` | Admin | Delete product |
 
 ## Product Query Examples
 

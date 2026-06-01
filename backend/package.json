@@ -1,21 +1,24 @@
 {
-  "name": "brainmint-person2-products",
+  "name": "brainmint-backend",
   "version": "1.0.0",
-  "description": "Person 2 backend module for products, categories, inventory, and admin product APIs.",
+  "description": "BrainMint Clothing Project - Combined Backend",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "seed": "node src/seed/seedProducts.js",
     "start": "node server.js",
-    "test": "node test/person2-products.test.js"
+    "dev": "nodemon server.js"
   },
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemailer": "^8.0.9",
+    "razorpay": "^2.9.6"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

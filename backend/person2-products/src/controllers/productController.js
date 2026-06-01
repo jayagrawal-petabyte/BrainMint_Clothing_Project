@@ -11,6 +11,71 @@ const toArray = (value) => {
   return Array.isArray(value) ? value : String(value).split(',').map((item) => item.trim()).filter(Boolean);
 };
 
+const toBoolean = (value) => {
+  if (value === undefined || value === null || value === '') return undefined;
+  if (typeof value === 'boolean') return value;
+
+  const normalized = String(value).trim().toLowerCase();
+  if (['true', '1', 'yes'].includes(normalized)) return true;
+  if (['false', '0', 'no'].includes(normalized)) return false;
+
+  return undefined;
+};
+
+const toPositiveNumber = (value, fallback, max) => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 1) return fallback;
+  return Math.min(Math.floor(parsed), max);
+};
+
+const toPrice = (value) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+};
+
+const firstDefined = (...values) => values.find((value) => value !== undefined);
+
+const sortMap = {
+  newest: '-createdAt',
+  latest: '-createdAt',
+  oldest: 'createdAt',
+  'price-low': 'price',
+  price_low: 'price',
+  lowtohigh: 'price',
+  price_asc: 'price',
+  'price-high': '-price',
+  price_high: '-price',
+  hightolow: '-price',
+  price_desc: '-price',
+  rating: '-ratings.average',
+  ratings: '-ratings.average',
+  bestseller: '-inventory.sold',
+  bestselling: '-inventory.sold',
+  name: 'name',
+  'name-desc': '-name',
+  featured: '-isFeatured'
+};
+
+const allowedSortFields = new Set([
+  'createdAt',
+  'price',
+  'discountPrice',
+  'ratings.average',
+  'inventory.sold',
+  'name',
+  'isFeatured'
+]);
+
+const resolveSort = (sort) => {
+  if (!sort) return '-createdAt';
+  const normalizedSort = String(sort).trim();
+  if (sortMap[normalizedSort]) return sortMap[normalizedSort];
+  if (sortMap[normalizedSort.toLowerCase()]) return sortMap[normalizedSort.toLowerCase()];
+
+  const directionless = normalizedSort.startsWith('-') ? normalizedSort.slice(1) : normalizedSort;
+  return allowedSortFields.has(directionless) ? normalizedSort : '-createdAt';
+};
+
 const formatProductForFrontend = (product) => {
   const productObject = typeof product.toObject === 'function' ? product.toObject() : product;
   const populatedCategory = productObject.category && typeof productObject.category === 'object'
@@ -27,67 +92,116 @@ const formatProductForFrontend = (product) => {
   };
 };
 
-const resolveCategoryFilter = async (category) => {
-  if (!category) return undefined;
+const resolveCategoryFilter = async (categoryValue) => {
+  const categoriesToMatch = toArray(categoryValue);
+  if (categoriesToMatch.length === 0) return undefined;
 
-  if (mongoose.Types.ObjectId.isValid(category)) {
-    return category;
+  const categoryIds = categoriesToMatch.filter((category) => mongoose.Types.ObjectId.isValid(category));
+  const categoryNames = categoriesToMatch.filter((category) => !mongoose.Types.ObjectId.isValid(category));
+
+  if (categoryNames.length > 0) {
+    const categoryRegexes = categoryNames.map((category) => new RegExp(`^${escapeRegex(category)}$`, 'i'));
+    const categories = await Category.find({
+      $or: [
+        { name: { $in: categoryRegexes } },
+        { slug: { $in: categoryRegexes } }
+      ]
+    }).select('_id');
+
+    categoryIds.push(...categories.map((item) => item._id));
   }
 
-  const categoryRegex = new RegExp(`^${escapeRegex(category)}$`, 'i');
-  const categories = await Category.find({
-    $or: [
-      { name: categoryRegex },
-      { slug: categoryRegex }
-    ]
-  }).select('_id');
-
-  return categories.length > 0 ? { $in: categories.map((item) => item._id) } : null;
+  return categoryIds.length > 0 ? { $in: categoryIds } : { $in: [] };
 };
 
 const buildProductQuery = async (queryParams) => {
   const query = {};
+  const categoryValue = firstDefined(queryParams.category, queryParams.categorySlug, queryParams.categories);
+  const brandList = toArray(firstDefined(queryParams.brand, queryParams.brands));
+  const sizeList = toArray(firstDefined(queryParams.size, queryParams.sizes));
+  const colorList = toArray(firstDefined(queryParams.color, queryParams.colors));
+  const minPrice = toPrice(queryParams.minPrice);
+  const maxPrice = toPrice(queryParams.maxPrice);
+  const isFeatured = toBoolean(firstDefined(queryParams.isFeatured, queryParams.featured));
+  const isBestseller = toBoolean(firstDefined(queryParams.isBestseller, queryParams.bestseller));
+  const isActive = toBoolean(queryParams.isActive);
+  const inStock = toBoolean(queryParams.inStock);
 
-  if (queryParams.category) query.category = await resolveCategoryFilter(queryParams.category);
-  if (queryParams.brand) query.brand = new RegExp(escapeRegex(queryParams.brand), 'i');
-  if (queryParams.size) query.sizes = { $in: toArray(queryParams.size) };
-  if (queryParams.color) query.colors = { $in: toArray(queryParams.color) };
-  if (queryParams.isFeatured) query.isFeatured = queryParams.isFeatured === 'true';
-  if (queryParams.isBestseller) query.isBestseller = queryParams.isBestseller === 'true';
-  if (queryParams.isActive) query.isActive = queryParams.isActive === 'true';
+  query.isActive = isActive === undefined ? true : isActive;
 
-  if (queryParams.search) {
-    query.$text = { $search: queryParams.search };
+  if (categoryValue) query.category = await resolveCategoryFilter(categoryValue);
+  if (brandList.length > 0) query.brand = { $in: brandList.map((brand) => new RegExp(`^${escapeRegex(brand)}$`, 'i')) };
+  if (sizeList.length > 0) query.sizes = { $in: sizeList };
+  if (colorList.length > 0) query.colors = { $in: colorList };
+  if (isFeatured !== undefined) query.isFeatured = isFeatured;
+  if (isBestseller !== undefined) query.isBestseller = isBestseller;
+
+  const search = (queryParams.search || queryParams.q || '').trim();
+  if (search) {
+    query.$text = { $search: search };
   }
 
-  if (queryParams.minPrice || queryParams.maxPrice) {
+  if (minPrice !== undefined || maxPrice !== undefined) {
     query.price = {};
-    if (queryParams.minPrice) query.price.$gte = Number(queryParams.minPrice);
-    if (queryParams.maxPrice) query.price.$lte = Number(queryParams.maxPrice);
+    if (minPrice !== undefined) query.price.$gte = minPrice;
+    if (maxPrice !== undefined) query.price.$lte = maxPrice;
   }
 
-  if (queryParams.inStock === 'true') {
+  if (inStock === true) {
     query['inventory.stock'] = { $gt: 0 };
+  } else if (inStock === false) {
+    query['inventory.stock'] = { $lte: 0 };
   }
 
   return query;
 };
 
+const getCatalogFilters = async (baseQuery) => {
+  const [categories, brands, sizes, colors, priceRange] = await Promise.all([
+    Category.find({ isActive: true }).sort({ name: 1 }).select('name slug description image isActive'),
+    Product.distinct('brand', baseQuery),
+    Product.distinct('sizes', baseQuery),
+    Product.distinct('colors', baseQuery),
+    Product.aggregate([
+      { $match: baseQuery },
+      {
+        $group: {
+          _id: null,
+          min: { $min: '$price' },
+          max: { $max: '$price' }
+        }
+      }
+    ])
+  ]);
+
+  return {
+    categories,
+    brands: brands.filter(Boolean).sort(),
+    sizes: sizes.filter(Boolean).sort(),
+    colors: colors.filter(Boolean).sort(),
+    priceRange: priceRange[0] || { min: 0, max: 0 },
+    sortOptions: Object.keys(sortMap)
+  };
+};
+
 const getProducts = asyncHandler(async (req, res) => {
-  const page = Math.max(Number(req.query.page) || 1, 1);
-  const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 100);
+  const page = toPositiveNumber(req.query.page, 1, Number.MAX_SAFE_INTEGER);
+  const limit = toPositiveNumber(req.query.limit, 12, 100);
   const skip = (page - 1) * limit;
-  const sort = req.query.sort || '-createdAt';
+  const sort = resolveSort(req.query.sort);
   const query = await buildProductQuery(req.query);
 
-  const [products, total] = await Promise.all([
+  const [products, total, filters] = await Promise.all([
     Product.find(query)
       .populate('category', 'name slug')
       .sort(sort)
+      .collation({ locale: 'en', strength: 2 })
       .skip(skip)
       .limit(limit),
-    Product.countDocuments(query)
+    Product.countDocuments(query),
+    getCatalogFilters({ isActive: true })
   ]);
+  const pages = Math.ceil(total / limit);
 
   res.json({
     success: true,
@@ -96,10 +210,15 @@ const getProducts = asyncHandler(async (req, res) => {
       products: products.map(formatProductForFrontend),
       pagination: {
         page,
-        pages: Math.ceil(total / limit),
+        limit,
+        pages,
         total,
-        count: products.length
-      }
+        count: products.length,
+        hasNextPage: page < pages,
+        hasPrevPage: page > 1
+      },
+      sort,
+      filters
     }
   });
 });
@@ -224,5 +343,12 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getBestsellers,
-  getNewArrivals
+  getNewArrivals,
+  _private: {
+    buildProductQuery,
+    resolveSort,
+    toArray,
+    toBoolean,
+    toPrice
+  }
 };

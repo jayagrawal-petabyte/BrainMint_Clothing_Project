@@ -96,14 +96,39 @@ Protected admin endpoints:
 ```text
 GET /api/products?page=1&limit=10
 GET /api/products?search=shirt
+GET /api/products?q=shirt
 GET /api/products?category=categoryId&minPrice=500&maxPrice=2000
 GET /api/products?category=Hoodie
-GET /api/products?size=M
-GET /api/products?color=%23000000
-GET /api/products?brand=nike&inStock=true
-GET /api/products?sort=price
-GET /api/products?sort=-createdAt
+GET /api/products?categories=hoodie,t-shirt
+GET /api/products?sizes=M,L
+GET /api/products?colors=%23000000,%23FFFFFF
+GET /api/products?brands=UrbanWear,BrainMint&inStock=true
+GET /api/products?featured=true
+GET /api/products?bestseller=true
+GET /api/products?sort=price-low
+GET /api/products?sort=price-high
+GET /api/products?sort=rating
+GET /api/products?sort=newest
 ```
+
+`GET /api/products` is the dynamic catalog endpoint for the frontend. Public results default to `isActive=true`, support comma-separated filters, and include pagination plus filter metadata so the frontend can stop depending on a static `products.js` mock file.
+
+Supported query params:
+
+| Query | Description |
+| --- | --- |
+| `page`, `limit` | Pagination. `limit` is capped at `100` and defaults to `12`. |
+| `search` or `q` | Full-text search across product name, description, and brand. |
+| `category`, `categorySlug`, `categories` | Category id, name, or slug. Multiple values can be comma-separated. |
+| `brand`, `brands` | Brand filter. Multiple values can be comma-separated. |
+| `size`, `sizes` | Size filter. Multiple values can be comma-separated. |
+| `color`, `colors` | Color filter. Multiple values can be comma-separated. |
+| `minPrice`, `maxPrice` | Price range filter. |
+| `inStock` | `true` for stock greater than `0`, `false` for out-of-stock products. |
+| `featured` or `isFeatured` | Featured product filter. |
+| `bestseller` or `isBestseller` | Bestseller product filter. |
+| `isActive` | Overrides the public active-only default when explicitly provided. |
+| `sort` | Supports `newest`, `oldest`, `price-low`, `price-high`, `rating`, `bestseller`, `name`, or safe direct fields like `-createdAt`. |
 
 Frontend product response fields:
 
@@ -134,6 +159,39 @@ Frontend product response fields:
     "sku": "HD-101"
   },
   "brand": "UrbanWear"
+}
+```
+
+Catalog list responses wrap products with pagination, selected sort, and available filters:
+
+```json
+{
+  "success": true,
+  "message": "Products fetched successfully",
+  "data": {
+    "products": [],
+    "pagination": {
+      "page": 1,
+      "limit": 12,
+      "pages": 3,
+      "total": 28,
+      "count": 12,
+      "hasNextPage": true,
+      "hasPrevPage": false
+    },
+    "sort": "-createdAt",
+    "filters": {
+      "categories": [],
+      "brands": ["BrainMint", "UrbanWear"],
+      "sizes": ["M", "L", "XL"],
+      "colors": ["#000000", "#FFFFFF"],
+      "priceRange": {
+        "min": 699,
+        "max": 3999
+      },
+      "sortOptions": ["newest", "latest", "oldest", "price-low", "price-high", "rating", "bestseller"]
+    }
+  }
 }
 ```
 

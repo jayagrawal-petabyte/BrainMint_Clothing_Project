@@ -51,6 +51,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7',
+        public_id: 'products/oversized-hoodie',
         alt: 'Oversized Hoodie'
       }
     ],
@@ -81,6 +82,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab',
+        public_id: 'products/classic-cotton-t-shirt',
         alt: 'Classic Cotton T-Shirt'
       }
     ],
@@ -111,6 +113,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1542272604-787c3835535d',
+        public_id: 'products/slim-fit-denim-jeans',
         alt: 'Slim Fit Denim Jeans'
       }
     ],
@@ -141,6 +144,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1',
+        public_id: 'products/graphic-street-t-shirt',
         alt: 'Graphic Street T-Shirt'
       }
     ],
@@ -171,6 +175,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c',
+        public_id: 'products/linen-resort-shirt',
         alt: 'Linen Resort Shirt'
       }
     ],
@@ -201,6 +206,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf',
+        public_id: 'products/oxford-button-down-shirt',
         alt: 'Oxford Button Down Shirt'
       }
     ],
@@ -231,6 +237,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1543076447-215ad9ba6923',
+        public_id: 'products/lightweight-bomber-jacket',
         alt: 'Lightweight Bomber Jacket'
       }
     ],
@@ -261,6 +268,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234',
+        public_id: 'products/denim-trucker-jacket',
         alt: 'Denim Trucker Jacket'
       }
     ],
@@ -291,6 +299,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea',
+        public_id: 'products/performance-joggers',
         alt: 'Performance Joggers'
       }
     ],
@@ -321,6 +330,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f',
+        public_id: 'products/fleece-lounge-joggers',
         alt: 'Fleece Lounge Joggers'
       }
     ],
@@ -351,6 +361,7 @@ const products = [
     images: [
       {
         url: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a',
+        public_id: 'products/relaxed-cargo-jeans',
         alt: 'Relaxed Cargo Jeans'
       }
     ],

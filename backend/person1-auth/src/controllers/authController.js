@@ -13,18 +13,30 @@ exports.register = async (req, res) => {
 
   try {
 
-    const { name, email, password } = req.body;
+      const { name, email, phoneNumber, password } = req.body;
 
-    // Check existing user
-    const existingUser =
-      await User.findOne({ email });
+      // Phone number validation
+      if (!/^[0-9]{10}$/.test(phoneNumber)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid phone number format"
+        });
+      }
 
+      const existingUser = await User.findOne({
+      $or: [
+        { email },
+        { phoneNumber }
+      ]
+    });
+    
     if(existingUser){
       return res.status(400).json({
-        success: false,
-        message: "User already exists"
-      });
-    }
+      success: false,
+      message: "User already exists"
+    });
+  }
+    
 
     // Hash password
     const hashedPassword =
@@ -32,10 +44,11 @@ exports.register = async (req, res) => {
 
     // Create user
     const user = await User.create({
-      name,
-      email,
-      password: hashedPassword
-    });
+  name,
+  email,
+  phoneNumber,
+  password: hashedPassword
+});
 
     res.status(201).json({
     success: true,
@@ -45,6 +58,7 @@ exports.register = async (req, res) => {
       id: user._id,
       name: user.name,
       email: user.email,
+      phoneNumber: user.phoneNumber,
       role: user.role
     }
   }
@@ -64,15 +78,21 @@ exports.login = async (req, res) => {
 
   try {
 
-    const { email, password } = req.body;
+    const { phoneNumber, password } = req.body;
+    // Phone number validation
+    if (!/^[0-9]{10}$/.test(phoneNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid phone number format"
+      });
+    }
 
-    // Check user exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ phoneNumber });
 
     if(!user){
       return res.status(400).json({
         success: false,
-        message: "Invalid email or password"
+        message: "Invalid phone number or password"
       });
     }
 
@@ -83,7 +103,7 @@ exports.login = async (req, res) => {
     if(!isMatch){
       return res.status(400).json({
         success: false,
-        message: "Invalid email or password"
+        message: "Invalid phone number or password"
       });
     }
 
@@ -99,6 +119,7 @@ exports.login = async (req, res) => {
       id: user._id,
       name: user.name,
       email: user.email,
+      phoneNumber: user.phoneNumber,
       role: user.role
         }
     }
@@ -144,21 +165,18 @@ exports.updateProfile = async (req, res) => {
 
   try {
 
-    const { name, email } = req.body;
+    const { name, email, phoneNumber, addresses } = req.body;
 
-    const user = await User.findByIdAndUpdate(
-
-      req.user.id,
-
-      {
-        name,
-        email
-      },
-
-      {
-        new: true
-      }
-
+    const user = await User.findByIdAndUpdate(req.user.id,
+    {
+      name,
+      email,
+      phoneNumber,
+      addresses
+    },
+    {
+      new: true
+    } 
     ).select("-password");
 
     res.status(200).json({

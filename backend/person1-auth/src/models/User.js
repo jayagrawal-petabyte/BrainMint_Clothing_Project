@@ -13,15 +13,33 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
 
+  phoneNumber: {
+  type: String,
+  required: true,
+  unique: true,
+  trim: true
+},
+
   password: {
     type: String,
     required: true
   },
 
   role: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "Role"
-},
+  type: String,
+  enum: ["admin", "user"],
+  default: "user"
+  },
+  addresses: [
+  {
+    fullName: String,
+    phone: String,
+    address: String,
+    city: String,
+    state: String,
+    pincode: String
+    }
+  ],
 
   resetPasswordToken: String,
 

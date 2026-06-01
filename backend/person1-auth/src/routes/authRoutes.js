@@ -36,10 +36,17 @@ router.get(
   authMiddleware,
   authController.getProfile
 );
+
 router.put(
   "/profile",
   authMiddleware,
   authController.updateProfile
+);
+
+router.get(
+  "/me",
+  authMiddleware,
+  authController.getProfile
 );
 
 router.get(

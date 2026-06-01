@@ -120,15 +120,17 @@ Frontend product response fields:
   "colors": ["#000000", "#FFFFFF"],
   "images": [
     {
-      "url": "image_url"
+      "url": "image_url",
+      "public_id": "cloudinary_public_id"
     }
   ],
-  "rating": {
+  "ratings": {
     "average": 4.5,
     "count": 120
   },
   "inventory": {
     "stock": 20,
+    "sold": 72,
     "sku": "HD-101"
   },
   "brand": "UrbanWear"
@@ -173,8 +175,9 @@ Successful response:
     "price": 799,
     "discountPrice": 599,
     "images": [],
-    "inventory": {
-      "stock": 50
+  "inventory": {
+      "stock": 50,
+      "sold": 0
     },
     "isActive": true,
     "orderSnapshot": {
@@ -252,6 +255,7 @@ x-user-role: admin
   "images": [
     {
       "url": "https://example.com/tshirt.jpg",
+      "public_id": "products/tshirt-001",
       "alt": "Classic Cotton T-Shirt"
     }
   ],
@@ -260,7 +264,12 @@ x-user-role: admin
   "inventory": {
     "sku": "TSHIRT-001",
     "stock": 50,
-    "lowStockThreshold": 5
+    "lowStockThreshold": 5,
+    "sold": 0
+  },
+  "ratings": {
+    "average": 0,
+    "count": 0
   },
   "isFeatured": true,
   "isBestseller": false,

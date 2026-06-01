@@ -23,7 +23,7 @@ const categorySchema = new mongoose.Schema(
     },
     image: {
       url: String,
-      publicId: String
+      public_id: String
     },
     isActive: {
       type: Boolean,

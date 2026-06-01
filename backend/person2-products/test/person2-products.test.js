@@ -30,6 +30,10 @@ assert(products.length >= 10, 'seed should include at least 10 products');
 assert(products.some((product) => product.inventory.stock <= product.inventory.lowStockThreshold), 'seed should include a low-stock product');
 assert(products.every((product) => product.categorySlug), 'each seed product must map to a category slug');
 assert(products.every((product) => product.images.length > 0), 'each seed product should include an image for frontend display');
+assert(products.every((product) => product.inventory && Number.isFinite(product.inventory.sold)), 'each seed product should use inventory.sold');
+assert(products.every((product) => product.ratings && Number.isFinite(product.ratings.average)), 'each seed product should use ratings');
+assert(!products.some((product) => Object.prototype.hasOwnProperty.call(product, 'soldCount')), 'seed products should not use soldCount');
+assert(!products.some((product) => Object.prototype.hasOwnProperty.call(product, 'rating')), 'seed products should not use rating');
 
 assert(
   appRoutes.some((route) => route.includes('api\\/admin\\/products')),

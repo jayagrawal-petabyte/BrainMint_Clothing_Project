@@ -57,9 +57,10 @@ const products = [
     inventory: {
       sku: 'HD-101',
       stock: 20,
-      lowStockThreshold: 5
+      lowStockThreshold: 5,
+      sold: 72
     },
-    rating: {
+    ratings: {
       average: 4.5,
       count: 120
     },
@@ -86,9 +87,10 @@ const products = [
     inventory: {
       sku: 'TS-201',
       stock: 45,
-      lowStockThreshold: 8
+      lowStockThreshold: 8,
+      sold: 31
     },
-    rating: {
+    ratings: {
       average: 4.3,
       count: 84
     },
@@ -115,9 +117,10 @@ const products = [
     inventory: {
       sku: 'JN-301',
       stock: 30,
-      lowStockThreshold: 5
+      lowStockThreshold: 5,
+      sold: 46
     },
-    rating: {
+    ratings: {
       average: 4.2,
       count: 67
     },
@@ -144,13 +147,13 @@ const products = [
     inventory: {
       sku: 'TS-202',
       stock: 36,
-      lowStockThreshold: 6
+      lowStockThreshold: 6,
+      sold: 58
     },
-    rating: {
+    ratings: {
       average: 4.6,
       count: 94
     },
-    soldCount: 58,
     isFeatured: true,
     isBestseller: true,
     isActive: true
@@ -174,13 +177,13 @@ const products = [
     inventory: {
       sku: 'SH-401',
       stock: 24,
-      lowStockThreshold: 5
+      lowStockThreshold: 5,
+      sold: 22
     },
-    rating: {
+    ratings: {
       average: 4.4,
       count: 51
     },
-    soldCount: 22,
     isFeatured: false,
     isBestseller: false,
     isActive: true
@@ -204,13 +207,13 @@ const products = [
     inventory: {
       sku: 'SH-402',
       stock: 18,
-      lowStockThreshold: 5
+      lowStockThreshold: 5,
+      sold: 17
     },
-    rating: {
+    ratings: {
       average: 4.1,
       count: 39
     },
-    soldCount: 17,
     isFeatured: false,
     isBestseller: false,
     isActive: true
@@ -234,13 +237,13 @@ const products = [
     inventory: {
       sku: 'JK-501',
       stock: 14,
-      lowStockThreshold: 4
+      lowStockThreshold: 4,
+      sold: 41
     },
-    rating: {
+    ratings: {
       average: 4.7,
       count: 73
     },
-    soldCount: 41,
     isFeatured: true,
     isBestseller: true,
     isActive: true
@@ -264,13 +267,13 @@ const products = [
     inventory: {
       sku: 'JK-502',
       stock: 9,
-      lowStockThreshold: 4
+      lowStockThreshold: 4,
+      sold: 19
     },
-    rating: {
+    ratings: {
       average: 4.2,
       count: 44
     },
-    soldCount: 19,
     isFeatured: false,
     isBestseller: false,
     isActive: true
@@ -294,13 +297,13 @@ const products = [
     inventory: {
       sku: 'JG-601',
       stock: 28,
-      lowStockThreshold: 6
+      lowStockThreshold: 6,
+      sold: 33
     },
-    rating: {
+    ratings: {
       average: 4.5,
       count: 62
     },
-    soldCount: 33,
     isFeatured: true,
     isBestseller: false,
     isActive: true
@@ -324,13 +327,13 @@ const products = [
     inventory: {
       sku: 'JG-602',
       stock: 3,
-      lowStockThreshold: 5
+      lowStockThreshold: 5,
+      sold: 9
     },
-    rating: {
+    ratings: {
       average: 4.0,
       count: 26
     },
-    soldCount: 9,
     isFeatured: false,
     isBestseller: false,
     isActive: true
@@ -354,13 +357,13 @@ const products = [
     inventory: {
       sku: 'JN-302',
       stock: 16,
-      lowStockThreshold: 5
+      lowStockThreshold: 5,
+      sold: 21
     },
-    rating: {
+    ratings: {
       average: 4.3,
       count: 47
     },
-    soldCount: 21,
     isFeatured: false,
     isBestseller: true,
     isActive: true

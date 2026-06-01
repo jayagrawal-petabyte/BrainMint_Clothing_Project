@@ -47,7 +47,7 @@ const getAdminDashboard = asyncHandler(async (req, res) => {
         $group: {
           _id: null,
           totalStock: { $sum: '$inventory.stock' },
-          totalSold: { $sum: '$soldCount' },
+          totalSold: { $sum: '$inventory.sold' },
           averagePrice: { $avg: '$price' }
         }
       }

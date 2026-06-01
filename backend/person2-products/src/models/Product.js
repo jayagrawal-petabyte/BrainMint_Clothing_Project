@@ -6,7 +6,7 @@ const imageSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    publicId: String,
+    public_id: String,
     alt: String
   },
   { _id: false }
@@ -80,9 +80,14 @@ const productSchema = new mongoose.Schema(
         type: Number,
         min: 0,
         default: 5
+      },
+      sold: {
+        type: Number,
+        min: 0,
+        default: 0
       }
     },
-    rating: {
+    ratings: {
       average: {
         type: Number,
         min: 0,
@@ -94,11 +99,6 @@ const productSchema = new mongoose.Schema(
         min: 0,
         default: 0
       }
-    },
-    soldCount: {
-      type: Number,
-      min: 0,
-      default: 0
     },
     isFeatured: {
       type: Boolean,
@@ -145,7 +145,7 @@ productSchema.statics.findAvailableForCart = function findAvailableForCart(produ
     _id: productId,
     isActive: true,
     'inventory.stock': { $gte: quantity }
-  }).select('_id name price discountPrice images sizes colors inventory.stock inventory.sku isActive');
+  }).select('_id name price discountPrice images sizes colors inventory.stock inventory.sold inventory.sku isActive');
 };
 
 productSchema.statics.decreaseStockForOrder = function decreaseStockForOrder(productId, quantity, options = {}) {
@@ -158,7 +158,7 @@ productSchema.statics.decreaseStockForOrder = function decreaseStockForOrder(pro
     {
       $inc: {
         'inventory.stock': -quantity,
-        soldCount: quantity
+        'inventory.sold': quantity
       }
     },
     {

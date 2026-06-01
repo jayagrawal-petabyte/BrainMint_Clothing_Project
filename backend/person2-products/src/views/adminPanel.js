@@ -104,6 +104,7 @@ const adminPanel = `<!doctype html>
         <label>SKU <input id="sku" required /></label>
         <label>Stock <input id="stock" type="number" min="0" value="0" required /></label>
         <label>Low stock threshold <input id="lowStockThreshold" type="number" min="0" value="5" /></label>
+        <label>Sold <input id="sold" type="number" min="0" value="0" /></label>
         <label>Sizes <input id="sizes" placeholder="S,M,L,XL" /></label>
         <label>Colors <input id="colors" placeholder="#000000,#ffffff" /></label>
         <label>Image URL <input id="imageUrl" /></label>
@@ -135,7 +136,7 @@ const adminPanel = `<!doctype html>
     </section>
   </main>
   <script>
-    const fields = ['name', 'slug', 'brand', 'category', 'price', 'discountPrice', 'sku', 'stock', 'lowStockThreshold', 'sizes', 'colors', 'imageUrl', 'imageAlt', 'isFeatured', 'isBestseller', 'isActive', 'description'];
+    const fields = ['name', 'slug', 'brand', 'category', 'price', 'discountPrice', 'sku', 'stock', 'lowStockThreshold', 'sold', 'sizes', 'colors', 'imageUrl', 'imageAlt', 'isFeatured', 'isBestseller', 'isActive', 'description'];
     let products = [];
     let categories = [];
 
@@ -171,7 +172,8 @@ const adminPanel = `<!doctype html>
       inventory: {
         sku: el('sku').value,
         stock: Number(el('stock').value),
-        lowStockThreshold: Number(el('lowStockThreshold').value)
+        lowStockThreshold: Number(el('lowStockThreshold').value),
+        sold: Number(el('sold').value)
       },
       isFeatured: el('isFeatured').value === 'true',
       isBestseller: el('isBestseller').value === 'true',
@@ -198,7 +200,7 @@ const adminPanel = `<!doctype html>
           '<td>' + product.name + '<br><small>' + product.inventory.sku + '</small></td>' +
           '<td>' + categoryName + '</td>' +
           '<td>₹' + product.price + (product.discountPrice ? ' / ₹' + product.discountPrice : '') + '</td>' +
-          '<td class="' + (lowStock ? 'low' : '') + '">' + product.inventory.stock + '</td>' +
+          '<td class="' + (lowStock ? 'low' : '') + '">' + product.inventory.stock + ' stock / ' + (product.inventory.sold || 0) + ' sold</td>' +
           '<td><span class="status ' + (product.isActive ? 'active' : 'inactive') + '">' + (product.isActive ? 'Active' : 'Inactive') + '</span></td>' +
           '<td><button class="secondary" type="button" onclick="editProduct(\\'' + product._id + '\\')">Edit</button> ' +
           '<button class="danger" type="button" onclick="deleteProduct(\\'' + product._id + '\\')">Delete</button></td>' +
@@ -236,6 +238,7 @@ const adminPanel = `<!doctype html>
       el('sku').value = product.inventory.sku || '';
       el('stock').value = product.inventory.stock || 0;
       el('lowStockThreshold').value = product.inventory.lowStockThreshold || 0;
+      el('sold').value = product.inventory.sold || 0;
       el('sizes').value = (product.sizes || []).join(',');
       el('colors').value = (product.colors || []).join(',');
       el('imageUrl').value = product.images && product.images[0] ? product.images[0].url : '';

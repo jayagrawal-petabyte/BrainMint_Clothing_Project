@@ -184,7 +184,7 @@ const getBestsellers = asyncHandler(async (req, res) => {
     'inventory.stock': { $gt: 0 }
   })
     .populate('category', 'name slug')
-    .sort('-soldCount -rating.average')
+    .sort('-inventory.sold -ratings.average')
     .limit(Number(req.query.limit) || 10);
 
   res.json({

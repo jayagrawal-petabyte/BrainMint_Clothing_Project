@@ -7,6 +7,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import ProductTabs from '../components/product/ProductTabs';
 import AddToCartPopup from '../components/product/AddToCartPopup';
+import SizeGuideModal from '../components/product/SizeGuideModal';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -18,6 +19,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
 
@@ -315,7 +317,25 @@ const ProductDetail = () => {
             <div className="product-selectors" style={{ marginBottom: '20px' }}>
               {product.sizes?.length > 0 && (
                 <div style={{ marginBottom: '15px' }}>
-                  <span style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>Size:</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontWeight: 600 }}>Size:</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowSizeGuide(true)}
+                      style={{ 
+                        background: 'transparent', 
+                        border: 'none', 
+                        fontSize: '13px', 
+                        textDecoration: 'underline', 
+                        color: 'var(--ltn__paragraph-color)', 
+                        cursor: 'pointer',
+                        fontWeight: 500,
+                        fontFamily: 'var(--ltn__body-font)'
+                      }}
+                    >
+                      Size Guide
+                    </button>
+                  </div>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {product.sizes.map(size => (
                       <button
@@ -468,13 +488,18 @@ const ProductDetail = () => {
 
       <ProductTabs />
 
-      {showPopup && (
-        <AddToCartPopup
-          product={product}
-          quantity={quantity}
-          onClose={() => setShowPopup(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showPopup && (
+          <AddToCartPopup
+            product={product}
+            quantity={quantity}
+            onClose={() => setShowPopup(false)}
+          />
+        )}
+        {showSizeGuide && (
+          <SizeGuideModal onClose={() => setShowSizeGuide(false)} />
+        )}
+      </AnimatePresence>
 
       {/* Sticky Mobile Add To Cart Bar */}
       <div className="mobile-sticky-atc d-lg-none">

@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import {
   Heart,
   ShoppingCart,
-  Eye
+  Eye,
+  Check
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
@@ -133,12 +135,15 @@ const ProductCard = ({ product }) => {
           <ul>
             {/* Quick View */}
             <li>
-              <button
+              <motion.button
                 type="button"
                 title="Quick View"
+                whileHover={{ scale: 1.12 }}
+                whileTap={{ scale: 0.85 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 <Eye size={16} />
-              </button>
+              </motion.button>
             </li>
 
             {/* Wishlist */}
@@ -147,7 +152,7 @@ const ProductCard = ({ product }) => {
                 position: 'relative'
               }}
             >
-              <button
+              <motion.button
                 type="button"
                 title={
                   wishlisted
@@ -169,16 +174,25 @@ const ProductCard = ({ product }) => {
                 onClick={
                   handleWishlist
                 }
+                whileHover={{ scale: 1.12 }}
+                whileTap={{ scale: 0.85 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 <Heart
                   size={16}
                   fill={
                     wishlisted
-                      ? 'currentColor'
+                      ? 'var(--ltn__secondary-color, #f24c5c)'
                       : 'none'
                   }
+                  color={
+                    wishlisted
+                      ? 'var(--ltn__secondary-color, #f24c5c)'
+                      : 'currentColor'
+                  }
+                  style={{ transition: 'fill 0.3s ease, color 0.3s ease' }}
                 />
-              </button>
+              </motion.button>
 
               <SplatParticles
                 particles={
@@ -193,7 +207,7 @@ const ProductCard = ({ product }) => {
                 position: 'relative'
               }}
             >
-              <button
+              <motion.button
                 type="button"
                 title="Add to Cart"
                 className={`
@@ -209,16 +223,27 @@ const ProductCard = ({ product }) => {
                   }
                 `}
                 onClick={handleCart}
+                whileHover={{ scale: 1.12 }}
+                whileTap={{ scale: 0.85 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
-                <ShoppingCart
-                  size={16}
-                  fill={
-                    inCart
-                      ? 'currentColor'
-                      : 'none'
-                  }
-                />
-              </button>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={inCart ? 'check' : 'cart'}
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.6, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {inCart ? (
+                      <Check size={16} color="var(--ltn__secondary-color, #f24c5c)" />
+                    ) : (
+                      <ShoppingCart size={16} />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </motion.button>
 
               <SplatParticles
                 particles={
@@ -229,6 +254,7 @@ const ProductCard = ({ product }) => {
           </ul>
         </div>
       </div>
+
 
       {/* Product Info */}
       <div className="product-info">

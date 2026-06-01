@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { submitContactForm } from '../services/api';
 import {
   FaPhoneAlt,
@@ -130,13 +131,20 @@ const Contact = () => {
           back to you as soon as possible.
         </p>
 
-        <div
+        <motion.div
           style={{
             display: "grid",
             gridTemplateColumns:
               "repeat(auto-fit, minmax(280px, 1fr))",
             gap: "30px",
           }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { staggerChildren: 0.08 } }
+          }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
         >
           {[
             {
@@ -156,8 +164,12 @@ const Contact = () => {
                 "Bhubaneswar, Odisha, India",
             },
           ].map((item, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
+              }}
               style={{
                 background: "var(--white-7)",
                 padding: "40px",
@@ -194,17 +206,28 @@ const Contact = () => {
               >
                 {item.value}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Contact Form */}
-      <section className="contact-form-section">
+      <motion.section
+        className="contact-form-section"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="contact-form-card stitch-card">
           <div className="contact-form-header">
-            <p className="contact-form-subtitle">Have A Doubt?</p>
-            <h2 className="contact-form-title">Send Us A Message</h2>
+            <p className="contact-form-subtitle">
+              Have A Doubt?
+            </p>
+
+            <h2 className="contact-form-title">
+              Send Us A Message
+            </h2>
           </div>
 
           <form className="contact-form" onSubmit={handleSubmit}>
@@ -252,8 +275,9 @@ const Contact = () => {
             </div>
           </form>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };
+
 export default Contact;

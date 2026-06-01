@@ -1,5 +1,6 @@
 
 import { X } from 'lucide-react';
+import { motion } from 'framer-motion';
 import './SizeGuideModal.css';
 
 const SIZE_DATA = [
@@ -12,8 +13,22 @@ const SIZE_DATA = [
 
 const SizeGuideModal = ({ onClose }) => {
   return (
-    <div className="size-modal-backdrop" onClick={onClose}>
-      <div className="size-modal" onClick={e => e.stopPropagation()}>
+    <motion.div 
+      className="size-modal-backdrop" 
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+    >
+      <motion.div 
+        className="size-modal" 
+        onClick={e => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.94, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.94, y: 15 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="size-modal-header">
           <h3>Size Guide</h3>
           <button className="size-modal-close" onClick={onClose}>
@@ -46,8 +61,8 @@ const SizeGuideModal = ({ onClose }) => {
         <p className="size-modal-tip">
           <strong>Tip:</strong> If you are between sizes, we recommend sizing up for a more comfortable fit.
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

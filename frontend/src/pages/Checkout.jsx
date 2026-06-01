@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck, ChevronDown, ChevronUp, ShoppingBag } from 'lucide-react';
+import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, ChevronRight, Check, ShoppingBag } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { placeOrder } from '../services/api';
@@ -16,19 +17,55 @@ const INDIAN_STATES = [
   'Daman and Diu','Delhi','Jammu and Kashmir','Ladakh','Lakshadweep','Puducherry'
 ];
 
+const STEPS = ['Contact', 'Delivery', 'Payment'];
+
+/* ── Floating label input — no placeholder collision ── */
+const FloatField = ({ id, name, label, type = 'text', value, onChange, optional }) => (
+  <div className={`ff ${value ? 'ff--has' : ''}`}>
+    <input
+      id={id} name={name} type={type}
+      value={value} onChange={onChange}
+      className="ff__input"
+      placeholder=" "
+    />
+    <label htmlFor={id} className="ff__label">
+      {label}{optional ? <em> (optional)</em> : ''}
+    </label>
+    <span className="ff__bar" />
+  </div>
+);
+
+/* ── Floating label select ── */
+const FloatSelect = ({ id, name, label, value, onChange, children }) => (
+  <div className="ff ff--has">
+    <select id={id} name={name} value={value} onChange={onChange} className="ff__input ff__select">
+      {children}
+    </select>
+    <label htmlFor={id} className="ff__label ff__label--up">{label}</label>
+    <ChevronDown size={15} className="ff__arrow" />
+    <span className="ff__bar" />
+  </div>
+);
+
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
   const { isLoggedIn, token } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderStatus, setOrderStatus] = useState(null);
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [loadingCheckout, setLoadingCheckout] = useState(true);
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [coupon, setCoupon] = useState('');
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponError, setCouponError] = useState(false);
 
   const [form, setForm] = useState({
     email: '', phone: '', newsletter: false,
     firstName: '', lastName: '',
     address: '', apartment: '',
-    city: '', state: 'Uttar Pradesh', pincode: '',
+    city: '', state: 'Odisha', pincode: '',
     saveInfo: false,
   });
 
@@ -39,17 +76,25 @@ const Checkout = () => {
     }
   }, [isLoggedIn, navigate]);
 
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  const getImage = (item) =>
-    item?.images?.[0]?.url || item?.images?.[0] || 'https://placehold.co/64x80?text=Item';
-
+  const getImage = (item) => item?.images?.[0]?.url || item?.images?.[0] || 'https://placehold.co/64x80?text=Item';
   const getPrice = (item) => item?.discountPrice || item?.price || 0;
+  const getId   = (item) => item?._id || item?.id;
 
-  const getId = (item) => item?._id || item?.id;
+  const shipping    = cartTotal > 999 ? 0 : 99;
+  const discount    = couponApplied ? Math.round(cartTotal * 0.1) : 0;
+  const finalTotal  = cartTotal + shipping - discount;
+
+  const handleCoupon = () => {
+    if (coupon.trim().toUpperCase() === 'URBAN10') { setCouponApplied(true); setCouponError(false); }
+    else setCouponError(true);
+  };
 
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) return;
@@ -97,292 +142,309 @@ const Checkout = () => {
   if (!isLoggedIn) return null; // Prevent flicker before redirect
 
   return (
-    <div className="checkout-page">
-      <div className="checkout-inner">
-        {/* Mobile Header & Summary Accordion */}
-        <div className="checkout-mobile-header d-lg-none">
-          <div className="checkout-mobile-top">
-            <Link to="/" className="checkout-brand">UrbanWear</Link>
-            <ShoppingBag size={20} />
-          </div>
-          <div 
-            className="checkout-summary-toggle" 
-            onClick={() => setIsSummaryOpen(!isSummaryOpen)}
+    <>
+      <AnimatePresence>
+        {loadingCheckout && (
+          <motion.div
+            className="checkout-loader-backdrop"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "var(--white-7)",
+              zIndex: 999999,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "var(--ltn__heading-color)",
+            }}
           >
-            <div className="checkout-summary-toggle-text">
-              Order summary {isSummaryOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </div>
-            <div className="checkout-summary-toggle-price">
-              ₹{cartTotal.toLocaleString('en-IN')}
-            </div>
-          </div>
-          {isSummaryOpen && (
-            <div className="checkout-summary-mobile-content">
-              {cartItems.length === 0 ? (
-                <p className="checkout-empty">No items in cart. <Link to="/shop">Shop now</Link></p>
-              ) : (
-                cartItems.map(item => (
-                  <div key={getId(item)} className="checkout-summary-item">
-                    <div className="checkout-summary-img-wrap">
-                      <img src={getImage(item)} alt={item.name} />
-                      <span className="checkout-summary-qty">{item.quantity}</span>
-                    </div>
-                    <div className="checkout-summary-info">
-                      <p className="checkout-summary-name">{item.name}</p>
-                      {item.selectedSize && <p className="checkout-summary-variant">{item.selectedSize}</p>}
-                    </div>
-                    <p className="checkout-summary-price">
-                      ₹{(getPrice(item) * item.quantity).toLocaleString('en-IN')}
-                    </p>
-                  </div>
-                ))
-              )}
-              <div className="checkout-summary-divider" />
-              <div className="checkout-summary-row">
-                <span>Subtotal</span>
-                <span>₹{cartTotal.toLocaleString('en-IN')}</span>
-              </div>
-              <div className="checkout-summary-row">
-                <span>Shipping</span>
-                {(!form.address || !form.city || !form.pincode) ? (
-                  <span className="checkout-summary-muted">Enter shipping address</span>
-                ) : (
-                  <span>Free</span>
-                )}
-              </div>
-              <div className="checkout-summary-divider" />
-              <div className="checkout-summary-total">
-                <span>Total</span>
-                <span>
-                  <small>INR </small>
-                  <strong>₹{cartTotal.toLocaleString('en-IN')}</strong>
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* LEFT: Form */}
-        <div className="checkout-form-col">
-          <Link to="/" className="checkout-brand d-none-lg">UrbanWear</Link>
-
-          {/* Contact */}
-          <section className="checkout-section">
-            <h2 className="checkout-section-title">Contact</h2>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email address"
-              value={form.email}
-              onChange={handleChange}
-              className="checkout-input full"
-            />
-            <label className="checkout-checkbox">
-              <input
-                type="checkbox"
-                name="newsletter"
-                checked={form.newsletter}
-                onChange={handleChange}
-              />
-              Email me with news and offers
-            </label>
-          </section>
-
-          {/* Delivery */}
-          <section className="checkout-section">
-            <h2 className="checkout-section-title">Delivery</h2>
-
-            <select name="country" className="checkout-input full checkout-select" defaultValue="India">
-              <option>India</option>
-            </select>
-
-            <div className="checkout-row">
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First name (optional)"
-                value={form.firstName}
-                onChange={handleChange}
-                className="checkout-input"
-              />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last name"
-                value={form.lastName}
-                onChange={handleChange}
-                className="checkout-input"
-              />
-            </div>
-
-            <input
-              type="text"
-              name="address"
-              placeholder="Address"
-              value={form.address}
-              onChange={handleChange}
-              className="checkout-input full"
-            />
-            <input
-              type="text"
-              name="apartment"
-              placeholder="Apartment, suite, etc. (optional)"
-              value={form.apartment}
-              onChange={handleChange}
-              className="checkout-input full"
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone number"
-              value={form.phone}
-              onChange={handleChange}
-              className="checkout-input full"
-            />
-
-            <div className="checkout-row checkout-row-3">
-              <input
-                type="text"
-                name="city"
-                placeholder="City"
-                value={form.city}
-                onChange={handleChange}
-                className="checkout-input"
-              />
-              <select
-                name="state"
-                value={form.state}
-                onChange={handleChange}
-                className="checkout-input checkout-select"
+            <div style={{ position: "relative", width: "100%", maxWidth: "400px", height: "150px", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              {/* Road Track Line */}
+              <div style={{ width: "100%", height: "2px", backgroundColor: "var(--border-color-1)", position: "absolute", bottom: "40px" }} />
+              
+              {/* Driving Truck Icon */}
+              <motion.div
+                initial={{ x: "-100px" }}
+                animate={{
+                  x: ["-100px", "170px", "170px", "450px"],
+                }}
+                transition={{
+                  duration: 2.8,
+                  times: [0, 0.35, 0.65, 1],
+                  ease: ["easeOut", "easeInOut", "easeIn", "easeIn"]
+                }}
+                onAnimationComplete={() => setLoadingCheckout(false)}
+                style={{
+                  position: "absolute",
+                  bottom: "42px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
               >
-                {INDIAN_STATES.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              <input
-                type="text"
-                name="pincode"
-                placeholder="PIN code"
-                value={form.pincode}
-                onChange={handleChange}
-                className="checkout-input"
-              />
+                <Truck size={42} color="var(--ltn__secondary-color)" />
+                {/* Subtle dust particles */}
+                <motion.div 
+                  animate={{ opacity: [0.8, 0, 0.8] }}
+                  transition={{ repeat: Infinity, duration: 0.2 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--border-color-7)", position: "absolute", left: "-10px", bottom: "4px" }}
+                />
+              </motion.div>
             </div>
+            
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{ duration: 2.8, times: [0, 0.2, 0.8, 1] }}
+              style={{
+                fontFamily: "var(--ltn__heading-font)",
+                fontSize: "16px",
+                letterSpacing: "2px",
+                fontWeight: 400,
+                textTransform: "uppercase",
+                marginTop: "20px",
+                textAlign: "center"
+              }}
+            >
+              Securing your order...
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            <label className="checkout-checkbox">
-              <input
-                type="checkbox"
-                name="saveInfo"
-                checked={form.saveInfo}
-                onChange={handleChange}
-              />
-              <span>Save this information for next time</span>
-            </label>
-          </section>
 
-          {/* Shipping Method */}
-          <section className="checkout-section">
-            <h2 className="checkout-section-title">Shipping method</h2>
-            {!form.address || !form.city || !form.pincode ? (
-              <div className="checkout-info-box">
-                Enter your shipping address to view available shipping methods.
-              </div>
-            ) : (
-              <div style={{ border: '1px solid var(--border-color-1)', borderRadius: '4px', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <span style={{ fontWeight: '500' }}>Standard Shipping</span>
-                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--ltn__paragraph-color)' }}>Delivery in 3-5 business days</p>
-                </div>
-                <span style={{ fontWeight: '600' }}>Free</span>
-              </div>
-            )}
-          </section>
-
-          {/* Payment */}
-          <section className="checkout-section">
-            <h2 className="checkout-section-title">Payment</h2>
-            <p className="checkout-payment-sub">All transactions are secure and encrypted.</p>
-            <div className="checkout-payment-box">
-              <ShieldCheck size={40} strokeWidth={1} className="checkout-payment-icon" />
-              <p>This store can't accept payments right now.</p>
-            </div>
-          </section>
-
-          <button 
-            className="checkout-pay-btn" 
-            onClick={handlePlaceOrder}
-            disabled={cartItems.length === 0 || isSubmitting}
-            style={{ opacity: cartItems.length === 0 || isSubmitting ? 0.7 : 1, cursor: cartItems.length === 0 || isSubmitting ? 'not-allowed' : 'pointer' }}
-          >
-            {isSubmitting ? 'Processing...' : 'Place Order'}
-          </button>
-
-          {orderStatus === 'success' && (
-             <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#e6ffe6', color: '#006600', border: '1px solid #00cc00', borderRadius: '4px' }}>
-                Successfully placed order! You will be redirected shortly.
-             </div>
-          )}
-          {orderStatus === 'error' && (
-             <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#ffe6e6', color: '#cc0000', border: '1px solid #ff0000', borderRadius: '4px' }}>
-                Failed to place order. Please try again.
-             </div>
-          )}
-
-          <p className="checkout-footer-note">All rights reserved UrbanWear</p>
-        </div>
-
-        {/* RIGHT: Order Summary (Desktop Only) */}
-        <div className="checkout-summary-col d-none-lg">
-          <div className="checkout-summary-inner">
-            {cartItems.length === 0 ? (
-              <p className="checkout-empty">No items in cart. <Link to="/shop">Shop now</Link></p>
-            ) : (
-              cartItems.map(item => (
-                <div key={getId(item)} className="checkout-summary-item">
-                  <div className="checkout-summary-img-wrap">
-                    <img src={getImage(item)} alt={item.name} />
-                    <span className="checkout-summary-qty">{item.quantity}</span>
-                  </div>
-                  <div className="checkout-summary-info">
-                    <p className="checkout-summary-name">{item.name}</p>
-                    {item.selectedSize && <p className="checkout-summary-variant">{item.selectedSize}</p>}
-                  </div>
-                  <p className="checkout-summary-price">
-                    ₹{(getPrice(item) * item.quantity).toLocaleString('en-IN')}
-                  </p>
-                </div>
-              ))
-            )}
-
-            <div className="checkout-summary-divider" />
-
-            <div className="checkout-summary-row">
-              <span>Subtotal</span>
-              <span>₹{cartTotal.toLocaleString('en-IN')}</span>
-            </div>
-            <div className="checkout-summary-row">
-              <span>Shipping</span>
-              {(!form.address || !form.city || !form.pincode) ? (
-                <span className="checkout-summary-muted">Enter shipping address</span>
-              ) : (
-                <span>Free</span>
-              )}
-            </div>
-
-            <div className="checkout-summary-divider" />
-
-            <div className="checkout-summary-total">
-              <span>Total</span>
-              <span>
-                <small>INR </small>
-                <strong>₹{cartTotal.toLocaleString('en-IN')}</strong>
-              </span>
-            </div>
-          </div>
-        </div>
+      <div className={`co-mob-drawer ${summaryOpen ? 'co-mob-drawer--open' : ''}`}>
+        <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId }} />
       </div>
-    </div>
+
+      <div className="co__grid">
+
+        {/* ══ LEFT ══ */}
+        <div className="co__left">
+          <Link to="/" className="co__brand">UrbanWear</Link>
+
+          {/* Breadcrumb */}
+          <nav className="co__crumb">
+            {STEPS.map((s, i) => (
+              <React.Fragment key={s}>
+                <button
+                  className={`co__crumb-step ${i === activeStep ? 'is-active' : ''} ${i < activeStep ? 'is-done' : ''} ${i > activeStep ? 'is-locked' : ''}`}
+                  onClick={() => i < activeStep && setActiveStep(i)}
+                >
+                  <span className="co__crumb-dot">
+                    {i < activeStep ? <Check size={10} strokeWidth={3} /> : i + 1}
+                  </span>
+                  {s}
+                </button>
+                {i < 2 && <ChevronRight size={12} className="co__crumb-sep" />}
+              </React.Fragment>
+            ))}
+          </nav>
+
+          {/* ── Step 0: Contact ── */}
+          {activeStep === 0 && (
+            <div className="co__panel co__panel--enter">
+              <div className="co__panel-head">
+                <span className="co__badge">Step 1 of 3</span>
+                <h2 className="co__panel-title">Contact</h2>
+                <p className="co__panel-sub">Already have an account? <Link to="/login">Log in</Link></p>
+              </div>
+              <FloatField id="email" name="email" label="Email or mobile phone number" type="email" value={form.email} onChange={handleChange} />
+              <label className="co__check">
+                <span className={`co__check-box ${form.newsletter ? 'co__check-box--on' : ''}`}>
+                  {form.newsletter && <Check size={9} strokeWidth={3} />}
+                </span>
+                <input type="checkbox" name="newsletter" checked={form.newsletter} onChange={handleChange} style={{display:'none'}} />
+                Email me with news and exclusive offers
+              </label>
+              <button className="co__cta" onClick={() => setActiveStep(1)}>
+                Continue to Delivery <ChevronRight size={15} />
+              </button>
+            </div>
+          )}
+
+          {activeStep > 0 && (
+            <div className="co__collapsed" onClick={() => setActiveStep(0)}>
+              <span className="co__collapsed-tag">Contact</span>
+              <span className="co__collapsed-val">{form.email || '—'}</span>
+              <span className="co__collapsed-edit">Edit</span>
+            </div>
+          )}
+
+          {/* ── Step 1: Delivery ── */}
+          {activeStep === 1 && (
+            <div className="co__panel co__panel--enter">
+              <div className="co__panel-head">
+                <span className="co__badge">Step 2 of 3</span>
+                <h2 className="co__panel-title">Delivery</h2>
+              </div>
+
+              <div className="ff ff--has">
+                <select className="ff__input ff__select" defaultValue="India" disabled>
+                  <option>India</option>
+                </select>
+                <label className="ff__label ff__label--up">Country / Region</label>
+                <ChevronDown size={15} className="ff__arrow" />
+                <span className="ff__bar" />
+              </div>
+
+              <div className="co__row-2">
+                <FloatField id="firstName" name="firstName" label="First name" value={form.firstName} onChange={handleChange} optional />
+                <FloatField id="lastName"  name="lastName"  label="Last name"  value={form.lastName}  onChange={handleChange} />
+              </div>
+
+              <FloatField id="address"   name="address"   label="Address"    value={form.address}   onChange={handleChange} />
+              <FloatField id="apartment" name="apartment" label="Apartment, suite, etc." value={form.apartment} onChange={handleChange} optional />
+
+              <div className="co__row-3">
+                <FloatField id="city" name="city" label="City" value={form.city} onChange={handleChange} />
+                <FloatSelect id="state" name="state" label="State" value={form.state} onChange={handleChange}>
+                  {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                </FloatSelect>
+                <FloatField id="pincode" name="pincode" label="PIN code" value={form.pincode} onChange={handleChange} />
+              </div>
+
+              <label className="co__check">
+                <span className={`co__check-box ${form.saveInfo ? 'co__check-box--on' : ''}`}>
+                  {form.saveInfo && <Check size={9} strokeWidth={3} />}
+                </span>
+                <input type="checkbox" name="saveInfo" checked={form.saveInfo} onChange={handleChange} style={{display:'none'}} />
+                Save this information for next time
+              </label>
+
+              <p className="co__subhead">Shipping method</p>
+              {form.pincode.length === 6 ? (
+                <div className="co__ship-card">
+                  <span className="co__ship-radio" />
+                  <div>
+                    <p className="co__ship-name">Standard Delivery</p>
+                    <p className="co__ship-eta">5–7 business days</p>
+                  </div>
+                  <span className="co__ship-price">{shipping === 0 ? <em className="co__free">Free</em> : `₹${shipping}`}</span>
+                </div>
+              ) : (
+                <div className="co__info-pill">
+                  <Truck size={14} /> Enter your PIN code to view shipping options
+                </div>
+              )}
+
+              <button className="co__cta" onClick={() => setActiveStep(2)}>
+                Continue to Payment <ChevronRight size={15} />
+              </button>
+            </div>
+          )}
+
+          {activeStep > 1 && (
+            <div className="co__collapsed" onClick={() => setActiveStep(1)}>
+              <span className="co__collapsed-tag">Ship to</span>
+              <span className="co__collapsed-val">{[form.address, form.city, form.pincode].filter(Boolean).join(', ') || '—'}</span>
+              <span className="co__collapsed-edit">Edit</span>
+            </div>
+          )}
+
+          {/* ── Step 2: Payment ── */}
+          {activeStep === 2 && (
+            <div className="co__panel co__panel--enter">
+              <div className="co__panel-head">
+                <span className="co__badge">Step 3 of 3</span>
+                <h2 className="co__panel-title">Payment</h2>
+                <span className="co__secure"><Lock size={11} /> Secure &amp; encrypted</span>
+              </div>
+
+              <div className="co__pay-box">
+                <ShieldCheck size={42} strokeWidth={1.2} className="co__pay-icon" />
+                <p className="co__pay-title">Payment coming soon</p>
+                <p className="co__pay-note">We're setting up our payment gateway. Check back shortly.</p>
+              </div>
+
+              <button className="co__cta co__cta--disabled" disabled>
+                <Lock size={14} /> Pay now · ₹{finalTotal.toLocaleString('en-IN')}
+              </button>
+
+              <div className="co__trust">
+                <span><ShieldCheck size={13} /> SSL secured</span>
+                <span className="co__trust-dot" />
+                <span><RotateCcw size={13} /> Easy returns</span>
+                <span className="co__trust-dot" />
+                <span><Truck size={13} /> Fast delivery</span>
+              </div>
+            </div>
+          )}
+
+          <p className="co__footer">© {new Date().getFullYear()} UrbanWear. All rights reserved.</p>
+        </div>
+
+        {/* ══ RIGHT ══ */}
+        <aside className="co__right">
+          <div className="co__right-inner">
+            <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId }} />
+          </div>
+        </aside>
+
+      </div>
+    </>
   );
 };
+
+const SummaryContent = ({ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId }) => (
+  <div className="co__summary">
+    {cartItems.length === 0 ? (
+      <p className="co__empty">Cart is empty. <Link to="/shop">Browse the store →</Link></p>
+    ) : (
+      <ul className="co__items">
+        {cartItems.map(item => (
+          <li key={getId(item)} className="co__item">
+            <div className="co__item-img">
+              <img src={getImage(item)} alt={item.name} loading="lazy" />
+              <span className="co__item-qty">{item.quantity}</span>
+            </div>
+            <div className="co__item-info">
+              <p className="co__item-name">{item.name}</p>
+              {item.selectedSize && <p className="co__item-size">Size: {item.selectedSize}</p>}
+            </div>
+            <p className="co__item-price">₹{(getPrice(item) * item.quantity).toLocaleString('en-IN')}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <div className="co__coupon">
+      <div className="co__coupon-field">
+        <Tag size={14} />
+        <input
+          className="co__coupon-input"
+          placeholder="Discount or gift card code"
+          value={coupon}
+          onChange={e => setCoupon(e.target.value)}
+          disabled={couponApplied}
+        />
+      </div>
+      <button className={`co__coupon-btn ${couponApplied ? 'co__coupon-btn--ok' : ''}`} onClick={handleCoupon} disabled={couponApplied}>
+        {couponApplied ? <Check size={14} /> : 'Apply'}
+      </button>
+    </div>
+    {couponError   && <p className="co__coupon-err">Invalid code — try <strong>URBAN10</strong></p>}
+    {couponApplied && <p className="co__coupon-ok">URBAN10 applied — 10% off!</p>}
+
+    <div className="co__divider" />
+    <div className="co__sum-row"><span>Subtotal</span><span>₹{cartTotal.toLocaleString('en-IN')}</span></div>
+    {discount > 0 && <div className="co__sum-row co__sum-row--discount"><span>Discount (URBAN10)</span><span>−₹{discount.toLocaleString('en-IN')}</span></div>}
+    <div className="co__sum-row">
+      <span>Shipping</span>
+      <span>{shipping === 0 ? <em className="co__free">Free</em> : `₹${shipping}`}</span>
+    </div>
+    <div className="co__divider" />
+
+    <div className="co__total">
+      <div><span className="co__total-label">Total</span><span className="co__total-cur"> INR</span></div>
+      <span className="co__total-amt">₹{finalTotal.toLocaleString('en-IN')}</span>
+    </div>
+    {cartTotal > 999 && <div className="co__free-note">🎉 You qualify for free shipping!</div>}
+  </div>
+);
 
 export default Checkout;

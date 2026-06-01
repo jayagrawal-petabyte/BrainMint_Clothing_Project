@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon, Menu, X } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
 import CartDrawer from "./CartDrawer";
 import MobileMenuDrawer from "./MobileMenuDrawer";
 import { useTheme } from '../../context/ThemeContext';
@@ -124,8 +125,35 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="user-menu">
-                  <button onClick={toggleTheme} className="theme-toggle-btn navbar-icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
-                    {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+                  <button 
+                    onClick={toggleTheme} 
+                    className="theme-toggle-btn navbar-icon-btn" 
+                    title="Toggle Theme" 
+                    aria-label="Toggle Theme"
+                    style={{ 
+                      background: 'transparent', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      width: '45px', 
+                      height: '45px', 
+                      color: 'var(--ltn__heading-color)',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={theme}
+                        initial={{ rotate: -90, scale: 0.5, opacity: 0 }}
+                        animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                        exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      >
+                        {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+                      </motion.div>
+                    </AnimatePresence>
                   </button>
                 </li>
                 <li className="mini-cart">
@@ -138,10 +166,19 @@ const Navbar = () => {
                       <ShoppingCart size={24} />
                       <sup><span className="cart-badge">{cartCount}</span></sup>
                     </div>
-                    <div className="mini-cart-info">
+                    <div className="mini-cart-info d-none-lg">
                       <h6>Your Cart</h6>
                       <span className="cart-total">₹{cartTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
+                  </button>
+                </li>
+                <li className="mobile-menu-trigger">
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(true)} 
+                    className="mobile-menu-toggle-btn"
+                    title="Open Menu"
+                  >
+                    <Menu size={24} />
                   </button>
                 </li>
               </ul>
@@ -170,6 +207,7 @@ const Navbar = () => {
           </nav>
         </div>
       </div>
+
     </header>
     <CartDrawer
       isOpen={isCartOpen}

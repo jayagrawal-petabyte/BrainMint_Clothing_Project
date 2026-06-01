@@ -2,6 +2,7 @@
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { X, CheckCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 import './AddToCartPopup.css';
 
 const AddToCartPopup = ({ product, quantity = 1, onClose }) => {
@@ -19,9 +20,23 @@ const AddToCartPopup = ({ product, quantity = 1, onClose }) => {
   }, [onClose]);
 
   return createPortal(
-    <div className="atc-backdrop" onClick={onClose}>
-      <div className="atc-popup" onClick={e => e.stopPropagation()}>
-        <button className="atc-close" onClick={onClose}>
+    <motion.div 
+      className="atc-backdrop" 
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+    >
+      <motion.div 
+        className="atc-popup" 
+        onClick={e => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.94, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.94, y: 15 }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <button className="atc-close" onClick={onClose} title="Close">
           <X size={18} />
         </button>
 
@@ -47,8 +62,8 @@ const AddToCartPopup = ({ product, quantity = 1, onClose }) => {
             Checkout
           </Link>
         </div>
-      </div>
-    </div>,
+      </motion.div>
+    </motion.div>,
     document.body
   );
 };

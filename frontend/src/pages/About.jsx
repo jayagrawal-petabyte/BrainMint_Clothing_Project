@@ -1,6 +1,7 @@
 ﻿import { useTheme } from "../context/ThemeContext";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   FaTruck,
   FaMoneyBillWave,
@@ -171,7 +172,7 @@ const { theme } = useTheme();
         </div>
 
         {/* ABOUT CONTENT */}
-        <section
+        <motion.section
           style={{
             maxWidth: "1250px",
             margin: "70px auto 0",
@@ -181,6 +182,10 @@ const { theme } = useTheme();
             gap: "55px",
             alignItems: "center",
           }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           <div>
             <div
@@ -372,16 +377,20 @@ const { theme } = useTheme();
               </p>
             </div>
           </div>
-        </section>
+        </motion.section>
       </section>
 
       {/* TESTIMONIALS */}
-      <div
+      <motion.div
         style={{
           maxWidth: "1250px",
           margin: "140px auto 0",
           textAlign: "center",
         }}
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         onMouseEnter={() => {
           if (swiperRef.current && swiperRef.current.swiper) {
             swiperRef.current.swiper.autoplay.stop();
@@ -515,7 +524,7 @@ const { theme } = useTheme();
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </motion.div>
     </div>
   );
 };

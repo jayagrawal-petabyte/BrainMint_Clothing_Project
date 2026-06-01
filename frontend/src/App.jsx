@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import Shop from './pages/Shop';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
@@ -39,16 +41,57 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
+// Clean page transition wrapper using standard easings and vertical curtain wipe
+const PageTransition = ({ children, noCurtain }) => (
+  <div style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}>
+    {/* Sleek luxury curtain panel that slides up on mount */}
+    {!noCurtain && (
+      <motion.div
+        initial={{ y: 0 }}
+        animate={{ y: "-100%" }}
+        transition={{ duration: 0.65, ease: [0.85, 0, 0.15, 1] }}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "var(--ltn__primary-color)",
+          zIndex: 99999,
+          pointerEvents: "none"
+        }}
+      />
+    )}
+    
+    {/* Page content fade & slide */}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.4, delay: noCurtain ? 0 : 0.1, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
+  </div>
+);
+
 function App() {
+  const [isHomeSplashActive, setIsHomeSplashActive] = useState(false);
+
   return (
     <AuthProvider>
       <CartProvider>
         <WishlistProvider>
         <Router>
           <ScrollToTopRoute />
-          <Routes>
-            {/* Secure checkout — no Navbar or Footer */}
-            <Route path="/checkout" element={<Checkout />} />
+          <AnimatePresence mode="wait">
+            <Routes>
+              {/* Secure checkout — no Navbar or Footer */}
+              <Route path="/checkout" element={
+                <PageTransition>
+                  <Checkout />
+                </PageTransition>
+              } />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -67,7 +110,7 @@ function App() {
             </Route>
 
             {/* All other pages get the standard layout */}
-            <Route path="*" element={
+            {/* <Route path="*" element={
               <div className="app">
                 <AnnouncementBar />
                 <Navbar />
@@ -93,8 +136,49 @@ function App() {
                 <BottomMobileNav />
                 <ScrollToTop />
               </div>
-            } />
-          </Routes>
+            } /> */}
+                          {/* All other pages get the standard layout */}
+              <Route path="*" element={
+                <div className="app">
+                  {!isHomeSplashActive && <AnnouncementBar />}
+                  {!isHomeSplashActive && <Navbar />}
+
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={
+                        <PageTransition noCurtain={true}>
+                          <Home onSplashActive={setIsHomeSplashActive} />
+                        </PageTransition>
+                      }
+                    />
+
+                    <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
+                    <Route path="/search" element={<PageTransition><Shop /></PageTransition>} />
+                    <Route path="/product/:id" element={<PageTransition><ProductDetail /></PageTransition>} />
+                    <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+                    <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />
+
+                    <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+                    <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+                    <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
+
+                    <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+                    <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+                    <Route path="/returns" element={<PageTransition><Returns /></PageTransition>} />
+                    <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
+                    <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
+
+                    <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+                  </Routes>
+
+                  {!isHomeSplashActive && <Footer />}
+                  {!isHomeSplashActive && <ScrollToTop />}
+                </div>
+              } />
+            </Routes>
+          </AnimatePresence>
+          {/* </Routes> */}
         </Router>
       </WishlistProvider>
     </CartProvider>
@@ -103,3 +187,4 @@ function App() {
 }
 
 export default App;
+

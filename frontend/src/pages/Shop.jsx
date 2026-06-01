@@ -293,16 +293,34 @@ const Shop = () => {
               </p>
             </div>
           ) : (
-            <div
+            <motion.div
               className={`product-grid grid-cols-${gridSize}`}
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.04
+                  }
+                }
+              }}
+              initial="hidden"
+              animate="show"
             >
               {currentItems.map(product => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                />
+                <motion.div
+                  key={product._id || product.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 15 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }
+                  }}
+                >
+                  <ProductCard
+                    product={product}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {/* Pagination */}

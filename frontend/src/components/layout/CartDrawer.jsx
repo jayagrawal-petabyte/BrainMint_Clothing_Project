@@ -34,7 +34,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.35, ease: "easeOut" }}
+            transition={{ type: "tween", duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             style={{
               position: "fixed",
               top: 0,

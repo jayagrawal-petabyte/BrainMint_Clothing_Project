@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Heart, User } from 'lucide-react';
+import { Home, ShoppingBag, Phone, User } from 'lucide-react';
 import './BottomMobileNav.css';
 
 const BottomMobileNav = () => {
@@ -8,7 +8,7 @@ const BottomMobileNav = () => {
   const navItems = [
     { path: '/', icon: <Home size={22} />, label: 'Home' },
     { path: '/shop', icon: <ShoppingBag size={22} />, label: 'Shop' },
-    { path: '/wishlist', icon: <Heart size={22} />, label: 'Wishlist' },
+    { path: '/contact', icon: <Phone size={22} />, label: 'Contact' },
     { path: '/account', icon: <User size={22} />, label: 'Profile' },
   ];
 

@@ -436,6 +436,39 @@
   .d-none-lg {
     display: none !important;
   }
+  
+  /* Mobile Navbar Overrides */
+  .logo-text {
+    font-size: 20px;
+    letter-spacing: -0.5px;
+  }
+  
+  .header-options > ul {
+    gap: 8px;
+  }
+  
+  .user-menu > a,
+  .navbar-icon-btn,
+  .mini-cart-btn {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+  }
+  
+  .user-menu svg,
+  .navbar-icon-btn svg,
+  .mini-cart-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .mini-cart-info {
+    display: none;
+  }
+  
+  .navbar-middle-content {
+    gap: 10px;
+  }
 }
 
 @media (min-width: 992px) {

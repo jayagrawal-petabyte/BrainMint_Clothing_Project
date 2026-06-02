@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { mockProducts } from "../data/products";
 import "./Admin.css";
@@ -62,10 +62,10 @@ const Admin = () => {
             {/* Stats */}
             <div className="admin-stats">
               {[
-                { icon: "ðŸ“¦", value: "1,284", label: "Total Orders", trend: "+12.5%", dir: "up" },
-                { icon: "ðŸ’°", value: "₹18.4L", label: "Revenue", trend: "+8.2%", dir: "up" },
-                { icon: "ðŸ‘¥", value: "3,842", label: "Customers", trend: "+15.3%", dir: "up" },
-                { icon: "ðŸ‘—", value: mockProducts.length.toString(), label: "Products", trend: "+2", dir: "up" },
+                { icon: "📦", value: "1,284", label: "Total Orders", trend: "+12.5%", dir: "up" },
+                { icon: "💰", value: "₹18.4L", label: "Revenue", trend: "+8.2%", dir: "up" },
+                { icon: "👥", value: "3,842", label: "Customers", trend: "+15.3%", dir: "up" },
+                { icon: "👗", value: mockProducts.length.toString(), label: "Products", trend: "+2", dir: "up" },
               ].map((stat, i) => (
                 <div className="stat-card" key={i}>
                   <div className="stat-card-header">
@@ -104,7 +104,7 @@ const Admin = () => {
                         <td>{order.customer}</td>
                         <td>
                           <div className="order-product">
-                            <div className="order-product-thumb">ðŸ‘—</div>
+                            <div className="order-product-thumb">👗</div>
                             <span className="order-product-name">{order.product}</span>
                           </div>
                         </td>
@@ -145,10 +145,10 @@ const Admin = () => {
               {topProducts.map((product) => (
                 <div className="admin-product-card" key={product.id}>
                   <div className="admin-product-img">
-                    ðŸ‘—
+                    👗
                     <div className="admin-product-overlay">
-                      <button title="Edit">âœï¸</button>
-                      <button title="Delete">ðŸ—‘ï¸</button>
+                      <button title="Edit">✏️</button>
+                      <button title="Delete">🗑️</button>
                     </div>
                   </div>
                   <div className="admin-product-info">

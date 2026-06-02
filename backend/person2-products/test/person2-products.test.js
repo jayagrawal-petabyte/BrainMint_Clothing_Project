@@ -6,6 +6,7 @@ const { categories, products } = require('../src/seed/seedProducts');
 const app = require('../src/app');
 const adminRoutes = require('../src/routes/adminRoutes');
 const { _private: productControllerPrivate } = require('../src/controllers/productController');
+const { protect } = require('../src/middleware/authMiddleware');
 
 const flattenRoutes = (router, prefix = '') => {
   const routes = [];
@@ -58,6 +59,28 @@ assert(
   'admin update/delete product routes should be registered'
 );
 
+let blockedWithoutToken = false;
+try {
+  protect({ headers: {} }, {}, () => {});
+} catch (error) {
+  blockedWithoutToken = error.statusCode === 401;
+}
+assert(blockedWithoutToken, 'protected routes should require an authentication token');
+
+const adminRequest = {
+  headers: {
+    authorization: 'Bearer test-token',
+    'x-user-role': 'admin',
+    'x-user-id': 'admin-test-id'
+  }
+};
+protect(adminRequest, {}, () => {});
+assert.deepStrictEqual(
+  adminRequest.user,
+  { id: 'admin-test-id', role: 'admin' },
+  'test mode should support temporary admin headers for isolated module tests'
+);
+
 (async () => {
   const catalogQuery = await productControllerPrivate.buildProductQuery({
     q: 'hoodie',
@@ -67,6 +90,7 @@ assert(
     featured: 'true',
     minPrice: '500',
     maxPrice: '3000',
+    minDiscount: '20',
     inStock: 'true'
   });
 
@@ -74,10 +98,13 @@ assert(
   assert.deepStrictEqual(catalogQuery.sizes, { $in: ['M', 'L'] }, 'catalog should support comma-separated sizes');
   assert.deepStrictEqual(catalogQuery.colors, { $in: ['#000000', '#FFFFFF'] }, 'catalog should support comma-separated colors');
   assert.deepStrictEqual(catalogQuery.price, { $gte: 500, $lte: 3000 }, 'catalog should support price range');
+  assert(catalogQuery.$expr, 'catalog should support discount percentage filtering');
   assert.deepStrictEqual(catalogQuery['inventory.stock'], { $gt: 0 }, 'catalog should support in-stock filtering');
   assert.strictEqual(catalogQuery.isFeatured, true, 'catalog should support featured alias');
   assert.deepStrictEqual(catalogQuery.$text, { $search: 'hoodie' }, 'catalog should support q search alias');
 
+  assert.strictEqual(productControllerPrivate.toDiscountPercent('90'), 90, 'discount slabs should support 90 percent');
+  assert.strictEqual(productControllerPrivate.toDiscountPercent('120'), 90, 'discount slabs should cap at 90 percent');
   assert.strictEqual(productControllerPrivate.resolveSort('price-low'), 'price', 'price-low sort should map to ascending price');
   assert.strictEqual(productControllerPrivate.resolveSort('price-high'), '-price', 'price-high sort should map to descending price');
   assert.strictEqual(productControllerPrivate.resolveSort('rating'), '-ratings.average', 'rating sort should map to ratings.average');

@@ -9,6 +9,8 @@ const crypto = require("crypto");
 const generateToken =
 require("../utils/generateToken");
 
+const sendEmail = require("../utils/sendEmail");
+
 exports.register = async (req, res) => {
 
   try {
@@ -228,11 +230,18 @@ exports.forgotPassword = async (req, res) => {
       Date.now() + 10 * 60 * 1000;
 
     await user.save();
+    const resetUrl =
+`http://localhost:3000/reset-password/${resetToken}`;
+
+  await sendEmail(
+    user.email,
+    "Password Reset",
+    `Click here to reset your password: ${resetUrl}`
+    );
 
     res.status(200).json({
       success: true,
-      message: "Reset token generated",
-      resetToken: resetToken
+      message: "Password reset email sent"
     });
 
   } catch (error) {

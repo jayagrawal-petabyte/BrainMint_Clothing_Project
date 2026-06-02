@@ -16,7 +16,7 @@ import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
 
-// Admin Components
+
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
@@ -24,7 +24,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import ProductManagement from './pages/admin/ProductManagement';
 import AddProduct from './pages/admin/AddProduct';
 import EditProduct from './pages/admin/EditProduct';
-// Mock placeholders for admin pages until they are created
+
 import InventoryManagement from './pages/admin/InventoryManagement';
 import OrderManagement from './pages/admin/OrderManagement';
 import DiscountManagement from './pages/admin/DiscountManagement';

@@ -3,6 +3,7 @@ import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon, Menu, X } from 'lu
 import { useCart } from '../context/CartContext';
 import { useState, useEffect, useRef } from "react";
 import CartDrawer from "./CartDrawer";
+import MobileMenuDrawer from "./MobileMenuDrawer";
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
@@ -81,7 +82,12 @@ const Navbar = () => {
 
             <div className="header-options">
               <ul>
-                <li className="user-menu">
+                <li className="user-menu d-lg-none">
+                  <button className="navbar-icon-btn" aria-label="Search" onClick={() => setIsMobileMenuOpen(true)}>
+                    <Search size={24} />
+                  </button>
+                </li>
+                <li className="user-menu d-none-lg">
                   <div className="user-dropdown-container">
                     <button className={`theme-toggle-btn navbar-icon-btn ${isLoggedIn ? 'logged-in' : ''}`} aria-label="User Account Menu">
                       <User size={24} />
@@ -166,6 +172,10 @@ const Navbar = () => {
     <CartDrawer
       isOpen={isCartOpen}
       onClose={() => setIsCartOpen(false)}
+    />
+    <MobileMenuDrawer
+      isOpen={isMobileMenuOpen}
+      onClose={() => setIsMobileMenuOpen(false)}
     />
     </>
   );

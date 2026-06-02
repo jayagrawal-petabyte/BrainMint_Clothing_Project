@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, ChevronDown, ChevronUp, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { placeOrder } from '../services/api';
@@ -22,6 +22,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderStatus, setOrderStatus] = useState(null);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   const [form, setForm] = useState({
     email: '', phone: '', newsletter: false,
@@ -98,9 +99,72 @@ const Checkout = () => {
   return (
     <div className="checkout-page">
       <div className="checkout-inner">
+        {/* Mobile Header & Summary Accordion */}
+        <div className="checkout-mobile-header d-lg-none">
+          <div className="checkout-mobile-top">
+            <Link to="/" className="checkout-brand">UrbanWear</Link>
+            <ShoppingBag size={20} />
+          </div>
+          <div 
+            className="checkout-summary-toggle" 
+            onClick={() => setIsSummaryOpen(!isSummaryOpen)}
+          >
+            <div className="checkout-summary-toggle-text">
+              Order summary {isSummaryOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </div>
+            <div className="checkout-summary-toggle-price">
+              ₹{cartTotal.toLocaleString('en-IN')}
+            </div>
+          </div>
+          {isSummaryOpen && (
+            <div className="checkout-summary-mobile-content">
+              {cartItems.length === 0 ? (
+                <p className="checkout-empty">No items in cart. <Link to="/shop">Shop now</Link></p>
+              ) : (
+                cartItems.map(item => (
+                  <div key={getId(item)} className="checkout-summary-item">
+                    <div className="checkout-summary-img-wrap">
+                      <img src={getImage(item)} alt={item.name} />
+                      <span className="checkout-summary-qty">{item.quantity}</span>
+                    </div>
+                    <div className="checkout-summary-info">
+                      <p className="checkout-summary-name">{item.name}</p>
+                      {item.selectedSize && <p className="checkout-summary-variant">{item.selectedSize}</p>}
+                    </div>
+                    <p className="checkout-summary-price">
+                      ₹{(getPrice(item) * item.quantity).toLocaleString('en-IN')}
+                    </p>
+                  </div>
+                ))
+              )}
+              <div className="checkout-summary-divider" />
+              <div className="checkout-summary-row">
+                <span>Subtotal</span>
+                <span>₹{cartTotal.toLocaleString('en-IN')}</span>
+              </div>
+              <div className="checkout-summary-row">
+                <span>Shipping</span>
+                {(!form.address || !form.city || !form.pincode) ? (
+                  <span className="checkout-summary-muted">Enter shipping address</span>
+                ) : (
+                  <span>Free</span>
+                )}
+              </div>
+              <div className="checkout-summary-divider" />
+              <div className="checkout-summary-total">
+                <span>Total</span>
+                <span>
+                  <small>INR </small>
+                  <strong>₹{cartTotal.toLocaleString('en-IN')}</strong>
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* LEFT: Form */}
         <div className="checkout-form-col">
-          <Link to="/" className="checkout-brand">UrbanWear</Link>
+          <Link to="/" className="checkout-brand d-none-lg">UrbanWear</Link>
 
           {/* Contact */}
           <section className="checkout-section">
@@ -267,8 +331,8 @@ const Checkout = () => {
           <p className="checkout-footer-note">All rights reserved UrbanWear</p>
         </div>
 
-        {/* RIGHT: Order Summary */}
-        <div className="checkout-summary-col">
+        {/* RIGHT: Order Summary (Desktop Only) */}
+        <div className="checkout-summary-col d-none-lg">
           <div className="checkout-summary-inner">
             {cartItems.length === 0 ? (
               <p className="checkout-empty">No items in cart. <Link to="/shop">Shop now</Link></p>

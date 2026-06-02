@@ -17,7 +17,7 @@ import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import AnnouncementBar from './components/AnnouncementBar';
 import Footer from './components/Footer';
-
+import BottomMobileNav from './components/BottomMobileNav';
 
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
@@ -90,6 +90,7 @@ function App() {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />
+                <BottomMobileNav />
                 <ScrollToTop />
               </div>
             } />

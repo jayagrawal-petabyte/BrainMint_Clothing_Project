@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, Heart } from 'lucide-react';
@@ -477,6 +477,27 @@ const ProductDetail = () => {
           onClose={() => setShowPopup(false)}
         />
       )}
+
+      {/* Sticky Mobile Add To Cart Bar */}
+      <div className="mobile-sticky-atc d-lg-none">
+        <div className="sticky-atc-variants">
+          <span>
+            {selectedSize && `${selectedSize} / `}
+            {selectedColor && `${selectedColor} / `}
+            {product.brand || 'UrbanWear'} - ₹{currentPrice.toLocaleString('en-IN')}
+          </span>
+        </div>
+        <div className="sticky-atc-actions">
+          <div className="quantity-selector">
+            <button onClick={() => handleQuantityChange('dec')}><Minus size={16} /></button>
+            <input type="number" value={quantity} readOnly />
+            <button onClick={() => handleQuantityChange('inc')}><Plus size={16} /></button>
+          </div>
+          <button className={`add-to-cart-btn ${showPopup ? 'added' : ''}`} onClick={handleAddToCart}>
+            {showPopup ? 'Added!' : 'Add to cart'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

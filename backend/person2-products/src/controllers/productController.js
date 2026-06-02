@@ -33,6 +33,12 @@ const toPrice = (value) => {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
 };
 
+const toDiscountPercent = (value) => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0) return undefined;
+  return Math.min(Math.floor(parsed), 90);
+};
+
 const firstDefined = (...values) => values.find((value) => value !== undefined);
 
 const sortMap = {
@@ -65,6 +71,8 @@ const allowedSortFields = new Set([
   'name',
   'isFeatured'
 ]);
+
+const discountRanges = [10, 20, 30, 40, 50, 60, 70, 80, 90];
 
 const resolveSort = (sort) => {
   if (!sort) return '-createdAt';
@@ -122,6 +130,11 @@ const buildProductQuery = async (queryParams) => {
   const colorList = toArray(firstDefined(queryParams.color, queryParams.colors));
   const minPrice = toPrice(queryParams.minPrice);
   const maxPrice = toPrice(queryParams.maxPrice);
+  const minDiscount = toDiscountPercent(firstDefined(
+    queryParams.minDiscount,
+    queryParams.discountPercent,
+    queryParams.discount
+  ));
   const isFeatured = toBoolean(firstDefined(queryParams.isFeatured, queryParams.featured));
   const isBestseller = toBoolean(firstDefined(queryParams.isBestseller, queryParams.bestseller));
   const isActive = toBoolean(queryParams.isActive);
@@ -145,6 +158,31 @@ const buildProductQuery = async (queryParams) => {
     query.price = {};
     if (minPrice !== undefined) query.price.$gte = minPrice;
     if (maxPrice !== undefined) query.price.$lte = maxPrice;
+  }
+
+  if (minDiscount !== undefined) {
+    query.$expr = {
+      $and: [
+        { $gt: ['$price', 0] },
+        { $gt: ['$discountPrice', 0] },
+        {
+          $gte: [
+            {
+              $multiply: [
+                {
+                  $divide: [
+                    { $subtract: ['$price', '$discountPrice'] },
+                    '$price'
+                  ]
+                },
+                100
+              ]
+            },
+            minDiscount
+          ]
+        }
+      ]
+    };
   }
 
   if (inStock === true) {
@@ -180,6 +218,7 @@ const getCatalogFilters = async (baseQuery) => {
     sizes: sizes.filter(Boolean).sort(),
     colors: colors.filter(Boolean).sort(),
     priceRange: priceRange[0] || { min: 0, max: 0 },
+    discountRanges,
     sortOptions: Object.keys(sortMap)
   };
 };
@@ -335,6 +374,64 @@ const getNewArrivals = asyncHandler(async (req, res) => {
   });
 });
 
+const getTrendingProducts = asyncHandler(async (req, res) => {
+  const limit = toPositiveNumber(req.query.limit, 10, 50);
+  const products = await Product.find({
+    isActive: true,
+    'inventory.stock': { $gt: 0 }
+  })
+    .populate('category', 'name slug')
+    .sort('-isBestseller -isFeatured -inventory.sold -ratings.average -createdAt')
+    .limit(limit);
+
+  res.json({
+    success: true,
+    message: 'Trending products fetched successfully',
+    data: {
+      count: products.length,
+      products: products.map(formatProductForFrontend)
+    }
+  });
+});
+
+const getPopularSearches = asyncHandler(async (req, res) => {
+  const [categories, brands, topProducts] = await Promise.all([
+    Category.find({ isActive: true }).sort({ name: 1 }).limit(8).select('name slug'),
+    Product.distinct('brand', { isActive: true }),
+    Product.find({ isActive: true })
+      .sort('-inventory.sold -ratings.average')
+      .limit(6)
+      .select('name slug')
+  ]);
+
+  const popularSearches = [
+    ...categories.map((category) => ({
+      label: category.name,
+      type: 'category',
+      value: category.slug
+    })),
+    ...brands.filter(Boolean).sort().slice(0, 6).map((brand) => ({
+      label: brand,
+      type: 'brand',
+      value: brand
+    })),
+    ...topProducts.map((product) => ({
+      label: product.name,
+      type: 'product',
+      value: product.slug
+    }))
+  ];
+
+  res.json({
+    success: true,
+    message: 'Popular searches fetched successfully',
+    data: {
+      count: popularSearches.length,
+      popularSearches
+    }
+  });
+});
+
 module.exports = {
   getProducts,
   getProductById,
@@ -344,11 +441,14 @@ module.exports = {
   deleteProduct,
   getBestsellers,
   getNewArrivals,
+  getTrendingProducts,
+  getPopularSearches,
   _private: {
     buildProductQuery,
     resolveSort,
     toArray,
     toBoolean,
+    toDiscountPercent,
     toPrice
   }
 };

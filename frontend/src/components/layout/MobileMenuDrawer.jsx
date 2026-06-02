@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
-import { X, Search, User, Heart, ShoppingCart } from 'lucide-react';
+import { X, Search, User, Heart, ShoppingCart, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useTheme } from '../../context/ThemeContext';
 import './MobileMenuDrawer.css';
 
 const MobileMenuDrawer = ({ isOpen, onClose }) => {
   const { isLoggedIn, logout, user } = useAuth();
   const { cartCount } = useCart();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -87,6 +89,10 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
                   <span>Shopping Cart</span>
                   {cartCount > 0 && <span className="mobile-cart-badge">{cartCount}</span>}
                 </Link>
+                <button onClick={toggleTheme} className="mobile-bottom-link logout-btn">
+                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                  <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                </button>
                 {isLoggedIn && (
                   <button onClick={() => { logout(); onClose(); }} className="mobile-bottom-link logout-btn">
                     <span>Logout</span>

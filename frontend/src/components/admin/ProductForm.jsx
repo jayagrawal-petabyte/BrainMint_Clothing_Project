@@ -41,8 +41,7 @@ const ProductForm = ({ initialData, isEditing = false }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate API call
-    console.log('Submitting:', formData);
+    onSubmit(formData);
     navigate('/admin/products');
   };
 

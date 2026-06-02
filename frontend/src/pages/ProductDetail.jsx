@@ -31,8 +31,6 @@ const ProductDetail = () => {
 
         const data = await fetchProductById(id);
 
-        console.log('Fetched Product:', data);
-
         if (!data) {
           setProduct(null);
           return;

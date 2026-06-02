@@ -1,5 +1,5 @@
 import React from 'react';
-import DiscountTable from '../../components/admin/DiscountTable';
+import DiscountTable from '../../components/admin/DiscountTable.jsx';
 import { Plus } from 'lucide-react';
 
 const mockDiscounts = [

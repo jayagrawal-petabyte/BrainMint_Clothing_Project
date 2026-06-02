@@ -45,9 +45,9 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .scroll-to-top {
-    bottom: 20px;
+    bottom: 85px; /* Safely above the 65px BottomMobileNav */
     right: 20px;
   }
 }

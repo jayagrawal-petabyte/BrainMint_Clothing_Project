@@ -56,7 +56,8 @@
 
 .empty-heart {
   color: var(--ltn__secondary-color);
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
+  display: block;
 }
 
 .empty-title {

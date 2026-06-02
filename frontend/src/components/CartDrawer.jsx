@@ -1,4 +1,4 @@
-﻿
+
 import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -292,7 +292,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                       style={{
                         background:
                           "var(--ltn__primary-color)",
-                        color: "#fff",
+                        color: "var(--white-7)",
                         width: "100%",
                         padding: "16px",
                         display: "block",

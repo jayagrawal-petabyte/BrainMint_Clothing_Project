@@ -30,7 +30,11 @@ const getWishlist = asyncHandler(async (req, res) => {
 // @route   POST /api/wishlist/:productId
 // @access  Private
 const addToWishlist = asyncHandler(async (req, res) => {
-  const { productId } = req.params;
+  const productId = req.params.productId || req.body.productId;
+
+  if (!productId) {
+    throw new ApiError(400, 'productId is required');
+  }
 
   let wishlist = await Wishlist.findOne({ user: req.user.id });
 

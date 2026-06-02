@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon, Menu, X } from 'lucide-react';
+import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CartDrawer from "./CartDrawer";
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
@@ -13,26 +13,25 @@ const Navbar = () => {
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      if (currentScrollY > lastScrollY && currentScrollY > 150) {
+      if (currentScrollY > lastScrollYRef.current && currentScrollY > 150) {
         setIsNavbarHidden(true);
       } else {
         setIsNavbarHidden(false);
       }
       
-      setLastScrollY(currentScrollY);
+      lastScrollYRef.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -48,15 +47,11 @@ const Navbar = () => {
       <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">
-            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '10px' }}>
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
             <div className="site-logo">
               <Link to="/" className="theme-logo">
                 <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
               </Link>
             </div>
-
 
             <div className="header-contact-search d-none-lg">
               <div className="header-feature-item">
@@ -71,8 +66,8 @@ const Navbar = () => {
 
               <div className="header-search">
                 <form onSubmit={handleSearch}>
-                  <input type="search" name="q" placeholder="Search our store" />
-                  <button type="submit">
+                  <input type="search" name="q" placeholder="Search our store" aria-label="Search store" />
+                  <button type="submit" aria-label="Submit search">
                     <Search size={20} />
                   </button>
                 </form>
@@ -83,7 +78,7 @@ const Navbar = () => {
               <ul>
                 <li className="user-menu">
                   <div className="user-dropdown-container">
-                    <button className="theme-toggle-btn" style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: isLoggedIn ? 'var(--ltn__primary-color)' : 'var(--ltn__heading-color)', transition: 'all 0.3s ease' }}>
+                    <button className={`theme-toggle-btn navbar-icon-btn ${isLoggedIn ? 'logged-in' : ''}`} aria-label="User Account Menu">
                       <User size={24} />
                     </button>
                     <div className="user-dropdown-menu">
@@ -94,6 +89,7 @@ const Navbar = () => {
                               {user?.name || user?.email?.split('@')[0] || 'My Account'}
                             </Link>
                           </div>
+                          <Link to="/admin" className="user-dropdown-menu-item">Admin Panel</Link>
                           <button className="user-dropdown-menu-item" onClick={logout}>
                             Logout
                           </button>
@@ -103,18 +99,19 @@ const Navbar = () => {
                           <Link to="/login" className="user-dropdown-menu-item">Login</Link>
                           <Link to="/register" className="user-dropdown-menu-item">Register</Link>
                           <Link to="/account" className="user-dropdown-menu-item">My Account</Link>
+                          <Link to="/admin/login" className="user-dropdown-menu-item">Admin Login</Link>
                         </>
                       )}
                     </div>
                   </div>
                 </li>
                 <li className="user-menu">
-                  <Link to="/wishlist" title="Wishlist">
+                  <Link to="/wishlist" title="Wishlist" aria-label="Wishlist">
                     <Heart size={24} />
                   </Link>
                 </li>
                 <li className="user-menu">
-                  <button onClick={toggleTheme} className="theme-toggle-btn" title="Toggle Theme" style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', color: 'var(--ltn__heading-color)', transition: 'all 0.3s ease' }}>
+                  <button onClick={toggleTheme} className="theme-toggle-btn navbar-icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
                     {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
                   </button>
                 </li>
@@ -122,11 +119,7 @@ const Navbar = () => {
                   <button
                     className="mini-cart-btn"
                     onClick={() => setIsCartOpen(true)}
-                    style={{
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                    }}
+                    aria-label="Open Cart Drawer"
                   >
                     <div className="mini-cart-icon">
                       <ShoppingCart size={24} />
@@ -144,7 +137,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className={`navbar-bottom ${isMobileMenuOpen ? 'mobile-menu-active' : 'd-none-lg'}`}>
+      <div className="navbar-bottom d-none-lg">
         <div className="container">
           <nav className="main-menu">
             <ul>

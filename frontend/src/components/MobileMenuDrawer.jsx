@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { X, Search, ChevronDown, ChevronUp, User, Heart, ShoppingCart } from 'lucide-react';
+import { X, Search, User, Heart, ShoppingCart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import './MobileMenuDrawer.css';
@@ -9,14 +8,6 @@ import './MobileMenuDrawer.css';
 const MobileMenuDrawer = ({ isOpen, onClose }) => {
   const { isLoggedIn, logout, user } = useAuth();
   const { cartCount } = useCart();
-  const [expandedMenus, setExpandedMenus] = useState({});
-
-  const toggleMenu = (menu) => {
-    setExpandedMenus((prev) => ({
-      ...prev,
-      [menu]: !prev[menu]
-    }));
-  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -74,25 +65,8 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
                 <li className="mobile-nav-item">
                   <Link to="/about" onClick={onClose}>ABOUT US</Link>
                 </li>
-                <li className="mobile-nav-item has-dropdown">
-                  <div className="mobile-nav-link-wrapper" onClick={() => toggleMenu('shop')}>
-                    <span>SHOP</span>
-                    {expandedMenus.shop ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </div>
-                  <AnimatePresence>
-                    {expandedMenus.shop && (
-                      <motion.ul
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="mobile-sub-menu"
-                      >
-                        <li><Link to="/shop?category=men" onClick={onClose}>Men</Link></li>
-                        <li><Link to="/shop?category=women" onClick={onClose}>Women</Link></li>
-                        <li><Link to="/shop?category=accessories" onClick={onClose}>Accessories</Link></li>
-                      </motion.ul>
-                    )}
-                  </AnimatePresence>
+                <li className="mobile-nav-item">
+                  <Link to="/shop" onClick={onClose}>SHOP</Link>
                 </li>
                 <li className="mobile-nav-item">
                   <Link to="/contact" onClick={onClose}>CONTACT</Link>

@@ -12,11 +12,36 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isLoggedIn || !token) {
-      setCartItems([]);
+      try {
+        const guestCart = localStorage.getItem('guestCart');
+        if (guestCart) {
+          setCartItems(JSON.parse(guestCart));
+        } else {
+          setCartItems([]);
+        }
+      } catch (e) {
+        setCartItems([]);
+      }
       return;
     }
 
     const loadCart = async () => {
+      try {
+        const guestCart = localStorage.getItem('guestCart');
+        if (guestCart) {
+          const parsedCart = JSON.parse(guestCart);
+          if (parsedCart.length > 0) {
+            // Merge guest items to backend
+            for (const item of parsedCart) {
+              await syncAddToCart(item._id || item.id, item.quantity, token);
+            }
+          }
+          localStorage.removeItem('guestCart');
+        }
+      } catch (e) {
+        localStorage.removeItem('guestCart');
+      }
+
       const res = await fetchCart(token);
       if (res && (res.data || res.items || Array.isArray(res))) {
         const itemsList = res.data?.items || res.items || res.data || res || [];
@@ -36,7 +61,19 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (product, quantity = 1) => {
     if (!isLoggedIn || !token) {
-      alert("Please login to add items to your cart!");
+      setCartItems(prevItems => {
+        const existingItem = prevItems.find(item => getId(item) === getId(product));
+        let newItems;
+        if (existingItem) {
+          newItems = prevItems.map(item =>
+            getId(item) === getId(product) ? { ...item, quantity: item.quantity + quantity } : item
+          );
+        } else {
+          newItems = [...prevItems, { ...product, quantity }];
+        }
+        localStorage.setItem('guestCart', JSON.stringify(newItems));
+        return newItems;
+      });
       return;
     }
     
@@ -55,12 +92,32 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
+    if (!isLoggedIn || !token) {
+      setCartItems(prevItems => {
+        const newItems = prevItems.filter(item => getId(item) !== productId);
+        localStorage.setItem('guestCart', JSON.stringify(newItems));
+        return newItems;
+      });
+      return;
+    }
+    // Note: assuming a backend API call exists or is implemented to remove item. 
+    // If not, we just update local state for logged in users as it currently did.
     setCartItems(prevItems => prevItems.filter(item => getId(item) !== productId));
   };
 
   const updateQuantity = (productId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(productId);
+      return;
+    }
+    if (!isLoggedIn || !token) {
+      setCartItems(prevItems => {
+        const newItems = prevItems.map(item =>
+          getId(item) === productId ? { ...item, quantity } : item
+        );
+        localStorage.setItem('guestCart', JSON.stringify(newItems));
+        return newItems;
+      });
       return;
     }
     setCartItems(prevItems =>
@@ -71,6 +128,9 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = () => {
+    if (!isLoggedIn || !token) {
+      localStorage.removeItem('guestCart');
+    }
     setCartItems([]);
   };
 

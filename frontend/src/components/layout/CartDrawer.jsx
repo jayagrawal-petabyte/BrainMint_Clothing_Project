@@ -40,6 +40,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
               top: 0,
               right: 0,
               width: "420px",
+              maxWidth: "100vw",
               height: "100vh",
               background: "var(--white-7)",
               boxShadow: "-10px 0 40px rgba(0,0,0,0.1)",

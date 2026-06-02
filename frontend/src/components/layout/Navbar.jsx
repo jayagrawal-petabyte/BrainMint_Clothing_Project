@@ -50,13 +50,15 @@ const Navbar = () => {
         <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">
-            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '15px', background: 'transparent', border: 'none', cursor: 'pointer', outline: 'none' }}>
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-            <div className="site-logo">
-              <Link to="/" className="theme-logo">
-                <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
-              </Link>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '8px', background: 'transparent', border: 'none', cursor: 'pointer', outline: 'none' }}>
+                {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+              </button>
+              <div className="site-logo">
+                <Link to="/" className="theme-logo">
+                  <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
+                </Link>
+              </div>
             </div>
 
             <div className="header-contact-search d-none-lg">

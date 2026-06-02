@@ -202,4 +202,12 @@
   .wishlist-heading {
     font-size: 38px;
   }
+  .wishlist-grid {
+    justify-content: center;
+    gap: 20px;
+  }
+  .wishlist-card {
+    width: 100%;
+    max-width: 350px;
+  }
 }

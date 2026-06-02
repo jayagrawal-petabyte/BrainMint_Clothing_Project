@@ -1,11 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, Phone, Heart, Sun, Moon, Menu, X } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 import { useState, useEffect, useRef } from "react";
 import CartDrawer from "./CartDrawer";
 import MobileMenuDrawer from "./MobileMenuDrawer";
-import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {

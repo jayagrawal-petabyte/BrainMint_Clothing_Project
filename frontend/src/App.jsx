@@ -14,10 +14,10 @@ import About from './pages/About';
 import Returns from './pages/Returns';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
-import Navbar from './components/Navbar';
-import AnnouncementBar from './components/AnnouncementBar';
-import Footer from './components/Footer';
-import BottomMobileNav from './components/BottomMobileNav';
+import Navbar from './components/layout/Navbar';
+import AnnouncementBar from './components/layout/AnnouncementBar';
+import Footer from './components/layout/Footer';
+import BottomMobileNav from './components/layout/BottomMobileNav';
 
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
@@ -32,8 +32,8 @@ import OrderManagement from './pages/admin/OrderManagement';
 import DiscountManagement from './pages/admin/DiscountManagement';
 import SalesAnalytics from './pages/admin/SalesAnalytics';
 
-import ScrollToTop from './components/ScrollToTop';
-import ScrollToTopRoute from './components/ScrollToTopRoute';
+import ScrollToTop from './components/ui/ScrollToTop';
+import ScrollToTopRoute from './components/ui/ScrollToTopRoute';
 import Contact from "./pages/Contact";
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';

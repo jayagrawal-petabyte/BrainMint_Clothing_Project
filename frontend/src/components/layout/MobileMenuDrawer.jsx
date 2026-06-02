@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { X, Search, User, Heart, ShoppingCart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 import './MobileMenuDrawer.css';
 
 const MobileMenuDrawer = ({ isOpen, onClose }) => {

@@ -5,8 +5,8 @@ import { Minus, Plus, Heart } from 'lucide-react';
 import { fetchProductById } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import ProductTabs from '../components/ProductTabs';
-import AddToCartPopup from '../components/AddToCartPopup';
+import ProductTabs from '../components/product/ProductTabs';
+import AddToCartPopup from '../components/product/AddToCartPopup';
 import './ProductDetail.css';
 
 const ProductDetail = () => {

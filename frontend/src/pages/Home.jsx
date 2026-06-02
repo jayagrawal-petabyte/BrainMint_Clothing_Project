@@ -7,9 +7,9 @@ import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import ProductCard from '../components/ProductCard';
-import PromoBanner from '../components/PromoBanner';
-import TrustBadges from '../components/TrustBadges';
+import ProductCard from '../components/product/ProductCard';
+import PromoBanner from '../components/shop/PromoBanner';
+import TrustBadges from '../components/ui/TrustBadges';
 import { fetchNewArrivals } from '../services/api';
 import './Home.css';
 

@@ -2,7 +2,7 @@
 import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../../context/CartContext";
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const {

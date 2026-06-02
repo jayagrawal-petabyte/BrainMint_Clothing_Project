@@ -3,7 +3,7 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
-import AddToCartPopup from "../components/AddToCartPopup";
+import AddToCartPopup from "../components/product/AddToCartPopup";
 import "./Wishlist.css";
 
 const Wishlist = () => {

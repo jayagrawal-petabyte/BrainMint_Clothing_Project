@@ -6,12 +6,12 @@ import {
   Eye
 } from 'lucide-react';
 
-import { useWishlist } from '../context/WishlistContext';
-import { useCart } from '../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
+import { useCart } from '../../context/CartContext';
 import {
   useSplat,
   SplatParticles
-} from './SplatEffect';
+} from '../ui/SplatEffect';
 import AddToCartPopup from './AddToCartPopup';
 
 import './ProductCard.css';

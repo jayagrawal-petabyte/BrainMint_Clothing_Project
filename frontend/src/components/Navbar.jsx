@@ -44,8 +44,9 @@ const Navbar = () => {
   };
 
   return (
-    <header className={`navbar-container ${isNavbarHidden ? 'navbar-hidden' : ''}`}>
-      <div className="navbar-middle">
+    <>
+      <header className={`navbar-container ${isNavbarHidden ? 'navbar-hidden' : ''}`}>
+        <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">
             <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '15px', background: 'transparent', border: 'none', cursor: 'pointer', outline: 'none' }}>
@@ -161,11 +162,12 @@ const Navbar = () => {
           </nav>
         </div>
       </div>
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-      />
     </header>
+    <CartDrawer
+      isOpen={isCartOpen}
+      onClose={() => setIsCartOpen(false)}
+    />
+    </>
   );
 };
 

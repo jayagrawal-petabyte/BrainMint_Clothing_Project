@@ -48,7 +48,7 @@ const Navbar = () => {
       <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">
-            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '10px' }}>
+            <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '15px', background: 'transparent', border: 'none', cursor: 'pointer', outline: 'none' }}>
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
             <div className="site-logo">

@@ -49,12 +49,12 @@ export const fetchCategories = async () => {
 };
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
-export const loginUser = async (email, password) => {
+export const loginUser = async (phoneNumber, password) => {
   try {
     const response = await fetch(`${AUTH_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ phoneNumber, password }),
     });
     return await response.json();
   } catch (error) {
@@ -63,12 +63,40 @@ export const loginUser = async (email, password) => {
   }
 };
 
-export const registerUser = async (name, email, password) => {
+export const forgotPasswordUser = async (email) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    return null;
+  }
+};
+
+export const resetPasswordUser = async (token, password) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/reset-password/${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return null;
+  }
+};
+
+export const registerUser = async (name, email, phoneNumber, password) => {
   try {
     const response = await fetch(`${AUTH_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, phoneNumber, password }),
     });
     return await response.json();
   } catch (error) {
@@ -77,7 +105,140 @@ export const registerUser = async (name, email, password) => {
   }
 };
 
+export const fetchCurrentUser = async (token) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch profile error:", error);
+    return null;
+  }
+};
+
+export const fetchUserProfile = async (token) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/profile`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch profile error:", error);
+    return null;
+  }
+};
+
+export const updateUserProfile = async (profileData, token) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(profileData),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Update profile error:", error);
+    return null;
+  }
+};
+
+export const submitContactForm = async (contactData) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(contactData),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Contact form error:", error);
+    return null;
+  }
+};
+
+
 // ─── Cart / Orders ─────────────────────────────────────────────────────────────
+export const fetchCart = async (token) => {
+  try {
+    const response = await fetch(`${CART_URL}/cart`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch cart error:", error);
+    return null;
+  }
+};
+
+export const syncAddToCart = async (productId, quantity, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/cart`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}` 
+      },
+      body: JSON.stringify({ productId, quantity }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Add to cart error:", error);
+    return null;
+  }
+};
+
+export const fetchWishlist = async (token) => {
+  try {
+    const response = await fetch(`${CART_URL}/wishlist`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch wishlist error:", error);
+    return null;
+  }
+};
+
+export const addToWishlistApi = async (productId, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/wishlist/${productId}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Add wishlist error:", error);
+    return null;
+  }
+};
+
+export const removeFromWishlistApi = async (productId, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/wishlist/${productId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Remove wishlist error:", error);
+    return null;
+  }
+};
+
 export const placeOrder = async (orderData, token) => {
   try {
     const response = await fetch(`${CART_URL}/orders`, {
@@ -91,6 +252,22 @@ export const placeOrder = async (orderData, token) => {
     return await response.json();
   } catch (error) {
     console.error("Order error:", error);
+    return null;
+  }
+};
+
+export const fetchMyOrders = async (token) => {
+  try {
+    const response = await fetch(`${CART_URL}/orders/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch orders error:", error);
     return null;
   }
 };

@@ -138,7 +138,7 @@ const Home = () => {
             aria-label="Shop Dresses"
           >
             <img
-              src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"
+              src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800"
               alt="Dresses"
             />
             <div className="category-content">
@@ -152,7 +152,7 @@ const Home = () => {
             aria-label="Shop Tops"
           >
             <img
-              src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=500"
+              src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=800"
               alt="Tops"
             />
             <div className="category-content">
@@ -166,7 +166,7 @@ const Home = () => {
             aria-label="Shop Skirts"
           >
             <img
-              src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500"
+              src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800"
               alt="Skirts"
             />
             <div className="category-content">
@@ -180,7 +180,7 @@ const Home = () => {
             aria-label="Shop Coats"
           >
             <img
-              src="https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500"
+              src="https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=800"
               alt="Coats"
             />
             <div className="category-content">

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login, isLoading } = useAuth();
@@ -18,12 +18,18 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password) {
-      setError('Please enter both email and password.');
+    if (!phoneNumber || !password) {
+      setError('Please enter both phone number and password.');
       return;
     }
 
-    const result = await login(email, password);
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setError('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
+    const result = await login(phoneNumber, password);
     
     if (result.success) {
       navigate(from, { replace: true });
@@ -57,14 +63,14 @@ const Login = () => {
             
             <div className="auth-input-group stitch-input">
               <input 
-                type="email" 
-                id="email"
+                type="tel" 
+                id="phoneNumber"
                 placeholder=" " 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                 required
               />
-              <label htmlFor="email">Email</label>
+              <label htmlFor="phoneNumber">Phone Number</label>
             </div>
             
             <div className="auth-input-group stitch-input">

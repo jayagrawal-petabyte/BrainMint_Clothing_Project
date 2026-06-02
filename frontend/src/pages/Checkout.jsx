@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -24,7 +24,7 @@ const Checkout = () => {
   const [orderStatus, setOrderStatus] = useState(null);
 
   const [form, setForm] = useState({
-    email: '', newsletter: false,
+    email: '', phone: '', newsletter: false,
     firstName: '', lastName: '',
     address: '', apartment: '',
     city: '', state: 'Uttar Pradesh', pincode: '',
@@ -66,10 +66,13 @@ const Checkout = () => {
         image: getImage(item)
       })),
       shippingAddress: {
+        name: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',
         address: form.address,
         city: form.city,
-        postalCode: form.pincode,
-        country: "India" // Default for now
+        state: form.state,
+        pincode: form.pincode,
+        phone: form.phone,
+        country: "India"
       },
       paymentMethod: "PayPal", // Hardcoded mock
       taxPrice: 0,
@@ -105,7 +108,7 @@ const Checkout = () => {
             <input
               type="email"
               name="email"
-              placeholder="Email or mobile phone number"
+              placeholder="Email address"
               value={form.email}
               onChange={handleChange}
               className="checkout-input full"
@@ -164,6 +167,14 @@ const Checkout = () => {
               onChange={handleChange}
               className="checkout-input full"
             />
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone number"
+              value={form.phone}
+              onChange={handleChange}
+              className="checkout-input full"
+            />
 
             <div className="checkout-row checkout-row-3">
               <input
@@ -208,9 +219,19 @@ const Checkout = () => {
           {/* Shipping Method */}
           <section className="checkout-section">
             <h2 className="checkout-section-title">Shipping method</h2>
-            <div className="checkout-info-box">
-              Enter your shipping address to view available shipping methods.
-            </div>
+            {!form.address || !form.city || !form.pincode ? (
+              <div className="checkout-info-box">
+                Enter your shipping address to view available shipping methods.
+              </div>
+            ) : (
+              <div style={{ border: '1px solid var(--border-color-1)', borderRadius: '4px', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <span style={{ fontWeight: '500' }}>Standard Shipping</span>
+                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--ltn__paragraph-color)' }}>Delivery in 3-5 business days</p>
+                </div>
+                <span style={{ fontWeight: '600' }}>Free</span>
+              </div>
+            )}
           </section>
 
           {/* Payment */}
@@ -277,7 +298,11 @@ const Checkout = () => {
             </div>
             <div className="checkout-summary-row">
               <span>Shipping</span>
-              <span className="checkout-summary-muted">Enter shipping address</span>
+              {(!form.address || !form.city || !form.pincode) ? (
+                <span className="checkout-summary-muted">Enter shipping address</span>
+              ) : (
+                <span>Free</span>
+              )}
             </div>
 
             <div className="checkout-summary-divider" />

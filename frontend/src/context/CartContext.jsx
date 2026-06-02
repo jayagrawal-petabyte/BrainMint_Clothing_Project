@@ -1,46 +1,48 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { fetchCart, syncAddToCart } from '../services/api';
 
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, token } = useAuth();
   const [cartItems, setCartItems] = useState([]);
 
-  // When user auth changes, load their specific cart from localStorage
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !token) {
       setCartItems([]);
       return;
     }
 
-    const storageKey = `urbanwear_cart_${user?.email}`;
-    try {
-      const saved = localStorage.getItem(storageKey);
-      setCartItems(saved ? JSON.parse(saved) : []);
-    } catch (e) {
-      setCartItems([]);
-    }
-  }, [isLoggedIn, user]);
-
-  // When cartItems changes, save to their specific localStorage (only if logged in)
-  useEffect(() => {
-    if (isLoggedIn && user?.email) {
-      const storageKey = `urbanwear_cart_${user.email}`;
-      localStorage.setItem(storageKey, JSON.stringify(cartItems));
-    }
-  }, [cartItems, isLoggedIn, user]);
+    const loadCart = async () => {
+      const res = await fetchCart(token);
+      if (res && (res.data || res.items || Array.isArray(res))) {
+        const itemsList = res.data?.items || res.items || res.data || res || [];
+        // Support both nested { product, quantity } or flat array
+        const mappedItems = Array.isArray(itemsList) ? itemsList.map(i => ({
+          ...(i.product || i),
+          quantity: i.quantity || 1
+        })) : [];
+        setCartItems(mappedItems);
+      }
+    };
+    loadCart();
+  }, [isLoggedIn, token]);
 
   const getId = (item) => item?._id || item?.id;
   const getPrice = (item) => item?.discountPrice || item?.price || 0;
 
-  const addToCart = (product, quantity = 1) => {
-    if (!isLoggedIn) {
+  const addToCart = async (product, quantity = 1) => {
+    if (!isLoggedIn || !token) {
       alert("Please login to add items to your cart!");
       return;
     }
+    
+    // Sync with backend API
+    await syncAddToCart(getId(product), quantity, token);
+
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => getId(item) === getId(product));
       if (existingItem) {

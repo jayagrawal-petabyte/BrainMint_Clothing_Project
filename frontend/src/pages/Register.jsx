@@ -7,6 +7,7 @@ const Register = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { register, isLoading } = useAuth();
@@ -16,15 +17,27 @@ const Register = () => {
     e.preventDefault();
     setError('');
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !phoneNumber || !password) {
       setError('Please fill out all fields.');
       return;
     }
 
-    const result = await register(firstName, lastName, email, password);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setError('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
+    const result = await register(firstName, lastName, email, phoneNumber, password);
     
     if (result.success) {
-      navigate('/');
+      navigate('/login');
     } else {
       setError(result.error || 'Failed to create account. Please try again.');
     }
@@ -86,7 +99,19 @@ const Register = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email Address</label>
+            </div>
+            
+            <div className="auth-input-group stitch-input">
+              <input 
+                type="tel" 
+                id="phoneNumber"
+                placeholder=" " 
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                required
+              />
+              <label htmlFor="phoneNumber">Phone Number</label>
             </div>
             
             <div className="auth-input-group stitch-input">

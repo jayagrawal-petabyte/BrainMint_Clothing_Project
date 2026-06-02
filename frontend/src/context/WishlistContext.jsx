@@ -1,64 +1,68 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { fetchWishlist, addToWishlistApi, removeFromWishlistApi } from '../services/api';
 
 const WishlistContext = createContext();
 
 export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, token } = useAuth();
   const [wishlistItems, setWishlistItems] = useState([]);
 
-  // When user auth changes, load their specific wishlist from localStorage
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !token) {
       setWishlistItems([]);
       return;
     }
 
-    const storageKey = `urbanwear_wishlist_${user?.email}`;
-    try {
-      const saved = localStorage.getItem(storageKey);
-      setWishlistItems(saved ? JSON.parse(saved) : []);
-    } catch (e) {
-      setWishlistItems([]);
-    }
-  }, [isLoggedIn, user]);
-
-  // When wishlistItems changes, save to their specific localStorage (only if logged in)
-  useEffect(() => {
-    if (isLoggedIn && user?.email) {
-      const storageKey = `urbanwear_wishlist_${user.email}`;
-      localStorage.setItem(storageKey, JSON.stringify(wishlistItems));
-    }
-  }, [wishlistItems, isLoggedIn, user]);
+    const loadWishlist = async () => {
+      const res = await fetchWishlist(token);
+      if (res && res.data) {
+        // Backend returns: data: { products: [ { ... }, { ... } ] } or data: { products: [] }
+        const productsList = res.data.products || res.data || [];
+        const mappedItems = Array.isArray(productsList) ? productsList.map(i => i.product || i) : [];
+        setWishlistItems(mappedItems);
+      }
+    };
+    loadWishlist();
+  }, [isLoggedIn, token]);
 
   const getId = (item) => item?._id || item?.id;
 
-  const addToWishlist = (product) => {
-    if (!isLoggedIn) {
+  const addToWishlist = async (product) => {
+    if (!isLoggedIn || !token) {
       alert("Please login to add items to your wishlist!");
       return;
     }
+    await addToWishlistApi(getId(product), token);
     setWishlistItems(prev => {
       if (prev.find(item => getId(item) === getId(product))) return prev;
       return [...prev, product];
     });
   };
 
-  const removeFromWishlist = (productId) => {
+  const removeFromWishlist = async (productId) => {
+    if (!isLoggedIn || !token) return;
+    await removeFromWishlistApi(productId, token);
     setWishlistItems(prev => prev.filter(item => getId(item) !== productId));
   };
 
-  const toggleWishlist = (product) => {
-    if (!isLoggedIn) {
+  const toggleWishlist = async (product) => {
+    if (!isLoggedIn || !token) {
       alert("Please login to use the wishlist!");
       return;
     }
-    if (wishlistItems.find(item => getId(item) === getId(product))) {
-      removeFromWishlist(getId(product));
+    
+    // Optimistic UI update
+    const isCurrentlyWishlisted = wishlistItems.find(item => getId(item) === getId(product));
+    
+    if (isCurrentlyWishlisted) {
+      setWishlistItems(prev => prev.filter(item => getId(item) !== getId(product)));
+      await removeFromWishlistApi(getId(product), token);
     } else {
-      addToWishlist(product);
+      setWishlistItems(prev => [...prev, product]);
+      await addToWishlistApi(getId(product), token);
     }
   };
 

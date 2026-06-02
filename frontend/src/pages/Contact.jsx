@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { submitContactForm } from '../services/api';
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -8,6 +9,47 @@ import './Login.css';
 import './Contact.css';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    phone: '',
+    message: ''
+  });
+  const [status, setStatus] = useState({ loading: false, success: false, error: '' });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    // Map ids to state keys
+    const key = id.replace('contact', '').toLowerCase();
+    setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ loading: true, success: false, error: '' });
+    
+    // The backend expects name, email, subject, message
+    // We'll append phone to the message
+    const finalMessage = formData.phone 
+      ? `Phone: ${formData.phone}\n\n${formData.message}` 
+      : formData.message;
+
+    const result = await submitContactForm({
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject || 'General Inquiry',
+      message: finalMessage
+    });
+
+    if (result && result.success !== false) {
+      setStatus({ loading: false, success: true, error: '' });
+      setFormData({ name: '', email: '', subject: '', phone: '', message: '' });
+    } else {
+      setStatus({ loading: false, success: false, error: result?.error || result?.message || 'Failed to send message.' });
+    }
+  };
+
   return (
     <div
       style={{
@@ -165,20 +207,23 @@ const Contact = () => {
             <h2 className="contact-form-title">Send Us A Message</h2>
           </div>
 
-          <form className="contact-form">
+          <form className="contact-form" onSubmit={handleSubmit}>
+            {status.success && <div className="auth-error" style={{backgroundColor: '#e6ffe6', color: '#008000', borderColor: '#b3ffb3'}}>Message sent successfully! We will get back to you soon.</div>}
+            {status.error && <div className="auth-error">{status.error}</div>}
+            
             <div className="contact-form-grid">
               <div className="stitch-input">
-                <input type="text" id="contactName" placeholder=" " required />
+                <input type="text" id="contactName" placeholder=" " value={formData.name} onChange={handleChange} required />
                 <label htmlFor="contactName">Your Name</label>
               </div>
 
               <div className="stitch-input">
-                <input type="email" id="contactEmail" placeholder=" " required />
+                <input type="email" id="contactEmail" placeholder=" " value={formData.email} onChange={handleChange} required />
                 <label htmlFor="contactEmail">Email Address</label>
               </div>
 
               <div className="stitch-input">
-                <select id="contactQuery" required defaultValue="">
+                <select id="contactSubject" required value={formData.subject} onChange={handleChange}>
                   <option value="" disabled hidden></option>
                   <option value="Order Issue">Order Issue</option>
                   <option value="Return">Return</option>
@@ -186,23 +231,23 @@ const Contact = () => {
                   <option value="Product Query">Product Query</option>
                   <option value="Other">Other</option>
                 </select>
-                <label htmlFor="contactQuery">Select Query Type</label>
+                <label htmlFor="contactSubject">Select Query Type</label>
               </div>
 
               <div className="stitch-input">
-                <input type="tel" id="contactPhone" placeholder=" " required />
+                <input type="tel" id="contactPhone" placeholder=" " value={formData.phone} onChange={handleChange} required />
                 <label htmlFor="contactPhone">Phone Number</label>
               </div>
             </div>
 
             <div className="stitch-input">
-              <textarea id="contactMessage" rows="6" placeholder=" " required style={{ resize: 'none' }}></textarea>
+              <textarea id="contactMessage" rows="6" placeholder=" " value={formData.message} onChange={handleChange} required style={{ resize: 'none' }}></textarea>
               <label htmlFor="contactMessage">Describe your query...</label>
             </div>
 
             <div className="contact-form-actions">
-              <button type="submit" className="stitch-btn">
-                Send Message
+              <button type="submit" className="stitch-btn" disabled={status.loading}>
+                {status.loading ? 'Sending...' : 'Send Message'}
               </button>
             </div>
           </form>

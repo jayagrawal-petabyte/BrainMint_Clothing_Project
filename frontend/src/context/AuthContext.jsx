@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { loginUser as apiLogin, registerUser as apiRegister } from '../services/api';
+import { loginUser as apiLogin, registerUser as apiRegister, fetchCurrentUser } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -13,20 +13,30 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = !!token;
 
   useEffect(() => {
-    // If we have a token, we could potentially fetch the user profile here
-    // For now, we'll just rely on the token for logged-in state
-    if (token) {
-      localStorage.setItem('urbanwear_token', token);
-    } else {
-      localStorage.removeItem('urbanwear_token');
-      setUser(null);
-    }
+    const hydrateSession = async () => {
+      if (token) {
+        localStorage.setItem('urbanwear_token', token);
+        const profile = await fetchCurrentUser(token);
+        if (profile && profile.success !== false) {
+          setUser(profile.data?.user || profile.user || profile.data || profile);
+        } else {
+          // Token might be expired
+          localStorage.removeItem('urbanwear_token');
+          setToken(null);
+          setUser(null);
+        }
+      } else {
+        localStorage.removeItem('urbanwear_token');
+        setUser(null);
+      }
+    };
+    hydrateSession();
   }, [token]);
 
-  const login = async (email, password) => {
+  const login = async (phoneNumber, password) => {
     setIsLoading(true);
     try {
-      const response = await apiLogin(email, password);
+      const response = await apiLogin(phoneNumber, password);
       
       // Based on typical auth API responses (e.g. { success: true, token, user })
       if (response && response.success !== false && (response.token || response.data?.token)) {
@@ -37,7 +47,7 @@ export const AuthProvider = ({ children }) => {
             setUser(response.user || response.data?.user);
          } else {
              // Fallback minimal user object if backend doesn't send it immediately
-             setUser({ email });
+             setUser({ phoneNumber });
          }
          return { success: true };
       }
@@ -50,19 +60,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (firstName, lastName, email, password) => {
+  const register = async (firstName, lastName, email, phoneNumber, password) => {
     setIsLoading(true);
     try {
-      // API expects name, email, password based on api.js
+      // API expects name, email, phoneNumber, password based on api.js
       const name = `${firstName} ${lastName}`.trim();
-      const response = await apiRegister(name, email, password);
+      const response = await apiRegister(name, email, phoneNumber, password);
       
       if (response && response.success !== false) {
          // Auto-login after register if token is provided, otherwise just return success
          if (response.token || response.data?.token) {
              const newToken = response.token || response.data?.token;
              setToken(newToken);
-             setUser(response.user || response.data?.user || { email, name });
+             setUser(response.user || response.data?.user || { phoneNumber, name });
          }
          return { success: true };
       }

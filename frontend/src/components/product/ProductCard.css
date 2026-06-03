@@ -199,38 +199,4 @@
   opacity: 0.8;
 }
 
-/* --- Product Hover Sizes --- */
-.product-card-sizes {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 10px;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  z-index: 5;
-}
-
-[data-theme="dark"] .product-card-sizes {
-  background: rgba(0, 0, 0, 0.85);
-}
-
-.ltn__product-item:hover .product-card-sizes {
-  transform: translateY(0);
-}
-
-.product-card-size-item {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--ltn__heading-color);
-  padding: 2px 6px;
-  border: 1px solid var(--border-color-1);
-  border-radius: 2px;
-}
-
 

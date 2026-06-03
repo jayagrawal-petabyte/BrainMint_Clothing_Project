@@ -273,16 +273,6 @@ const ProductCard = ({ product, badgeText }) => {
             </li>
           </ul>
         </div>
-
-        {/* Hover Sizes */}
-        {product?.sizes?.length > 0 && (
-          <div className="product-card-sizes">
-            <span style={{ width: '100%', textAlign: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--ltn__paragraph-color)', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Sizes</span>
-            {product.sizes.map(size => (
-              <span key={size} className="product-card-size-item">{size}</span>
-            ))}
-          </div>
-        )}
       </div>
 
 
@@ -295,6 +285,12 @@ const ProductCard = ({ product, badgeText }) => {
             {productName}
           </Link>
         </h2>
+
+        {product?.sizes?.length > 0 && (
+          <div style={{ fontSize: '13px', color: 'var(--ltn__paragraph-color)', marginBottom: '6px', textAlign: 'left', paddingLeft: '15px' }}>
+            Sizes: <span style={{ fontWeight: 500, color: 'var(--ltn__heading-color)' }}>{product.sizes[0]}</span>
+          </div>
+        )}
 
         {ratingVal > 0 && (
           <div className="product-card-rating">

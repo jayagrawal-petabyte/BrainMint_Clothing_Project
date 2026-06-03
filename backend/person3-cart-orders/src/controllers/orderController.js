@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
@@ -89,6 +90,21 @@ const getUserOrders = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get all orders (Admin)
+// @route   GET /api/orders/all
+// @access  Admin
+const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find()
+    .populate('user', 'name email')
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    message: 'All orders fetched successfully',
+    data: orders
+  });
+});
+
 // @desc    Get single order by ID
 // @route   GET /api/orders/:orderId
 // @access  Private
@@ -138,9 +154,46 @@ const cancelOrder = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Update order status (Admin)
+// @route   PUT /api/orders/:orderId/status
+// @access  Admin
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+
+  const allowedStatuses = [
+    'pending',
+    'confirmed',
+    'shipped',
+    'delivered',
+    'cancelled'
+  ];
+
+  if (!allowedStatuses.includes(status)) {
+    throw new ApiError(400, 'Invalid order status');
+  }
+
+  const order = await Order.findById(req.params.orderId);
+
+  if (!order) {
+    throw new ApiError(404, 'Order not found');
+  }
+
+  order.status = status;
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Order status updated successfully',
+    data: order
+  });
+});
+
 module.exports = {
   createOrder,
   getUserOrders,
+  getAllOrders,
   getOrderById,
-  cancelOrder
+  cancelOrder,
+  updateOrderStatus
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
+import { motion } from 'framer-motion';
 
 const salesData = [
   { name: 'Jan', revenue: 4000, orders: 240 },
@@ -34,7 +35,12 @@ const SalesCharts = () => {
   const tooltipBg = isDark ? '#1A1A1A' : '#FFFFFF';
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 font-rubik">
+    <motion.div 
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 font-rubik"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15, duration: 0.6, ease: "easeOut" }}
+    >
       {/* Revenue Chart */}
       <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark">
         <div className="mb-6">
@@ -84,7 +90,7 @@ const SalesCharts = () => {
           </ResponsiveContainer>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

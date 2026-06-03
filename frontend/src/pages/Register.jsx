@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import './Login.css'; // Reusing the same auth classes for consistency
 
@@ -43,30 +44,64 @@ const Register = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
   return (
     <div className="auth-page">
       {/* Header */}
-      <div className="auth-header">
+      <motion.div 
+        className="auth-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <h1>Create account</h1>
         <div className="auth-breadcrumb">
           <Link to="/">Home</Link>
           <span>&gt;</span>
           <span>Create Account</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Register Form */}
       <div className="auth-container">
-        <div className="auth-form-wrapper stitch-card">
-          <div className="auth-form-header">
+        <motion.div 
+          className="auth-form-wrapper stitch-card"
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.div className="auth-form-header" variants={itemVariants}>
             <h2>Create Account</h2>
             <p>Please register using account details below.</p>
-          </div>
+          </motion.div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
-            {error && <div className="auth-error">{error}</div>}
+            {error && <motion.div className="auth-error" variants={itemVariants}>{error}</motion.div>}
             
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="text" 
                 id="firstName"
@@ -76,9 +111,9 @@ const Register = () => {
                 required
               />
               <label htmlFor="firstName">First Name</label>
-            </div>
+            </motion.div>
 
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="text" 
                 id="lastName"
@@ -88,9 +123,9 @@ const Register = () => {
                 required
               />
               <label htmlFor="lastName">Last Name</label>
-            </div>
+            </motion.div>
             
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="email" 
                 id="email"
@@ -100,9 +135,9 @@ const Register = () => {
                 required
               />
               <label htmlFor="email">Email Address</label>
-            </div>
+            </motion.div>
             
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="tel" 
                 id="phoneNumber"
@@ -112,9 +147,9 @@ const Register = () => {
                 required
               />
               <label htmlFor="phoneNumber">Phone Number</label>
-            </div>
+            </motion.div>
             
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="password" 
                 id="password"
@@ -124,9 +159,9 @@ const Register = () => {
                 required
               />
               <label htmlFor="password">Password</label>
-            </div>
+            </motion.div>
 
-            <div className="auth-actions" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '20px' }}>
+            <motion.div className="auth-actions" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '20px' }} variants={itemVariants}>
               <button 
                 type="submit" 
                 className="auth-submit-btn stitch-btn"
@@ -138,9 +173,9 @@ const Register = () => {
               <Link to="/" className="auth-footer-link" style={{ marginTop: '0' }}>
                 Return to Store
               </Link>
-            </div>
+            </motion.div>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Package, 
@@ -36,15 +37,26 @@ const AdminSidebar = () => {
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 font-medium ${
+              `relative flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 font-medium z-10 ${
                 isActive
-                  ? 'bg-admin-bg dark:bg-[#222] text-admin-heading dark:text-admin-heading-dark shadow-sm'
-                  : 'text-admin-text dark:text-admin-text-dark hover:bg-admin-bg dark:hover:bg-[#222] hover:text-admin-heading dark:hover:text-admin-heading-dark'
+                  ? 'text-admin-heading dark:text-admin-heading-dark font-semibold'
+                  : 'text-admin-text dark:text-admin-text-dark hover:bg-admin-bg/30 dark:hover:bg-[#222]/30 hover:text-admin-heading dark:hover:text-admin-heading-dark'
               }`
             }
           >
-            {item.icon}
-            <span>{item.name}</span>
+            {({ isActive }) => (
+              <>
+                {item.icon}
+                <span className="relative z-10">{item.name}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-admin-nav"
+                    className="absolute inset-0 bg-admin-bg dark:bg-[#222] rounded-lg -z-10 shadow-sm border-l-2 border-admin-accent"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>

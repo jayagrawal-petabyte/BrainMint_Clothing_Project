@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
@@ -38,30 +39,64 @@ const Login = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
   return (
     <div className="auth-page">
       {/* Header */}
-      <div className="auth-header">
+      <motion.div 
+        className="auth-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <h1>Account</h1>
         <div className="auth-breadcrumb">
           <Link to="/">Home</Link>
           <span>&gt;</span>
           <span>Account</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Login Form */}
       <div className="auth-container">
-        <div className="auth-form-wrapper stitch-card">
-          <div className="auth-form-header">
+        <motion.div 
+          className="auth-form-wrapper stitch-card"
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.div className="auth-form-header" variants={itemVariants}>
             <h2>Login</h2>
             <p>Please login using account details below.</p>
-          </div>
+          </motion.div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
-            {error && <div className="auth-error">{error}</div>}
+            {error && <motion.div className="auth-error" variants={itemVariants}>{error}</motion.div>}
             
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="tel" 
                 id="phoneNumber"
@@ -71,9 +106,9 @@ const Login = () => {
                 required
               />
               <label htmlFor="phoneNumber">Phone Number</label>
-            </div>
+            </motion.div>
             
-            <div className="auth-input-group stitch-input">
+            <motion.div className="auth-input-group stitch-input" variants={itemVariants}>
               <input 
                 type="password" 
                 id="password"
@@ -83,9 +118,9 @@ const Login = () => {
                 required
               />
               <label htmlFor="password">Password</label>
-            </div>
+            </motion.div>
 
-            <div className="auth-actions">
+            <motion.div className="auth-actions" variants={itemVariants}>
               <button 
                 type="submit" 
                 className="auth-submit-btn stitch-btn"
@@ -96,13 +131,15 @@ const Login = () => {
               <Link to="/forgot-password" className="auth-forgot-link stitch-link">
                 Forgot your password?
               </Link>
-            </div>
+            </motion.div>
           </form>
 
-          <Link to="/register" className="auth-footer-link">
-            Create account
-          </Link>
-        </div>
+          <motion.div variants={itemVariants}>
+            <Link to="/register" className="auth-footer-link">
+              Create account
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

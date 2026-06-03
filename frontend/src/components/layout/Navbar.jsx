@@ -51,19 +51,19 @@ const Navbar = () => {
         <div className="navbar-middle">
         <div className="container">
           <div className="navbar-middle-content">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '8px', background: 'transparent', border: 'none', cursor: 'pointer', outline: 'none' }}>
-                {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
-              </button>
-              <div className="site-logo">
-                <Link to="/" className="theme-logo">
-                  <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
-                </Link>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <button className="mobile-menu-btn d-lg-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ marginRight: '8px', background: 'transparent', border: 'none', cursor: 'pointer', outline: 'none' }}>
+                  {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+                </button>
+                <div className="site-logo">
+                  <Link to="/" className="theme-logo">
+                    <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
+                  </Link>
+                </div>
               </div>
-            </div>
 
-            <div className="header-contact-search d-none-lg">
-              <div className="header-feature-item">
+              <div className="header-feature-item d-none-lg">
                 <div className="header-feature-icon">
                   <Phone size={24} />
                 </div>
@@ -72,15 +72,15 @@ const Navbar = () => {
                   <p><a href="tel:123-456-789-10">123-456-789-10</a></p>
                 </div>
               </div>
+            </div>
 
-              <div className="header-search">
-                <form onSubmit={handleSearch}>
-                  <input type="search" name="q" placeholder="Search our store" aria-label="Search store" />
-                  <button type="submit" aria-label="Submit search">
-                    <Search size={20} />
-                  </button>
-                </form>
-              </div>
+            <div className="header-search d-none-lg">
+              <form onSubmit={handleSearch}>
+                <input type="search" name="q" placeholder="Search our store" aria-label="Search store" />
+                <button type="submit" aria-label="Submit search">
+                  <Search size={20} />
+                </button>
+              </form>
             </div>
 
             <div className="header-options">

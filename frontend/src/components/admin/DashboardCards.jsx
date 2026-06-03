@@ -1,5 +1,6 @@
 import React from 'react';
 import { Package, IndianRupee, Users, ShoppingBag, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const DashboardCards = () => {
   const stats = [
@@ -37,12 +38,43 @@ const DashboardCards = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 14
+      }
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <motion.div 
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+    >
       {stats.map((stat, index) => (
-        <div 
+        <motion.div 
           key={index} 
-          className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark transition-transform hover:-translate-y-1 duration-300"
+          variants={itemVariants}
+          whileHover={{ y: -5, boxShadow: '0px 12px 24px rgba(0,0,0,0.1)' }}
+          className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark cursor-pointer"
         >
           <div className="flex justify-between items-start">
             <div>
@@ -62,9 +94,9 @@ const DashboardCards = () => {
               {stat.icon}
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 

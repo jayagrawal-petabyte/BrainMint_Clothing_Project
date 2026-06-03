@@ -128,7 +128,13 @@
 .stitch-input select:valid,
 .stitch-input textarea:focus,
 .stitch-input textarea:not(:placeholder-shown) {
-  border-bottom-color: #b71e36;
+  border-bottom-color: var(--ltn__secondary-color);
+}
+
+.stitch-input input:focus,
+.stitch-input select:focus,
+.stitch-input textarea:focus {
+  filter: drop-shadow(0 2px 6px rgba(242, 76, 92, 0.25));
 }
 
 .stitch-input input:focus + label,
@@ -138,7 +144,7 @@
 .stitch-input textarea:focus + label,
 .stitch-input textarea:not(:placeholder-shown) + label {
   transform: translateY(-24px) scale(0.85);
-  color: #b71e36;
+  color: var(--ltn__secondary-color);
 }
 
 .auth-actions {
@@ -167,8 +173,8 @@
 }
 
 .stitch-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 24px rgba(242, 76, 92, 0.35);
   background-color: #1a1c1c;
 }
 
@@ -289,7 +295,7 @@
 
 [data-theme="dark"] .stitch-btn:hover {
   background-color: #ffffff;
-  box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.15);
+  box-shadow: 0px 8px 24px rgba(242, 76, 92, 0.45);
 }
 
 [data-theme="dark"] .stitch-link,

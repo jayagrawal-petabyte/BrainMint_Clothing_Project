@@ -41,24 +41,7 @@
   box-shadow: 0 12px 24px rgba(0,0,0,0.3);
 }
 
-.product-img img.primary-img {
-  opacity: 1;
-}
-.ltn__product-item:hover .product-img img.primary-img {
-  opacity: 0;
-}
-
-.product-img img.hover-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-.ltn__product-item:hover .product-img img.hover-img {
-  opacity: 1;
-}
-
-/* --- Hover Action Icons --- */
+/* --- Hover Actions --- */
 .product-hover-action {
   position: absolute;
   top: 60%;
@@ -197,6 +180,21 @@
   color: var(--ltn__paragraph-color);
   font-size: 11px;
   opacity: 0.8;
+}
+
+/* --- Hover Default Size --- */
+.product-card-default-size {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-bottom: 0 !important;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
+}
+
+.ltn__product-item:hover .product-card-default-size {
+  max-height: 20px;
+  opacity: 1;
+  margin-bottom: 6px !important;
 }
 
 

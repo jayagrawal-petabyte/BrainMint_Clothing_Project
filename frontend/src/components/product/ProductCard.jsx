@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Heart,
@@ -40,9 +40,6 @@ const ProductCard = ({ product, badgeText }) => {
   const productImage =
     product?.images?.[0]?.url ||
     'https://placehold.co/400x500?text=No+Image';
-
-  const productImage2 =
-    product?.images?.[1]?.url;
 
   const productPrice =
     product?.discountPrice ||
@@ -87,6 +84,20 @@ const ProductCard = ({ product, badgeText }) => {
   const [wishSplat, setWishSplat] = useState(false);
   const [cartSplat, setCartSplat] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (isHovered && product?.images?.length > 1) {
+      interval = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+      }, 1200);
+    } else {
+      setCurrentImageIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [isHovered, product?.images]);
 
   const triggerSplat = setter => {
     setter(true);
@@ -123,7 +134,11 @@ const ProductCard = ({ product, badgeText }) => {
 
   return (
     <>
-      <div className="ltn__product-item">
+      <div 
+        className="ltn__product-item"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
       {/* Product Image */}
       <div className="product-img">
         {showBadge && (
@@ -135,19 +150,11 @@ const ProductCard = ({ product, badgeText }) => {
           to={`/product/${productId}`}
         >
           <img
-            src={productImage}
+            src={product?.images?.[currentImageIndex]?.url || productImage}
             alt={productName}
             loading="lazy"
-            className={productImage2 ? "primary-img" : ""}
+            style={{ transition: 'none' }}
           />
-          {productImage2 && (
-            <img
-              src={productImage2}
-              alt={`${productName} alternate`}
-              loading="lazy"
-              className="hover-img"
-            />
-          )}
         </Link>
 
         {/* Hover Actions */}
@@ -287,7 +294,7 @@ const ProductCard = ({ product, badgeText }) => {
         </h2>
 
         {product?.sizes?.length > 0 && (
-          <div style={{ fontSize: '13px', color: 'var(--ltn__paragraph-color)', marginBottom: '6px', textAlign: 'left', paddingLeft: '15px' }}>
+          <div className="product-card-default-size" style={{ fontSize: '13px', color: 'var(--ltn__paragraph-color)', textAlign: 'left', paddingLeft: '15px' }}>
             Sizes: <span style={{ fontWeight: 500, color: 'var(--ltn__heading-color)' }}>{product.sizes[0]}</span>
           </div>
         )}

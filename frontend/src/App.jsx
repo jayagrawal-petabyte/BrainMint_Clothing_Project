@@ -29,6 +29,7 @@ import ProductManagement from './pages/admin/ProductManagement';
 import AddProduct from './pages/admin/AddProduct';
 import EditProduct from './pages/admin/EditProduct';
 
+import CategoryManagement from './pages/admin/CategoryManagement';
 import InventoryManagement from './pages/admin/InventoryManagement';
 import OrderManagement from './pages/admin/OrderManagement';
 import DiscountManagement from './pages/admin/DiscountManagement';
@@ -102,6 +103,7 @@ function App() {
                 <Route path="products" element={<ProductManagement />} />
                 <Route path="products/add" element={<AddProduct />} />
                 <Route path="products/edit/:id" element={<EditProduct />} />
+                <Route path="categories" element={<CategoryManagement />} />
                 <Route path="inventory" element={<InventoryManagement />} />
                 <Route path="orders" element={<OrderManagement />} />
                 <Route path="discounts" element={<DiscountManagement />} />

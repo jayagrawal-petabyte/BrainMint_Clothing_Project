@@ -228,7 +228,52 @@ export const adminDeleteProduct = async (id, token) => {
   }
 };
 
+export const adminCreateCategory = async (categoryData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/categories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(categoryData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Create category error:", error);
+    return null;
+  }
+};
 
+export const adminUpdateCategory = async (id, categoryData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/categories/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(categoryData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Update category error:", error);
+    return null;
+  }
+};
+
+export const adminDeleteCategory = async (id, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/categories/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Delete category error:", error);
+    return null;
+  }
+};
 
 // ─── Cart / Orders ─────────────────────────────────────────────────────────────
 export const fetchCart = async (token) => {
@@ -326,6 +371,19 @@ export const removeFromWishlistApi = async (productId, token) => {
     return await response.json();
   } catch (error) {
     console.error("Remove wishlist error:", error);
+    return null;
+  }
+};
+
+export const clearWishlistApi = async (token) => {
+  try {
+    const response = await fetch(`${CART_URL}/wishlist`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Clear wishlist error:", error);
     return null;
   }
 };

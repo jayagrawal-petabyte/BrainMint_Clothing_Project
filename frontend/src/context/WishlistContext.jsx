@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { fetchWishlist, addToWishlistApi, removeFromWishlistApi } from '../services/api';
+import { fetchWishlist, addToWishlistApi, removeFromWishlistApi, clearWishlistApi } from '../services/api';
 
 const WishlistContext = createContext();
 
@@ -117,12 +117,24 @@ export const WishlistProvider = ({ children }) => {
     return wishlistItems.some(item => getId(item) === productId);
   };
 
+  const clearWishlist = async () => {
+    if (!isLoggedIn || !token) {
+      localStorage.removeItem('guestWishlist');
+      setWishlistItems([]);
+      return;
+    }
+    
+    await clearWishlistApi(token);
+    setWishlistItems([]);
+  };
+
   return (
     <WishlistContext.Provider value={{
       wishlistItems,
       addToWishlist,
       removeFromWishlist,
       toggleWishlist,
+      clearWishlist,
       isWishlisted
     }}>
       {children}

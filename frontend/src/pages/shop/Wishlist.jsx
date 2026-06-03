@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useWishlist } from "../../context/WishlistContext";
@@ -7,7 +7,7 @@ import AddToCartPopup from "../../components/product/AddToCartPopup";
 import "./Wishlist.css";
 
 const Wishlist = () => {
-  const { wishlistItems, removeFromWishlist } = useWishlist();
+  const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
   const { addToCart } = useCart();
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -19,8 +19,36 @@ const Wishlist = () => {
           <span className="eyebrow-dash" />
           <span className="eyebrow-text">Saved Collection</span>
         </div>
-        <h1 className="wishlist-heading">My Wishlist</h1>
-        <p className="wishlist-sub">Your curated collection of favorite styles.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '15px' }}>
+          <div>
+            <h1 className="wishlist-heading" style={{ marginBottom: '5px' }}>My Wishlist</h1>
+            <p className="wishlist-sub" style={{ margin: 0 }}>Your curated collection of favorite styles.</p>
+          </div>
+          {wishlistItems.length > 0 && (
+            <button 
+              onClick={clearWishlist}
+              style={{ 
+                background: 'transparent', 
+                border: '1px solid var(--border-color-1)', 
+                color: 'var(--ltn__paragraph-color)',
+                padding: '8px 16px', 
+                cursor: 'pointer', 
+                fontSize: '13px',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'var(--ltn__secondary-color)';
+                e.currentTarget.style.color = 'var(--ltn__secondary-color)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border-color-1)';
+                e.currentTarget.style.color = 'var(--ltn__paragraph-color)';
+              }}
+            >
+              Clear Wishlist
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Empty State */}

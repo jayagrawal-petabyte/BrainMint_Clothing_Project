@@ -9,13 +9,15 @@ import {
   Tags, 
   BarChart3, 
   LogOut,
-  Settings
+  Settings,
+  Folder
 } from 'lucide-react';
 
 const AdminSidebar = () => {
   const navItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'Products', path: '/admin/products', icon: <Package size={20} /> },
+    { name: 'Categories', path: '/admin/categories', icon: <Folder size={20} /> },
     { name: 'Inventory', path: '/admin/inventory', icon: <Tags size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
     { name: 'Discounts', path: '/admin/discounts', icon: <Tags size={20} /> },

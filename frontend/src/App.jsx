@@ -163,7 +163,7 @@ function App() {
                     <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
                     <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
 
-                    <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
                     <Route path="/returns" element={<PageTransition><Returns /></PageTransition>} />
                     <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />

@@ -45,12 +45,39 @@ body {
   color: var(--ltn__paragraph-color);
   background-color: var(--white-7);
   line-height: 1.8;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
   width: 100%;
+  scrollbar-width: none !important; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none !important; /* Hide scrollbar in Chrome/Safari/Opera */
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  scrollbar-width: none !important; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none !important; /* Hide scrollbar in Chrome/Safari/Opera */
+}
+
+#root,
+.app {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+#root::-webkit-scrollbar,
+.app::-webkit-scrollbar {
+  display: none !important;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,6 +1,7 @@
 .popular-products-section {
   padding: 0 8%;
   width: 100%;
+  overflow: hidden; /* Contains Swiper slides and prevents horizontal body overflow */
 }
 
 .popular-tagline {
@@ -59,6 +60,7 @@
 .popular-carousel-wrapper {
   position: relative;
   padding: 10px 0 30px;
+  overflow: hidden; /* Contains swiper overflow within container borders */
 }
 
 /* --- Swiper Custom Styling --- */

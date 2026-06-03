@@ -11,27 +11,29 @@ const ProductSlider = ({ title, products }) => {
 
   return (
     <div className="product-slider-section">
-      {title && <h2 className="product-slider-title">{title}</h2>}
-      
-      <div className="product-slider-container">
-        <Swiper
-          modules={[Navigation]}
-          navigation={true}
-          spaceBetween={16}
-          slidesPerView={2}
-          breakpoints={{
-            576: { slidesPerView: 3 },
-            768: { slidesPerView: 4 },
-            1024: { slidesPerView: 5 },
-          }}
-          className="product-swiper"
-        >
-          {products.map((product) => (
-            <SwiperSlide key={product._id || product.id}>
-              <ProductCard product={product} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      <div className="container">
+        {title && <h2 className="product-slider-title">{title}</h2>}
+        
+        <div className="product-slider-container">
+          <Swiper
+            modules={[Navigation]}
+            navigation={true}
+            spaceBetween={16}
+            slidesPerView={2}
+            breakpoints={{
+              576: { slidesPerView: 3 },
+              768: { slidesPerView: 4 },
+              1024: { slidesPerView: 5 },
+            }}
+            className="product-swiper"
+          >
+            {products.map((product) => (
+              <SwiperSlide key={product._id || product.id}>
+                <ProductCard product={product} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
     </div>
   );

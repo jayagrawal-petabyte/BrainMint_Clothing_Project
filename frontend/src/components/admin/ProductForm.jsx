@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const ProductForm = ({ initialData, isEditing = false }) => {
+const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = [] }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialData || {
     name: '',
@@ -12,36 +12,30 @@ const ProductForm = ({ initialData, isEditing = false }) => {
     discount: '',
     stock: '',
     status: 'Active',
-    images: []
+    imageUrl: ''
   });
 
-  const [previewImage, setPreviewImage] = useState(initialData?.image || null);
+  const [previewImage, setPreviewImage] = useState(initialData?.imageUrl || null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-        setFormData(prev => ({ ...prev, images: [file] }));
-      };
-      reader.readAsDataURL(file);
+    
+    if (name === 'imageUrl') {
+      setPreviewImage(value);
     }
   };
 
   const removeImage = () => {
     setPreviewImage(null);
-    setFormData(prev => ({ ...prev, images: [] }));
+    setFormData(prev => ({ ...prev, imageUrl: '' }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    if (onSubmit) {
+      await onSubmit(formData);
+    }
     navigate('/admin/products');
   };
 
@@ -134,11 +128,10 @@ const ProductForm = ({ initialData, isEditing = false }) => {
                   className="w-full px-4 py-3 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-admin-heading dark:text-admin-heading-dark transition-all appearance-none"
                 >
                   <option value="">Select Category</option>
-                  <option value="Dresses">Dresses</option>
-                  <option value="Tops">Tops</option>
-                  <option value="Bottoms">Bottoms</option>
-                  <option value="Outerwear">Outerwear</option>
-                  <option value="Accessories">Accessories</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>{cat.name}</option>
+                  ))}
+                  <option value="hoodie">Hoodie (Fallback)</option>
                 </select>
               </div>
             </div>
@@ -151,29 +144,32 @@ const ProductForm = ({ initialData, isEditing = false }) => {
             <h3 className="text-lg font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark mb-6">Product Media</h3>
             
             <div className="space-y-4">
-              <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark">Product Image</label>
-              
-              {previewImage ? (
-                <div className="relative rounded-xl overflow-hidden border border-admin-border dark:border-admin-border-dark aspect-[3/4]">
-                  <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
-                  <button 
-                    type="button" 
-                    onClick={removeImage}
-                    className="absolute top-2 right-2 bg-white text-red-500 p-1.5 rounded-full shadow-md hover:bg-red-50 transition-colors"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center w-full aspect-[3/4] border-2 border-dashed border-admin-border dark:border-[#444] rounded-xl cursor-pointer hover:bg-admin-bg dark:hover:bg-[#1A1A1A] transition-colors">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-8 h-8 mb-3 text-admin-text dark:text-admin-text-dark" />
-                    <p className="mb-2 text-sm text-admin-text dark:text-admin-text-dark font-medium">Click to upload</p>
-                    <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
+                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-2">Image URL</label>
+                <input
+                  type="url"
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleChange}
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-4 py-3 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-admin-heading dark:text-admin-heading-dark transition-all mb-4"
+                />
+                
+                {previewImage ? (
+                  <div className="relative rounded-xl overflow-hidden border border-admin-border dark:border-admin-border-dark aspect-[3/4]">
+                    <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
+                    <button 
+                      type="button" 
+                      onClick={removeImage}
+                      className="absolute top-2 right-2 bg-white text-red-500 p-1.5 rounded-full shadow-md hover:bg-red-50 transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
                   </div>
-                  <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
-                </label>
-              )}
+                ) : (
+                  <div className="flex flex-col items-center justify-center w-full aspect-[3/4] border-2 border-dashed border-admin-border dark:border-[#444] rounded-xl bg-admin-bg/50 dark:bg-[#1A1A1A]/50">
+                    <p className="text-sm text-admin-text dark:text-admin-text-dark font-medium">Image preview will appear here</p>
+                  </div>
+                )}
             </div>
           </div>
 

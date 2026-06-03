@@ -168,6 +168,67 @@ export const submitContactForm = async (contactData) => {
   }
 };
 
+// ─── Admin ───────────────────────────────────────────────────────────────────
+export const fetchAdminStatus = async (token) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/admin`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const adminCreateProduct = async (productData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(productData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Create product error:", error);
+    return null;
+  }
+};
+
+export const adminUpdateProduct = async (id, productData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/products/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(productData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Update product error:", error);
+    return null;
+  }
+};
+
+export const adminDeleteProduct = async (id, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/products/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Delete product error:", error);
+    return null;
+  }
+};
+
+
 
 // ─── Cart / Orders ─────────────────────────────────────────────────────────────
 export const fetchCart = async (token) => {

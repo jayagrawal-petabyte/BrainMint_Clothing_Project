@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProductTable from '../../components/admin/ProductTable';
-
-const mockProducts = [
-  { id: 1, name: 'Floral Maxi Dress', category: 'Dresses', price: 4999, stock: 45, status: 'Active', image: 'https://images.unsplash.com/photo-1572804013309-8c98c41f1481?q=80&w=1000&auto=format&fit=crop' },
-  { id: 2, name: 'Silk Blouse', category: 'Tops', price: 3499, stock: 12, status: 'Active', image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=1000&auto=format&fit=crop' },
-  { id: 3, name: 'Little Black Dress', category: 'Dresses', price: 5999, stock: 0, status: 'Draft', image: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1000&auto=format&fit=crop' },
-  { id: 4, name: 'Tailored Blazer', category: 'Outerwear', price: 6999, stock: 28, status: 'Active', image: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?q=80&w=1000&auto=format&fit=crop' },
-  { id: 5, name: 'High-Waist Trousers', category: 'Bottoms', price: 3999, stock: 8, status: 'Active', image: 'https://images.unsplash.com/photo-1509631179647-0c500ba5e04f?q=80&w=1000&auto=format&fit=crop' },
-];
+import { fetchProducts, adminDeleteProduct } from '../../services/api';
 
 const ProductManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadProducts = async () => {
+    setIsLoading(true);
+    const data = await fetchProducts('?limit=100');
+    setProducts(data.products || []);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      const token = localStorage.getItem('adminToken');
+      await adminDeleteProduct(id, token);
+      loadProducts();
+    }
+  };
 
   return (
     <div className="animate-in fade-in duration-500 font-rubik">
@@ -50,7 +64,7 @@ const ProductManagement = () => {
         </button>
       </div>
 
-      <ProductTable products={mockProducts} searchQuery={searchQuery} />
+      <ProductTable products={products} searchQuery={searchQuery} onDelete={handleDelete} isLoading={isLoading} />
     </div>
   );
 };

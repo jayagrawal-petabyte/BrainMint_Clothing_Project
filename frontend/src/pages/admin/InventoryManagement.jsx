@@ -1,20 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, AlertTriangle } from 'lucide-react';
 import InventoryTable from '../../components/admin/InventoryTable';
-
-const mockInventory = [
-  { id: 1, name: 'Floral Maxi Dress', category: 'Dresses', stock: 45, image: 'https://images.unsplash.com/photo-1572804013309-8c98c41f1481?q=80&w=1000' },
-  { id: 2, name: 'Silk Blouse', category: 'Tops', stock: 12, image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=1000' },
-  { id: 3, name: 'Little Black Dress', category: 'Dresses', stock: 0, image: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1000' },
-  { id: 4, name: 'Tailored Blazer', category: 'Outerwear', stock: 28, image: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?q=80&w=1000' },
-  { id: 5, name: 'High-Waist Trousers', category: 'Bottoms', stock: 8, image: 'https://images.unsplash.com/photo-1509631179647-0c500ba5e04f?q=80&w=1000' },
-];
+import { fetchProducts, adminUpdateProduct } from '../../services/api';
 
 const InventoryManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadProducts = async () => {
+    setIsLoading(true);
+    const data = await fetchProducts('?limit=100');
+    setProducts(data.products || []);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const handleUpdateStock = async (id, newStock) => {
+    const token = localStorage.getItem('adminToken');
+    const product = products.find(p => p._id === id);
+    if (!product) return;
+
+    const payload = {
+      ...product,
+      inventory: { ...product.inventory, stock: Number(newStock) }
+    };
+    
+    await adminUpdateProduct(id, payload, token);
+    loadProducts();
+  };
   
-  const lowStockCount = mockInventory.filter(p => p.stock > 0 && p.stock < 15).length;
-  const outOfStockCount = mockInventory.filter(p => p.stock === 0).length;
+  const lowStockCount = products.filter(p => {
+    const stock = p.inventory?.stock || 0;
+    return stock > 0 && stock < 15;
+  }).length;
+  
+  const outOfStockCount = products.filter(p => (p.inventory?.stock || 0) === 0).length;
 
   return (
     <div className="animate-in fade-in duration-500 font-rubik">
@@ -59,7 +83,7 @@ const InventoryManagement = () => {
         </div>
       </div>
 
-      <InventoryTable products={mockInventory} searchQuery={searchQuery} />
+      <InventoryTable products={products} searchQuery={searchQuery} onUpdateStock={handleUpdateStock} isLoading={isLoading} />
     </div>
   );
 };

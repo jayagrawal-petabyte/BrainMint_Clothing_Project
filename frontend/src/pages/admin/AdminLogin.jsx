@@ -1,20 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Phone, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { loginUser, fetchAdminStatus } from '../../services/api';
 
 const AdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError(null);
+    
+    try {
+      const res = await loginUser(phoneNumber, password);
+      
+      if (res && res.success) {
+        const token = res.data.token;
+        const isAdmin = await fetchAdminStatus(token);
+        
+        if (isAdmin) {
+          localStorage.setItem('adminToken', token);
+          navigate('/admin/dashboard');
+        } else {
+          setError('Access denied: You do not have admin privileges.');
+        }
+      } else {
+        setError(res?.message || 'Invalid phone number or password.');
+      }
+    } catch (err) {
+      setError('An error occurred during login.');
+    } finally {
       setIsLoading(false);
-      navigate('/admin/dashboard');
-    }, 1500);
+    }
   };
 
   const staggerContainer = {
@@ -85,6 +107,12 @@ const AdminLogin = () => {
             <p className="text-sm text-admin-text dark:text-admin-text-dark">Please sign in to access the admin panel.</p>
           </div>
 
+          {error && (
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center border border-red-100">
+              {error}
+            </div>
+          )}
+
           <motion.form 
             variants={staggerContainer}
             initial="hidden"
@@ -95,16 +123,18 @@ const AdminLogin = () => {
             <div className="space-y-4">
               
               <motion.div variants={itemVariant}>
-                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-2">Email Address</label>
+                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-2">Phone Number</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
+                    <Phone className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
-                    type="email"
+                    type="tel"
                     required
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                     className="block w-full pl-11 pr-4 py-3 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-admin-heading dark:text-admin-heading-dark transition-all duration-200"
-                    placeholder="admin@urbanwear.com"
+                    placeholder="10-digit phone number"
                   />
                 </div>
               </motion.div>
@@ -118,6 +148,8 @@ const AdminLogin = () => {
                   <input
                     type="password"
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="block w-full pl-11 pr-4 py-3 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-admin-heading dark:text-admin-heading-dark transition-all duration-200"
                     placeholder="••••••••"
                   />

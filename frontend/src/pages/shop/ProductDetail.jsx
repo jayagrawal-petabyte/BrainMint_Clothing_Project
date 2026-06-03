@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, Heart } from 'lucide-react';
-import { fetchProductById } from '../../services/api';
+import { fetchProductById, fetchProducts, fetchPopularProducts } from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import ProductTabs from '../../components/product/ProductTabs';
 import AddToCartPopup from '../../components/product/AddToCartPopup';
 import SizeGuideModal from '../../components/product/SizeGuideModal';
+import ProductSlider from '../../components/product/ProductSlider';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -22,6 +23,9 @@ const ProductDetail = () => {
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const [sizeError, setSizeError] = useState(false);
+  const [similarProducts, setSimilarProducts] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
 
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
@@ -44,6 +48,16 @@ const ProductDetail = () => {
           data.images?.[0]?.url ||
             'https://placehold.co/600x800'
         );
+
+        if (data.category) {
+          const similarRes = await fetchProducts(`?category=${data.category}`);
+          const filteredSimilar = (similarRes.products || []).filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
+          setSimilarProducts(filteredSimilar);
+        }
+
+        const popular = await fetchPopularProducts();
+        const filteredPopular = popular.filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
+        setPopularProducts(filteredPopular);
       } catch (error) {
         console.error('Error fetching product:', error);
       } finally {
@@ -118,6 +132,11 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
+    if (product.sizes?.length > 0 && !selectedSize) {
+      setSizeError(true);
+      return;
+    }
+    setSizeError(false);
     addToCart(product, quantity, selectedSize, selectedColor);
     setShowPopup(true);
   };
@@ -318,7 +337,10 @@ const ProductDetail = () => {
               {product.sizes?.length > 0 && (
                 <div style={{ marginBottom: '15px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 600 }}>Size:</span>
+                    <div>
+                      <span style={{ fontWeight: 600, marginRight: '10px' }}>Size:</span>
+                      {sizeError && <span style={{ color: '#d11a2a', fontSize: '13px', fontWeight: 500 }}>Please select a size</span>}
+                    </div>
                     <button 
                       type="button" 
                       onClick={() => setShowSizeGuide(true)}
@@ -340,7 +362,10 @@ const ProductDetail = () => {
                     {product.sizes.map(size => (
                       <button
                         key={size}
-                        onClick={() => setSelectedSize(size)}
+                        onClick={() => {
+                          setSelectedSize(size);
+                          setSizeError(false);
+                        }}
                         style={{
                           minWidth: '40px', height: '40px', padding: '0 10px',
                           border: `2px solid ${selectedSize === size ? 'var(--ltn__secondary-color)' : 'var(--border-color-11)'}`,
@@ -487,6 +512,14 @@ const ProductDetail = () => {
       </div>
 
       <ProductTabs />
+
+      {similarProducts.length > 0 && (
+        <ProductSlider title="Similar Products" products={similarProducts} />
+      )}
+      
+      {popularProducts.length > 0 && (
+        <ProductSlider title="You May Also Like" products={popularProducts} />
+      )}
 
       <AnimatePresence>
         {showPopup && (

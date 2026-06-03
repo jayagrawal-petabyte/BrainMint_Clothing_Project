@@ -162,11 +162,17 @@ const CartDrawer = ({ isOpen, onClose }) => {
                           <h4
                             style={{
                               fontSize: "18px",
-                              marginBottom: "8px",
+                              marginBottom: "4px",
                             }}
                           >
                             {item.name}
                           </h4>
+                          
+                          {(item.size || item.color) && (
+                            <p style={{ fontSize: "12px", color: "var(--ltn__paragraph-color)", marginBottom: "8px" }}>
+                              {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color}`}
+                            </p>
+                          )}
 
                           <p
                             style={{
@@ -188,7 +194,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                               onClick={() =>
                                 updateQuantity(
                                   itemId,
-                                  item.quantity - 1
+                                  item.quantity - 1,
+                                  item.size,
+                                  item.color
                                 )
                               }
                               style={qtyBtn}
@@ -204,7 +212,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                               onClick={() =>
                                 updateQuantity(
                                   itemId,
-                                  item.quantity + 1
+                                  item.quantity + 1,
+                                  item.size,
+                                  item.color
                                 )
                               }
                               style={qtyBtn}
@@ -214,7 +224,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
                             <button
                               onClick={() =>
-                                removeFromCart(itemId)
+                                removeFromCart(itemId, item.size, item.color)
                               }
                               style={{
                                 border: "none",

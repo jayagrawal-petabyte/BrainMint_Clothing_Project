@@ -113,7 +113,9 @@ const ProductCard = ({ product, badgeText }) => {
 
   const handleCart = e => {
     e.preventDefault();
-    addToCart(product, 1);
+    const defaultSize = product?.sizes?.[0] || '';
+    const defaultColor = product?.colors?.[0] || '';
+    addToCart(product, 1, defaultSize, defaultColor);
     triggerCartSplat('var(--ltn__primary-color)', 20);
     setShowPopup(true);
     triggerSplat(setCartSplat);
@@ -271,6 +273,16 @@ const ProductCard = ({ product, badgeText }) => {
             </li>
           </ul>
         </div>
+
+        {/* Hover Sizes */}
+        {product?.sizes?.length > 0 && (
+          <div className="product-card-sizes">
+            <span style={{ width: '100%', textAlign: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--ltn__paragraph-color)', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Sizes</span>
+            {product.sizes.map(size => (
+              <span key={size} className="product-card-size-item">{size}</span>
+            ))}
+          </div>
+        )}
       </div>
 
 

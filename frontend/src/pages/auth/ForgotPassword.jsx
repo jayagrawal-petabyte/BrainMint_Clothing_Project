@@ -30,7 +30,7 @@ const ForgotPassword = () => {
     setIsLoading(false);
     
     if (result && result.success !== false) {
-      setMessage('If an account matches that phone number, a reset link will be sent.');
+      setMessage('If an account matches that email address, a reset link will be sent.');
     } else {
       setError(result?.error || 'Failed to request password reset.');
     }

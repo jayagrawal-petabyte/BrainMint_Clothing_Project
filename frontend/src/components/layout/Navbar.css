@@ -51,40 +51,48 @@
 }
 
 .header-feature-item {
-  display: flex;
+  display: flex !important;
   align-items: center !important;
-  gap: 15px;
+  gap: 12px;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .header-feature-icon {
   color: var(--ltn__secondary-color, #e55472);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   height: 24px;
 }
 
+.header-feature-icon svg {
+  display: block !important;
+  margin: 0 !important;
+}
+
 .header-feature-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .header-feature-info h6 {
   font-size: 11px;
-  margin: 0 0 2px;
+  margin: 0 0 3px 0 !important;
+  padding: 0 !important;
   letter-spacing: 1px;
   font-weight: 600;
   color: var(--ltn__primary-color, #565656);
-  line-height: 1.2;
+  line-height: 1 !important;
 }
 
 .header-feature-info p {
-  margin: 0;
-  line-height: 1.2;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
 }
 
 .header-feature-info p a {
@@ -92,6 +100,8 @@
   font-weight: 600;
   color: var(--ltn__heading-color, #010101);
   transition: all 0.3s ease;
+  display: inline-block;
+  line-height: 1 !important;
 }
 
 .header-feature-info p a:hover {

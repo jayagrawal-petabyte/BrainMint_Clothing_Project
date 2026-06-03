@@ -155,20 +155,20 @@ function App() {
 
                     <Route path="/shop" element={<Shop />} />
                     <Route path="/search" element={<Shop />} />
-                    <Route path="/product/:id" element={<PageTransition><ProductDetail /></PageTransition>} />
-                    <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
-                    <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
 
-                    <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
-                    <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
-                    <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/account" element={<Account />} />
 
                     <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-                    <Route path="/returns" element={<PageTransition><Returns /></PageTransition>} />
-                    <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/returns" element={<Returns />} />
+                    <Route path="/terms" element={<Terms />} />
 
-                    <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
 
                   {!isHomeSplashActive && <Footer />}

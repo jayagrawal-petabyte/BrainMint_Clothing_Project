@@ -5,6 +5,10 @@ process.env.NODE_ENV = 'test';
 const { categories, products } = require('../src/seed/seedProducts');
 const app = require('../src/app');
 const adminRoutes = require('../src/routes/adminRoutes');
+const analyticsRoutes = require('../src/routes/analyticsRoutes');
+const couponRoutes = require('../src/routes/couponRoutes');
+const newsletterRoutes = require('../src/routes/newsletterRoutes');
+const productRoutes = require('../src/routes/productRoutes');
 const { _private: productControllerPrivate } = require('../src/controllers/productController');
 const { protect } = require('../src/middleware/authMiddleware');
 
@@ -26,6 +30,10 @@ const appRoutes = app._router.stack
   .map((layer) => layer.regexp.toString());
 
 const adminRouteList = flattenRoutes(adminRoutes);
+const analyticsRouteList = flattenRoutes(analyticsRoutes);
+const couponRouteList = flattenRoutes(couponRoutes);
+const newsletterRouteList = flattenRoutes(newsletterRoutes);
+const productRouteList = flattenRoutes(productRoutes);
 
 assert(categories.length >= 6, 'seed should include at least 6 product categories');
 assert(products.length >= 10, 'seed should include at least 10 products');
@@ -43,6 +51,18 @@ assert(
   'app should mount admin product routes'
 );
 assert(
+  appRoutes.some((route) => route.includes('api\\/admin\\/coupons')),
+  'app should mount admin coupon routes'
+);
+assert(
+  appRoutes.some((route) => route.includes('api\\/admin\\/analytics')),
+  'app should mount admin analytics routes'
+);
+assert(
+  appRoutes.some((route) => route.includes('api\\/newsletter')),
+  'app should mount newsletter routes'
+);
+assert(
   adminRouteList.some((route) => route.path === '/panel' && route.methods.includes('get')),
   'admin panel route should be registered'
 );
@@ -57,6 +77,30 @@ assert(
 assert(
   adminRouteList.some((route) => route.path === '/:id' && route.methods.includes('put') && route.methods.includes('delete')),
   'admin update/delete product routes should be registered'
+);
+assert(
+  couponRouteList.some((route) => route.path === '/' && route.methods.includes('get') && route.methods.includes('post')),
+  'admin coupon list/create routes should be registered'
+);
+assert(
+  couponRouteList.some((route) => route.path === '/:id' && route.methods.includes('put') && route.methods.includes('delete')),
+  'admin coupon update/delete routes should be registered'
+);
+assert(
+  couponRouteList.some((route) => route.path === '/validate' && route.methods.includes('post')),
+  'coupon validation route should be registered'
+);
+assert(
+  analyticsRouteList.some((route) => route.path === '/dashboard' && route.methods.includes('get')),
+  'admin sales analytics dashboard route should be registered'
+);
+assert(
+  newsletterRouteList.some((route) => route.path === '/subscribe' && route.methods.includes('post')),
+  'newsletter subscribe route should be registered'
+);
+assert(
+  productRouteList.some((route) => route.path === '/:id/reviews' && route.methods.includes('get') && route.methods.includes('post')),
+  'product review fetch/submit routes should be registered'
 );
 
 let blockedWithoutToken = false;

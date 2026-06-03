@@ -11,6 +11,10 @@ const {
   getTrendingProducts,
   updateProduct
 } = require('../controllers/productController');
+const {
+  getProductReviews,
+  submitProductReview
+} = require('../controllers/reviewController');
 const { adminOnly, protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -21,6 +25,7 @@ router.get('/trending', getTrendingProducts);
 router.get('/popular-searches', getPopularSearches);
 router.route('/').get(getProducts).post(protect, adminOnly, createProduct);
 router.get('/:id/cart-check', getProductForCart);
+router.route('/:id/reviews').get(getProductReviews).post(protect, submitProductReview);
 router.route('/:id').get(getProductById).put(protect, adminOnly, updateProduct).delete(protect, adminOnly, deleteProduct);
 
 module.exports = router;

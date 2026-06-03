@@ -1,10 +1,11 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Heart,
   ShoppingCart,
   Eye,
-  Check
+  Check,
+  Star
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,7 +19,7 @@ import AddToCartPopup from './AddToCartPopup';
 
 import './ProductCard.css';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, badgeText }) => {
   const { toggleWishlist, isWishlisted } =
     useWishlist();
 
@@ -59,6 +60,18 @@ const ProductCard = ({ product }) => {
       (item._id || item.id) ===
       productId
   );
+
+  // Badge display
+  const isTrending = product?.isTrending || false;
+  const showBadge = badgeText || (isTrending ? '🔥 Trending' : '');
+
+  // Rating values
+  const ratingVal = typeof product?.rating === 'object'
+    ? product.rating?.average
+    : product?.rating;
+  const ratingCount = typeof product?.rating === 'object'
+    ? product.rating?.count
+    : product?.reviewCount;
 
   // Particle effects
   const {
@@ -111,6 +124,11 @@ const ProductCard = ({ product }) => {
       <div className="ltn__product-item">
       {/* Product Image */}
       <div className="product-img">
+        {showBadge && (
+          <span className={`product-card-badge ${showBadge.includes('Trending') ? 'trending' : ''}`}>
+            {showBadge}
+          </span>
+        )}
         <Link
           to={`/product/${productId}`}
         >
@@ -265,6 +283,14 @@ const ProductCard = ({ product }) => {
             {productName}
           </Link>
         </h2>
+
+        {ratingVal > 0 && (
+          <div className="product-card-rating">
+            <Star size={12} fill="#ffb300" color="#ffb300" className="star-icon" />
+            <span className="rating-value">{ratingVal}</span>
+            {ratingCount > 0 && <span className="rating-count">({ratingCount})</span>}
+          </div>
+        )}
 
         <div className="product-price">
           <span>

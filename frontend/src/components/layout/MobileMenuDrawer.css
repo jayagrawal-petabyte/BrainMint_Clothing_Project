@@ -58,7 +58,7 @@
   border-color: var(--ltn__secondary-color);
 }
 
-.mobile-menu-search button {
+.mobile-menu-search form > button {
   position: absolute;
   right: 15px;
   top: 50%;

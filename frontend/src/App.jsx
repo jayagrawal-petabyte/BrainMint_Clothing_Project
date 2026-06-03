@@ -172,6 +172,7 @@ function App() {
                   </Routes>
 
                   {!isHomeSplashActive && <Footer />}
+                  {!isHomeSplashActive && <BottomMobileNav />}
                   {!isHomeSplashActive && <ScrollToTop />}
                 </div>
               } />

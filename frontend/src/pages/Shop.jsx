@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, X, Grid3X3 } from 'lucide-react';
 import FilterSidebar from '../components/shop/FilterSidebar';
 import ProductCard from '../components/product/ProductCard';
+import TrendingSearches from '../components/product/TrendingSearches';
 import { fetchProducts } from '../services/api';
 import './Shop.css';
 
@@ -151,6 +152,12 @@ const Shop = () => {
           )}
         </div>
       </div>
+
+      {isSearchPage && (
+        <div style={{ maxWidth: "1250px", margin: "20px auto 0", padding: "0 20px" }}>
+          <TrendingSearches compact={true} />
+        </div>
+      )}
 
       <div className="shop-container">
         {/* Sidebar */}

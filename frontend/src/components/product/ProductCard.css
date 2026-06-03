@@ -149,3 +149,54 @@
   color: var(--ltn__paragraph-color);
 }
 
+/* --- Product Badges --- */
+.product-card-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: var(--ltn__primary-color);
+  color: var(--white-7);
+  padding: 5px 12px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 0px;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.product-card-badge.trending {
+  background-color: var(--ltn__secondary-color);
+  color: #ffffff !important;
+}
+
+
+
+/* --- Product Ratings --- */
+.product-card-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.product-card-rating .star-icon {
+  display: inline-block;
+}
+
+.product-card-rating .rating-value {
+  font-weight: 500;
+  color: var(--ltn__heading-color);
+}
+
+.product-card-rating .rating-count {
+  color: var(--ltn__paragraph-color);
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+

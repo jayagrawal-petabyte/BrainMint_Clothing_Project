@@ -1,0 +1,184 @@
+.popular-products-section {
+  padding: 0 8%;
+  width: 100%;
+}
+
+.popular-tagline {
+  color: var(--ltn__secondary-color);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: var(--ltn__heading-font);
+  margin-bottom: 8px;
+}
+
+/* Matching homepage section-header and section-title styles */
+.popular-products-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--border-color-1);
+  padding-bottom: 1rem;
+}
+
+.popular-products-section .section-title {
+  margin-bottom: 0;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ltn__heading-color);
+}
+
+/* Custom Navigation Actions */
+.popular-nav-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.popular-nav-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color-1);
+  background-color: transparent;
+  color: var(--ltn__primary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.popular-nav-btn:hover {
+  background-color: var(--ltn__primary-color);
+  color: var(--white-7);
+  border-color: var(--ltn__primary-color);
+}
+
+.popular-carousel-wrapper {
+  position: relative;
+  padding: 10px 0 30px;
+}
+
+/* --- Swiper Custom Styling --- */
+.popular-swiper {
+  position: relative;
+  overflow: visible !important;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.popular-swiper .swiper-slide {
+  height: auto;
+}
+
+/* Pagination Dots */
+.popular-swiper .swiper-pagination {
+  bottom: 0px !important;
+}
+
+.popular-swiper .swiper-pagination-bullet {
+  background: var(--ltn__paragraph-color);
+  opacity: 0.25;
+  width: 7px;
+  height: 7px;
+  transition: all 0.3s ease;
+}
+
+.popular-swiper .swiper-pagination-bullet-active {
+  background: var(--ltn__secondary-color);
+  opacity: 1;
+  width: 20px;
+  border-radius: 4px;
+}
+
+/* --- Loading Skeletons --- */
+.popular-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.product-card-skeleton {
+  background: var(--white-7);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background-color: var(--border-color-11);
+  border-radius: 2px;
+  margin-bottom: 15px;
+}
+
+.skeleton-text {
+  background-color: var(--border-color-11);
+  border-radius: 2px;
+  margin: 0 auto 10px;
+}
+
+.skeleton-text.title {
+  width: 70%;
+  height: 18px;
+}
+
+.skeleton-text.rating {
+  width: 40%;
+  height: 12px;
+}
+
+.skeleton-text.price {
+  width: 30%;
+  height: 16px;
+}
+
+/* Responsive breakpoint styling */
+@media (max-width: 1024px) {
+  .popular-skeleton-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .product-card-skeleton:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .popular-products-section .section-header {
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+  }
+
+  .popular-products-section .section-title {
+    font-size: 26px;
+  }
+
+  .popular-nav-actions {
+    display: none; /* Hide arrows on touch screens or mobile since it is swipable */
+  }
+
+  .popular-skeleton-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .product-card-skeleton:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .popular-products-section .section-title {
+    font-size: 22px;
+  }
+
+  .popular-skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+  .product-card-skeleton:nth-child(2) {
+    display: none;
+  }
+}

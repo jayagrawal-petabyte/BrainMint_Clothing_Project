@@ -1,15 +1,38 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { X, Search, User, Heart, ShoppingCart, Sun, Moon } from 'lucide-react';
+import { X, Search, User, Heart, ShoppingCart, Sun, Moon, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
+import { fetchTrendingSearches } from '../../services/api';
 import './MobileMenuDrawer.css';
 
 const MobileMenuDrawer = ({ isOpen, onClose }) => {
   const { isLoggedIn, logout, user } = useAuth();
   const { cartCount } = useCart();
   const { theme, toggleTheme } = useTheme();
+
+  const [isFocused, setIsFocused] = useState(false);
+  const [trendingKeywords, setTrendingKeywords] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadTrending = async () => {
+      try {
+        const searches = await fetchTrendingSearches();
+        if (isMounted && searches) {
+          setTrendingKeywords(searches.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Error loading trending searches in mobile menu drawer", err);
+      }
+    };
+    loadTrending();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -51,11 +74,86 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
             </div>
 
             <div className="mobile-menu-search">
-              <form onSubmit={handleSearch}>
-                <input type="search" name="q" placeholder="Search our store" />
+              <form onSubmit={handleSearch} style={{ position: 'relative' }}>
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="Search our store"
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+                  autoComplete="off"
+                />
                 <button type="submit">
                   <Search size={20} />
                 </button>
+
+                <AnimatePresence>
+                  {isFocused && trendingKeywords.length > 0 && (
+                    <motion.div
+                      className="search-suggestions-dropdown mobile-drawer-dropdown"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      style={{
+                        position: 'absolute',
+                        top: '50px',
+                        left: 0,
+                        width: '100%',
+                        backgroundColor: 'var(--white-7)',
+                        border: '1px solid var(--border-color-1)',
+                        borderRadius: '12px',
+                        zIndex: 1000,
+                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.08)',
+                        padding: '12px 0'
+                      }}
+                    >
+                      <div className="dropdown-header" style={{
+                        fontFamily: 'var(--ltn__heading-font)',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px',
+                        color: 'var(--ltn__paragraph-color)',
+                        padding: '0 20px',
+                        marginBottom: '10px',
+                        textAlign: 'left'
+                      }}>Trending Searches</div>
+                      <ul className="suggestions-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                        {trendingKeywords.map((keyword) => (
+                          <li key={keyword} style={{ width: '100%' }}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                window.location.href = `/search?q=${encodeURIComponent(keyword)}`;
+                                onClose();
+                                setIsFocused(false);
+                              }}
+                              className="suggestion-link"
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                width: '100%',
+                                padding: '10px 20px',
+                                background: 'transparent',
+                                border: 'none',
+                                textAlign: 'left',
+                                fontFamily: 'var(--ltn__body-font)',
+                                fontSize: '14px',
+                                color: 'var(--ltn__heading-color)',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              <span>{keyword}</span>
+                              <ArrowUpRight size={14} style={{ opacity: 0.5 }} />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </form>
             </div>
 

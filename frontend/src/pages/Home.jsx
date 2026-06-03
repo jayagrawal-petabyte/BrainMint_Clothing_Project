@@ -11,6 +11,8 @@ import 'swiper/css/pagination';
 import ProductCard from '../components/product/ProductCard';
 import PromoBanner from '../components/shop/PromoBanner';
 import TrustBadges from '../components/ui/TrustBadges';
+import TrendingSearches from '../components/product/TrendingSearches';
+import PopularProducts from '../components/product/PopularProducts';
 import { fetchNewArrivals } from '../services/api';
 import { ShoppingBag, Shirt, Sparkles } from 'lucide-react';
 import './Home.css';
@@ -474,6 +476,10 @@ const Home = ({ onSplashActive }) => {
           </motion.div>
         )}
       </section>
+
+      {/* Trending Searches & Popular Products */}
+      <TrendingSearches />
+      <PopularProducts />
     </div>
   </>
 );

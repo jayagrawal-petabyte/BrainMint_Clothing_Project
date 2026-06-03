@@ -271,3 +271,147 @@ export const fetchMyOrders = async (token) => {
     return null;
   }
 };
+
+// ─── Trending & Popular ────────────────────────────────────────────────────────
+const FALLBACK_TRENDING_SEARCHES = [
+  "Summer Dresses",
+  "Linen Shirts",
+  "Oversized Tees",
+  "Denim Jackets",
+  "Crop Tops",
+  "Wide-Leg Pants",
+  "Pleated Skirts",
+  "Trench Coats"
+];
+
+const FALLBACK_POPULAR_PRODUCTS = [
+  {
+    _id: "popular-1",
+    name: "Luxe Silk Blouse",
+    price: 3499,
+    discountPrice: 2999,
+    images: [
+      { url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600" },
+      { url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=600" }
+    ],
+    category: "women",
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["#FFFFFF", "#F5F5DC"],
+    rating: { average: 4.8, count: 124 },
+    isTrending: true
+  },
+  {
+    _id: "popular-2",
+    name: "Classic Trench Coat",
+    price: 8999,
+    discountPrice: 7999,
+    images: [
+      { url: "https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?q=80&w=600" }
+    ],
+    category: "women",
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["#F5F5DC", "#000000"],
+    rating: { average: 4.9, count: 86 },
+    isTrending: true
+  },
+  {
+    _id: "popular-3",
+    name: "Floral Maxi Dress",
+    price: 4999,
+    images: [
+      { url: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600" }
+    ],
+    category: "women",
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["#FFB6C1", "#FFFFFF"],
+    rating: { average: 4.7, count: 95 },
+    isTrending: true
+  },
+  {
+    _id: "popular-4",
+    name: "Oversized Denim Jacket",
+    price: 5499,
+    discountPrice: 4499,
+    images: [
+      { url: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=600" }
+    ],
+    category: "women",
+    sizes: ["S", "M", "L"],
+    colors: ["#1e73be"],
+    rating: { average: 4.6, count: 54 },
+    isTrending: true
+  },
+  {
+    _id: "popular-5",
+    name: "High-Waist Tailored Trousers",
+    price: 3999,
+    images: [
+      { url: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=600" }
+    ],
+    category: "women",
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["#000000", "#808080"],
+    rating: { average: 4.5, count: 42 },
+    isTrending: true
+  }
+];
+
+let trendingPromise = null;
+
+const fetchTrendingData = async () => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/products/trending`);
+    if (!response.ok) {
+      throw new Error(`API returned status ${response.status}`);
+    }
+    const data = await response.json();
+    const payload = data.data || data;
+    
+    let searches = FALLBACK_TRENDING_SEARCHES;
+    let products = FALLBACK_POPULAR_PRODUCTS;
+    
+    if (payload) {
+      if (Array.isArray(payload)) {
+        products = payload.map(p => ({ ...p, isTrending: true }));
+      } else {
+        if (Array.isArray(payload.products)) {
+          products = payload.products.map(p => ({ ...p, isTrending: true }));
+        } else if (Array.isArray(payload.popularProducts)) {
+          products = payload.popularProducts.map(p => ({ ...p, isTrending: true }));
+        }
+        
+        if (Array.isArray(payload.searches)) {
+          searches = payload.searches;
+        } else if (Array.isArray(payload.trendingSearches)) {
+          searches = payload.trendingSearches;
+        }
+      }
+    }
+    
+    return { searches, products };
+  } catch (error) {
+    console.warn("Using fallback trending data due to API fetch error:", error);
+    return {
+      searches: FALLBACK_TRENDING_SEARCHES,
+      products: FALLBACK_POPULAR_PRODUCTS
+    };
+  }
+};
+
+const getTrendingCached = () => {
+  if (!trendingPromise) {
+    trendingPromise = fetchTrendingData();
+  }
+  return trendingPromise;
+};
+
+export const fetchTrendingSearches = async () => {
+  const data = await getTrendingCached();
+  return data.searches;
+};
+
+export const fetchPopularProducts = async () => {
+  const data = await getTrendingCached();
+  return data.products;
+};
+

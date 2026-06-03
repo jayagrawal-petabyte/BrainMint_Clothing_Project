@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderTable from '../../components/admin/OrderTable';
 
 const mockOrders = [
@@ -12,7 +12,23 @@ const mockOrders = [
 
 const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
+  const [orders, setOrders] = useState([]);
   const tabs = ['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+
+  useEffect(() => {
+    try {
+      const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
+      // Normalize statuses (Title Case) to match CSS mapping in table status badges
+      const normalizedLocal = localOrders.map(o => ({
+        ...o,
+        status: o.status ? (o.status === 'COD' ? 'Pending' : o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending'
+      }));
+      setOrders([...normalizedLocal, ...mockOrders]);
+    } catch (e) {
+      console.error("Failed to load local orders in OrderManagement", e);
+      setOrders(mockOrders);
+    }
+  }, []);
 
   return (
     <div className="animate-in fade-in duration-500 font-rubik">
@@ -30,14 +46,14 @@ const OrderManagement = () => {
               activeTab === tab 
                 ? 'bg-admin-bg dark:bg-[#222] text-admin-heading dark:text-admin-heading-dark shadow-sm' 
                 : 'text-admin-text dark:text-admin-text-dark hover:text-admin-heading dark:hover:text-admin-heading-dark'
-            }`}
+              }`}
           >
             {tab}
           </button>
         ))}
       </div>
 
-      <OrderTable orders={mockOrders} statusFilter={activeTab} />
+      <OrderTable orders={orders} statusFilter={activeTab} />
     </div>
   );
 };

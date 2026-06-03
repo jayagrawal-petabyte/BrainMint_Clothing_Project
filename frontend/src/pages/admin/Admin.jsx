@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { mockProducts } from "../data/products";
 import "./Admin.css";
@@ -22,7 +22,23 @@ const activityFeed = [
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [orders, setOrders] = useState([]);
   const topProducts = mockProducts.slice(0, 8);
+
+  useEffect(() => {
+    try {
+      const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
+      // Normalize statuses from local orders (lowercase to match CSS mapping in Admin.css)
+      const normalizedLocal = localOrders.map(o => ({
+        ...o,
+        status: o.status ? o.status.toLowerCase() : 'pending'
+      }));
+      setOrders([...normalizedLocal, ...recentOrders]);
+    } catch (e) {
+      console.error("Failed to load local orders in Admin dashboard", e);
+      setOrders(recentOrders);
+    }
+  }, []);
 
   return (
     <div className="admin-container">
@@ -98,7 +114,7 @@ const Admin = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {recentOrders.map((order, i) => (
+                    {orders.map((order, i) => (
                       <tr key={i}>
                         <td style={{ fontWeight: 600, color: "var(--ltn__heading-color)" }}>{order.id}</td>
                         <td>{order.customer}</td>
@@ -183,7 +199,7 @@ const Admin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentOrders.map((order, i) => (
+                  {orders.map((order, i) => (
                     <tr key={i}>
                       <td style={{ fontWeight: 600, color: "var(--ltn__heading-color)" }}>{order.id}</td>
                       <td>{order.customer}</td>

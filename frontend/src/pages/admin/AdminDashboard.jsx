@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardCards from '../../components/admin/DashboardCards';
 import SalesCharts from '../../components/admin/SalesCharts';
 import { ArrowRight } from 'lucide-react';
@@ -12,6 +12,22 @@ const recentOrders = [
 ];
 
 const AdminDashboard = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    try {
+      const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
+      // Normalize statuses (Title Case) to match CSS mapping in table status badges
+      const normalizedLocal = localOrders.map(o => ({
+        ...o,
+        status: o.status ? (o.status === 'COD' ? 'Pending' : o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending'
+      }));
+      setOrders([...normalizedLocal, ...recentOrders]);
+    } catch (e) {
+      console.error("Failed to load local orders in AdminDashboard", e);
+      setOrders(recentOrders);
+    }
+  }, []);
   return (
     <div className="animate-in fade-in duration-500">
       <div className="mb-8">
@@ -44,7 +60,7 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-admin-border dark:divide-admin-border-dark">
-              {recentOrders.map((order, index) => (
+              {orders.map((order, index) => (
                 <tr key={index} className="hover:bg-admin-bg/50 dark:hover:bg-[#222]/50 transition-colors">
                   <td className="px-6 py-4 font-semibold text-admin-heading dark:text-admin-heading-dark">{order.id}</td>
                   <td className="px-6 py-4 text-admin-text dark:text-admin-text-dark">{order.customer}</td>

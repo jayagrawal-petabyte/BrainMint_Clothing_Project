@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, Chevr
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { placeOrder } from '../../services/api';
+import { placeOrder, fetchUserProfile } from '../../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -20,18 +20,21 @@ const INDIAN_STATES = [
 const STEPS = ['Contact', 'Delivery', 'Payment'];
 
 /* ── Floating label input — no placeholder collision ── */
-const FloatField = ({ id, name, label, type = 'text', value, onChange, optional }) => (
-  <div className={`ff ${value ? 'ff--has' : ''}`}>
-    <input
-      id={id} name={name} type={type}
-      value={value} onChange={onChange}
-      className="ff__input"
-      placeholder=" "
-    />
-    <label htmlFor={id} className="ff__label">
-      {label}{optional ? <em> (optional)</em> : ''}
-    </label>
-    <span className="ff__bar" />
+const FloatField = ({ id, name, label, type = 'text', value, onChange, optional, error }) => (
+  <div className="ff-container">
+    <div className={`ff ${value ? 'ff--has' : ''} ${error ? 'ff--error' : ''}`}>
+      <input
+        id={id} name={name} type={type}
+        value={value} onChange={onChange}
+        className="ff__input"
+        placeholder=" "
+      />
+      <label htmlFor={id} className="ff__label">
+        {label}{optional ? <em> (optional)</em> : ''}
+      </label>
+      <span className="ff__bar" />
+    </div>
+    {error && <span className="ff__err-msg">{error}</span>}
   </div>
 );
 
@@ -49,7 +52,7 @@ const FloatSelect = ({ id, name, label, value, onChange, children }) => (
 
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
-  const { isLoggedIn, token } = useAuth();
+  const { isLoggedIn, token, user } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderStatus, setOrderStatus] = useState(null);
@@ -60,6 +63,10 @@ const Checkout = () => {
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('COD');
+  const [fetchedProfile, setFetchedProfile] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [placedOrderTotal, setPlacedOrderTotal] = useState(0);
 
   const [form, setForm] = useState({
     email: '', phone: '', newsletter: false,
@@ -68,6 +75,58 @@ const Checkout = () => {
     city: '', state: 'Odisha', pincode: '',
     saveInfo: false,
   });
+
+  useEffect(() => {
+    if (token) {
+      fetchUserProfile(token)
+        .then(res => {
+          if (res && res.success !== false) {
+            setFetchedProfile(res.profile || res.data || res.user);
+          }
+        })
+        .catch(err => console.error("Error loading user profile", err));
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const profileSource = fetchedProfile || user;
+    if (!profileSource) return;
+
+    setForm(prev => {
+      const isEmailEmpty = !prev.email;
+      const isPhoneEmpty = !prev.phone;
+      const isFirstNameEmpty = !prev.firstName;
+      const isLastNameEmpty = !prev.lastName;
+      const isAddressEmpty = !prev.address;
+      const isCityEmpty = !prev.city;
+      const isPincodeEmpty = !prev.pincode;
+
+      let first = '';
+      let last = '';
+      const name = profileSource.name || user?.name || '';
+      if (name) {
+        const parts = name.trim().split(/\s+/);
+        if (parts.length > 0) {
+          first = parts[0];
+          last = parts.slice(1).join(' ');
+        }
+      }
+      
+      const defaultAddr = profileSource.addresses?.[0] || user?.addresses?.[0];
+
+      return {
+        ...prev,
+        email: isEmailEmpty ? (profileSource.email || user?.email || '') : prev.email,
+        phone: isPhoneEmpty ? (profileSource.phoneNumber || profileSource.phone || user?.phoneNumber || user?.phone || '') : prev.phone,
+        firstName: isFirstNameEmpty ? (first || '') : prev.firstName,
+        lastName: isLastNameEmpty ? (last || '') : prev.lastName,
+        address: isAddressEmpty ? (defaultAddr?.street || profileSource.address || user?.address || '') : prev.address,
+        city: isCityEmpty ? (defaultAddr?.city || profileSource.city || user?.city || '') : prev.city,
+        state: prev.state === 'Odisha' ? (defaultAddr?.state || profileSource.state || user?.state || 'Odisha') : prev.state,
+        pincode: isPincodeEmpty ? (defaultAddr?.pincode || profileSource.pincode || user?.pincode || '') : prev.pincode,
+      };
+    });
+  }, [user, fetchedProfile]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -81,6 +140,58 @@ const Checkout = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    if (errors[name]) {
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy[name];
+        return copy;
+      });
+    }
+  };
+
+  const isEmailValid = (email) => {
+    if (!email) return false;
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isPhone = /^[6-9]\d{9}$/.test(email.replace(/[\s-]/g, ''));
+    return isEmail || isPhone;
+  };
+
+  const handleContinueToDelivery = () => {
+    const newErrors = {};
+    if (!form.email.trim()) {
+      newErrors.email = "Please enter an email or phone number.";
+    } else if (!isEmailValid(form.email)) {
+      newErrors.email = "Please enter a valid email address or 10-digit mobile number.";
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      setErrors({});
+      setActiveStep(1);
+    }
+  };
+
+  const handleContinueToPayment = () => {
+    const newErrors = {};
+    if (!form.lastName.trim()) newErrors.lastName = "Last name is required.";
+    if (!form.address.trim()) newErrors.address = "Address is required.";
+    if (!form.city.trim()) newErrors.city = "City is required.";
+    if (!form.pincode.trim()) {
+      newErrors.pincode = "PIN code is required.";
+    } else if (!/^\d{6}$/.test(form.pincode)) {
+      newErrors.pincode = "Please enter a valid 6-digit PIN code.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      setErrors({});
+      if (!form.phone) {
+        setForm(prev => ({ ...prev, phone: prev.email }));
+      }
+      setActiveStep(2);
+    }
   };
 
   const getImage = (item) => item?.images?.[0]?.url || item?.images?.[0] || 'https://placehold.co/64x80?text=Item';
@@ -113,6 +224,7 @@ const Checkout = () => {
       })),
       shippingAddress: {
         name: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',
+        fullName: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',
         address: form.address,
         city: form.city,
         state: form.state,
@@ -120,18 +232,39 @@ const Checkout = () => {
         phone: form.phone,
         country: "India"
       },
-      paymentMethod: "PayPal", // Hardcoded mock
+      paymentMethod: paymentMethod,
       taxPrice: 0,
-      shippingPrice: 0,
-      totalPrice: cartTotal
+      shippingPrice: shipping,
+      totalPrice: finalTotal
     };
 
     const response = await placeOrder(orderData, token);
 
     setIsSubmitting(false);
 
-    // The backend person3 implementation might return different shapes, assuming standard here:
     if (response && response.success !== false) {
+      // Save order details to local storage so it shows up in the admin panel
+      const newOrder = {
+        id: response.data?.orderId || response.order?._id || response.data?._id || `#UW-${Math.floor(1000 + Math.random() * 9000)}`,
+        customer: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',
+        email: form.email || user?.email || '',
+        product: cartItems.map(item => `${item.name} (x${item.quantity})`).join(', '),
+        amount: `₹${finalTotal.toLocaleString('en-IN')}`,
+        status: 'Pending',
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        paymentMethod: paymentMethod,
+        items: cartItems
+      };
+      
+      try {
+        const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
+        localOrders.unshift(newOrder);
+        localStorage.setItem('urbanwear_placed_orders', JSON.stringify(localOrders));
+      } catch (err) {
+        console.error("Failed to save order to localStorage", err);
+      }
+
+      setPlacedOrderTotal(finalTotal);
       setOrderStatus('success');
       clearCart();
     } else {
@@ -140,6 +273,60 @@ const Checkout = () => {
   };
 
   if (!isLoggedIn) return null; // Prevent flicker before redirect
+
+  if (orderStatus === 'success') {
+    return (
+      <div className="co-success-container">
+        <motion.div 
+          className="co-success-card"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="co-success-icon-wrap">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
+            >
+              <Check size={48} className="co-success-icon" />
+            </motion.div>
+          </div>
+          
+          <h1 className="co-success-title">Order Confirmed</h1>
+          <p className="co-success-subtitle">Thank you for your order. We are preparing it for shipment.</p>
+          
+          <div className="co-success-divider" />
+          
+          <div className="co-success-details">
+            <div className="co-success-detail-row">
+              <span className="co-success-label">Payment Method</span>
+              <span className="co-success-val">{paymentMethod === 'COD' ? 'Cash on Delivery (COD)' : paymentMethod}</span>
+            </div>
+            <div className="co-success-detail-row">
+              <span className="co-success-label">Delivery Address</span>
+              <span className="co-success-val">{[form.address, form.city, form.pincode].filter(Boolean).join(', ')}</span>
+            </div>
+            <div className="co-success-detail-row">
+              <span className="co-success-label">{paymentMethod === 'COD' ? 'Amount to Pay' : 'Total Paid'}</span>
+              <span className="co-success-val">₹{placedOrderTotal.toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+          
+          <div className="co-success-divider" />
+          
+          <div className="co-success-actions">
+            <Link to="/account" className="co-success-btn co-success-btn-primary">
+              View Order History
+            </Link>
+            <Link to="/shop" className="co-success-btn co-success-btn-secondary">
+              Continue Shopping
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -253,7 +440,7 @@ const Checkout = () => {
                 <h2 className="co__panel-title">Contact</h2>
                 <p className="co__panel-sub">Already have an account? <Link to="/login">Log in</Link></p>
               </div>
-              <FloatField id="email" name="email" label="Email or mobile phone number" type="email" value={form.email} onChange={handleChange} />
+              <FloatField id="email" name="email" label="Email or mobile phone number" type="email" value={form.email} onChange={handleChange} error={errors.email} />
               <label className="co__check">
                 <span className={`co__check-box ${form.newsletter ? 'co__check-box--on' : ''}`}>
                   {form.newsletter && <Check size={9} strokeWidth={3} />}
@@ -261,7 +448,7 @@ const Checkout = () => {
                 <input type="checkbox" name="newsletter" checked={form.newsletter} onChange={handleChange} style={{display:'none'}} />
                 Email me with news and exclusive offers
               </label>
-              <button className="co__cta" onClick={() => setActiveStep(1)}>
+              <button className="co__cta" onClick={handleContinueToDelivery}>
                 Continue to Delivery <ChevronRight size={15} />
               </button>
             </div>
@@ -294,18 +481,18 @@ const Checkout = () => {
 
               <div className="co__row-2">
                 <FloatField id="firstName" name="firstName" label="First name" value={form.firstName} onChange={handleChange} optional />
-                <FloatField id="lastName"  name="lastName"  label="Last name"  value={form.lastName}  onChange={handleChange} />
+                <FloatField id="lastName"  name="lastName"  label="Last name"  value={form.lastName}  onChange={handleChange} error={errors.lastName} />
               </div>
 
-              <FloatField id="address"   name="address"   label="Address"    value={form.address}   onChange={handleChange} />
+              <FloatField id="address"   name="address"   label="Address"    value={form.address}   onChange={handleChange} error={errors.address} />
               <FloatField id="apartment" name="apartment" label="Apartment, suite, etc." value={form.apartment} onChange={handleChange} optional />
 
               <div className="co__row-3">
-                <FloatField id="city" name="city" label="City" value={form.city} onChange={handleChange} />
+                <FloatField id="city" name="city" label="City" value={form.city} onChange={handleChange} error={errors.city} />
                 <FloatSelect id="state" name="state" label="State" value={form.state} onChange={handleChange}>
                   {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                 </FloatSelect>
-                <FloatField id="pincode" name="pincode" label="PIN code" value={form.pincode} onChange={handleChange} />
+                <FloatField id="pincode" name="pincode" label="PIN code" value={form.pincode} onChange={handleChange} error={errors.pincode} />
               </div>
 
               <label className="co__check">
@@ -332,7 +519,7 @@ const Checkout = () => {
                 </div>
               )}
 
-              <button className="co__cta" onClick={() => setActiveStep(2)}>
+              <button className="co__cta" onClick={handleContinueToPayment}>
                 Continue to Payment <ChevronRight size={15} />
               </button>
             </div>
@@ -355,14 +542,45 @@ const Checkout = () => {
                 <span className="co__secure"><Lock size={11} /> Secure &amp; encrypted</span>
               </div>
 
-              <div className="co__pay-box">
-                <ShieldCheck size={42} strokeWidth={1.2} className="co__pay-icon" />
-                <p className="co__pay-title">Payment coming soon</p>
-                <p className="co__pay-note">We're setting up our payment gateway. Check back shortly.</p>
+              <p className="co__subhead">Select Payment Method</p>
+              <div className="co__payment-options">
+                {/* Cash on Delivery */}
+                <div 
+                  className={`co__pay-option ${paymentMethod === 'COD' ? 'co__pay-option--active' : ''}`}
+                  onClick={() => setPaymentMethod('COD')}
+                >
+                  <span className={`co__pay-radio ${paymentMethod === 'COD' ? 'co__pay-radio--active' : ''}`} />
+                  <div className="co__pay-details">
+                    <span className="co__pay-name">Cash on Delivery (COD)</span>
+                    <span className="co__pay-desc">Pay with cash upon delivery. No extra fees.</span>
+                  </div>
+                </div>
+
+                {/* Online Payment (Disabled / Coming Soon) */}
+                <div className="co__pay-option co__pay-option--disabled">
+                  <span className="co__pay-radio" />
+                  <div className="co__pay-details">
+                    <span className="co__pay-name">Credit/Debit Card</span>
+                    <span className="co__pay-desc">Pay securely with Visa, Mastercard, or RuPay. (Coming Soon)</span>
+                  </div>
+                </div>
+                
+                {/* UPI (Disabled / Coming Soon) */}
+                <div className="co__pay-option co__pay-option--disabled">
+                  <span className="co__pay-radio" />
+                  <div className="co__pay-details">
+                    <span className="co__pay-name">UPI / Net Banking</span>
+                    <span className="co__pay-desc">Pay instantly using your UPI ID or netbanking account. (Coming Soon)</span>
+                  </div>
+                </div>
               </div>
 
-              <button className="co__cta co__cta--disabled" disabled>
-                <Lock size={14} /> Pay now · ₹{finalTotal.toLocaleString('en-IN')}
+              <button 
+                className={`co__cta ${isSubmitting ? 'co__cta--disabled' : ''}`} 
+                onClick={handlePlaceOrder}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : `Place Order · ₹${finalTotal.toLocaleString('en-IN')}`}
               </button>
 
               <div className="co__trust">

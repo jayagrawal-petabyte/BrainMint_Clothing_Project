@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
@@ -8,12 +8,12 @@ import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import ProductCard from '../components/product/ProductCard';
-import PromoBanner from '../components/shop/PromoBanner';
-import TrustBadges from '../components/ui/TrustBadges';
-import TrendingSearches from '../components/product/TrendingSearches';
-import PopularProducts from '../components/product/PopularProducts';
-import { fetchNewArrivals } from '../services/api';
+import ProductCard from '../../components/product/ProductCard';
+import PromoBanner from '../../components/shop/PromoBanner';
+import TrustBadges from '../../components/ui/TrustBadges';
+import TrendingSearches from '../../components/product/TrendingSearches';
+import PopularProducts from '../../components/product/PopularProducts';
+import { fetchNewArrivals } from '../../services/api';
 import { ShoppingBag, Shirt, Sparkles } from 'lucide-react';
 import './Home.css';
 

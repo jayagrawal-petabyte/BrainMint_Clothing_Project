@@ -1,4 +1,4 @@
-﻿import { useTheme } from "../context/ThemeContext";
+﻿import { useTheme } from "../../context/ThemeContext";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";

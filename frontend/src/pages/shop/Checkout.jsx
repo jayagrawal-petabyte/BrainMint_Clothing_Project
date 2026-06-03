@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, ChevronRight, Check, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
-import { placeOrder } from '../services/api';
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { placeOrder } from '../../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { resetPasswordUser } from '../services/api';
+import { resetPasswordUser } from '../../services/api';
 import './Login.css'; // Reusing Login.css for consistent auth styling
 
 const ResetPassword = () => {

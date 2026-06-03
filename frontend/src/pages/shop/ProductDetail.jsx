@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, Heart } from 'lucide-react';
-import { fetchProductById } from '../services/api';
-import { useCart } from '../context/CartContext';
-import { useWishlist } from '../context/WishlistContext';
-import ProductTabs from '../components/product/ProductTabs';
-import AddToCartPopup from '../components/product/AddToCartPopup';
-import SizeGuideModal from '../components/product/SizeGuideModal';
+import { fetchProductById } from '../../services/api';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
+import ProductTabs from '../../components/product/ProductTabs';
+import AddToCartPopup from '../../components/product/AddToCartPopup';
+import SizeGuideModal from '../../components/product/SizeGuideModal';
 import './ProductDetail.css';
 
 const ProductDetail = () => {

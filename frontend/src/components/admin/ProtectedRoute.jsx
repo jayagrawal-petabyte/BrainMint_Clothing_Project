@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = () => {
-  
-  const isAdmin = true; 
+  const token = localStorage.getItem('adminToken');
+  const isAdmin = !!token;
 
   if (!isAdmin) {
     return <Navigate to="/admin/login" replace />;

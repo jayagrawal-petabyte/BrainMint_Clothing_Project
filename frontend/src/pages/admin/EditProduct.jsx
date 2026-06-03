@@ -1,21 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductForm from '../../components/admin/ProductForm';
-import { ArrowLeft } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { adminUpdateProduct, fetchProductById, fetchCategories } from '../../services/api';
 
 const EditProduct = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [productData, setProductData] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data fetching based on ID
-  const mockProductData = {
-    name: 'Floral Maxi Dress',
-    description: 'A beautiful floral maxi dress perfect for summer days. Features a lightweight fabric and comfortable fit.',
-    category: 'Dresses',
-    price: '4999',
-    discount: '10',
-    stock: '45',
-    status: 'Active',
-    image: 'https://images.unsplash.com/photo-1572804013309-8c98c41f1481?q=80&w=1000&auto=format&fit=crop'
+  useEffect(() => {
+    fetchCategories().then(setCategories);
+    fetchProductById(id).then(data => {
+      if (data) {
+        setProductData({
+          name: data.name || '',
+          description: data.description || '',
+          category: data.categoryId || data.category || '',
+          price: data.price || '',
+          discount: data.discountPrice ? Math.round(((data.price - data.discountPrice) / data.price) * 100) : '',
+          stock: data.inventory?.stock || '',
+          status: data.isActive ? 'Active' : 'Draft',
+          imageUrl: data.images && data.images[0] ? data.images[0].url : ''
+        });
+      }
+      setIsLoading(false);
+    });
+  }, [id]);
+
+  const handleSubmit = async (formData) => {
+    const token = localStorage.getItem('adminToken');
+    const payload = {
+      name: formData.name,
+      slug: formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+      description: formData.description,
+      category: formData.category,
+      price: Number(formData.price),
+      discountPrice: formData.discount ? Number(formData.price) - (Number(formData.price) * Number(formData.discount) / 100) : undefined,
+      inventory: { 
+        stock: Number(formData.stock)
+      },
+      isActive: formData.status === 'Active',
+      images: formData.imageUrl ? [{ url: formData.imageUrl }] : []
+    };
+    
+    await adminUpdateProduct(id, payload, token);
   };
 
   return (
@@ -28,7 +59,15 @@ const EditProduct = () => {
         <p className="text-admin-text dark:text-admin-text-dark mt-1">Update the product information below.</p>
       </div>
 
-      <ProductForm initialData={mockProductData} isEditing={true} />
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="animate-spin text-admin-accent w-12 h-12" />
+        </div>
+      ) : productData ? (
+        <ProductForm initialData={productData} isEditing={true} onSubmit={handleSubmit} categories={categories} />
+      ) : (
+        <div className="text-center text-admin-text dark:text-admin-text-dark mt-12">Product not found.</div>
+      )}
     </div>
   );
 };

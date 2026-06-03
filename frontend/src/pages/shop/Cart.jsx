@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Minus, Plus, X, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
@@ -54,7 +54,11 @@ const Cart = () => {
                 <img src={getImage(item)} alt={item.name} className="cart-row-img" />
                 <div className="cart-row-info">
                   <Link to={`/product/${getId(item)}`} className="cart-row-name">{item.name}</Link>
-                  {item.selectedSize && <span className="cart-row-variant">{item.selectedSize}</span>}
+                  {(item.size || item.color) && (
+                    <span className="cart-row-variant" style={{ color: "var(--ltn__paragraph-color)", fontSize: "13px" }}>
+                      {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color}`}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -63,11 +67,11 @@ const Cart = () => {
               </div>
 
               <div className="cart-row-qty">
-                <button onClick={() => updateQuantity(getId(item), item.quantity - 1)}>
+                <button onClick={() => updateQuantity(getId(item), item.quantity - 1, item.size, item.color)}>
                   <Minus size={12} />
                 </button>
                 <span>{item.quantity}</span>
-                <button onClick={() => updateQuantity(getId(item), item.quantity + 1)}>
+                <button onClick={() => updateQuantity(getId(item), item.quantity + 1, item.size, item.color)}>
                   <Plus size={12} />
                 </button>
               </div>
@@ -76,7 +80,7 @@ const Cart = () => {
                 ₹{(getPrice(item) * item.quantity).toLocaleString('en-IN')}
               </div>
 
-              <button className="cart-row-remove" onClick={() => removeFromCart(getId(item))}>
+              <button className="cart-row-remove" onClick={() => removeFromCart(getId(item), item.size, item.color)}>
                 <X size={16} />
               </button>
             </div>

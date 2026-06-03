@@ -183,7 +183,7 @@ export const fetchCart = async (token) => {
   }
 };
 
-export const syncAddToCart = async (productId, quantity, token) => {
+export const syncAddToCart = async (productId, quantity, size, color, token) => {
   try {
     const response = await fetch(`${CART_URL}/cart`, {
       method: "POST",
@@ -191,7 +191,7 @@ export const syncAddToCart = async (productId, quantity, token) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}` 
       },
-      body: JSON.stringify({ productId, quantity }),
+      body: JSON.stringify({ productId, quantity, size, color }),
     });
     return await response.json();
   } catch (error) {

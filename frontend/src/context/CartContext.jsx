@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
           if (parsedCart.length > 0) {
             // Merge guest items to backend
             for (const item of parsedCart) {
-              await syncAddToCart(item._id || item.id, item.quantity, token);
+              await syncAddToCart(item._id || item.id, item.quantity, item.size, item.color, token);
             }
           }
           localStorage.removeItem('guestCart');
@@ -48,7 +48,9 @@ export const CartProvider = ({ children }) => {
         // Support both nested { product, quantity } or flat array
         const mappedItems = Array.isArray(itemsList) ? itemsList.map(i => ({
           ...(i.product || i),
-          quantity: i.quantity || 1
+          quantity: i.quantity || 1,
+          size: i.size || '',
+          color: i.color || ''
         })) : [];
         setCartItems(mappedItems);
       }
@@ -59,17 +61,17 @@ export const CartProvider = ({ children }) => {
   const getId = (item) => item?._id || item?.id;
   const getPrice = (item) => item?.discountPrice || item?.price || 0;
 
-  const addToCart = async (product, quantity = 1) => {
+  const addToCart = async (product, quantity = 1, size = '', color = '') => {
     if (!isLoggedIn || !token) {
       setCartItems(prevItems => {
-        const existingItem = prevItems.find(item => getId(item) === getId(product));
+        const existingItem = prevItems.find(item => getId(item) === getId(product) && item.size === size && item.color === color);
         let newItems;
         if (existingItem) {
           newItems = prevItems.map(item =>
-            getId(item) === getId(product) ? { ...item, quantity: item.quantity + quantity } : item
+            (getId(item) === getId(product) && item.size === size && item.color === color) ? { ...item, quantity: item.quantity + quantity } : item
           );
         } else {
-          newItems = [...prevItems, { ...product, quantity }];
+          newItems = [...prevItems, { ...product, quantity, size, color }];
         }
         localStorage.setItem('guestCart', JSON.stringify(newItems));
         return newItems;
@@ -78,23 +80,24 @@ export const CartProvider = ({ children }) => {
     }
     
     // Sync with backend API
-    await syncAddToCart(getId(product), quantity, token);
+    await syncAddToCart(getId(product), quantity, size, color, token);
 
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => getId(item) === getId(product));
+      const existingItem = prevItems.find(item => getId(item) === getId(product) && item.size === size && item.color === color);
       if (existingItem) {
         return prevItems.map(item =>
-          getId(item) === getId(product) ? { ...item, quantity: item.quantity + quantity } : item
+          (getId(item) === getId(product) && item.size === size && item.color === color) ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
-      return [...prevItems, { ...product, quantity }];
+      return [...prevItems, { ...product, quantity, size, color }];
     });
   };
 
-  const removeFromCart = (productId) => {
+  // Use a unique combination of ID, size, and color for exact item matching
+  const removeFromCart = (productId, size = '', color = '') => {
     if (!isLoggedIn || !token) {
       setCartItems(prevItems => {
-        const newItems = prevItems.filter(item => getId(item) !== productId);
+        const newItems = prevItems.filter(item => !(getId(item) === productId && item.size === size && item.color === color));
         localStorage.setItem('guestCart', JSON.stringify(newItems));
         return newItems;
       });
@@ -102,18 +105,18 @@ export const CartProvider = ({ children }) => {
     }
     // Note: assuming a backend API call exists or is implemented to remove item. 
     // If not, we just update local state for logged in users as it currently did.
-    setCartItems(prevItems => prevItems.filter(item => getId(item) !== productId));
+    setCartItems(prevItems => prevItems.filter(item => !(getId(item) === productId && item.size === size && item.color === color)));
   };
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = (productId, quantity, size = '', color = '') => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, size, color);
       return;
     }
     if (!isLoggedIn || !token) {
       setCartItems(prevItems => {
         const newItems = prevItems.map(item =>
-          getId(item) === productId ? { ...item, quantity } : item
+          (getId(item) === productId && item.size === size && item.color === color) ? { ...item, quantity } : item
         );
         localStorage.setItem('guestCart', JSON.stringify(newItems));
         return newItems;
@@ -122,7 +125,7 @@ export const CartProvider = ({ children }) => {
     }
     setCartItems(prevItems =>
       prevItems.map(item =>
-        getId(item) === productId ? { ...item, quantity } : item
+        (getId(item) === productId && item.size === size && item.color === color) ? { ...item, quantity } : item
       )
     );
   };

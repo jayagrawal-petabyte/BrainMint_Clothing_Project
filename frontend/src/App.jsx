@@ -167,7 +167,6 @@ function App() {
                     <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
                     <Route path="/returns" element={<PageTransition><Returns /></PageTransition>} />
                     <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
-                    <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
 
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>

@@ -17,7 +17,6 @@ const paymentRoutes = require('./person3-cart-orders/src/routes/paymentRoutes');
 
 // Import all models so mongoose registers them
 require('./person1-auth/src/models/User');
-require('./person1-auth/src/models/Roles');
 require('./person2-products/src/models/Product');
 require('./person2-products/src/models/Category');
 

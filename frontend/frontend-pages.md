@@ -30,6 +30,42 @@
 - Trust Badges
 
 ## Context
+
+
+## Admin Pages
+- Admin Dashboard
+- Admin Login
+- Product Management
+- Add Product
+- Edit Product
+- Inventory Management
+- Order Management
+- Discount Management
+- Sales Analytics
+
+## Authentication Pages
+- Login
+- Register
+- Forgot Password
+- Reset Password
+- Account
+
+## Core Pages
+- Home
+- About
+- Contact
+- Not Found
+
+## Shop Pages
+- Shop
+- Product Detail
+- Cart
+- Checkout
+- Wishlist
+
+## Information Pages
+- Returns
+- Terms & Conditions
 - Cart Context
 - Wishlist Context
 - Theme Context

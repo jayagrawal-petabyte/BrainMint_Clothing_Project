@@ -30,6 +30,19 @@ const userSchema = new mongoose.Schema({
   enum: ["admin", "user"],
   default: "user"
   },
+
+  emailOTP: {
+  type: String
+},
+
+emailOTPExpire: {
+  type: Date
+},
+
+isEmailVerified: {
+  type: Boolean,
+  default: false
+},
   addresses: [
   {
     fullName: String,

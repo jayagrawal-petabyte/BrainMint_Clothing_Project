@@ -11,6 +11,190 @@ require("../utils/generateToken");
 
 const sendEmail = require("../utils/sendEmail");
 
+const PendingUser =
+require("../models/PendingUser");
+
+exports.sendRegistrationOTP =
+async (req, res) => {
+
+  try {
+
+    const {
+      name,
+      email,
+      phoneNumber,
+      password
+    } = req.body;
+
+    if (!/^[0-9]{10}$/.test(phoneNumber)) {
+
+      return res.status(400).json({
+        success: false,
+        message: "Invalid phone number format"
+      });
+
+    }
+
+    const existingUser =
+      await User.findOne({
+        $or: [
+          { email },
+          { phoneNumber }
+        ]
+      });
+
+    if (existingUser) {
+
+      return res.status(400).json({
+        success: false,
+        message: "User already exists"
+      });
+
+    }
+
+    const otp =
+      Math.floor(
+        100000 +
+        Math.random() * 900000
+      ).toString();
+
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
+
+    await PendingUser.findOneAndUpdate(
+
+      { email },
+
+      {
+        name,
+        email,
+        phoneNumber,
+        password: hashedPassword,
+        otp,
+        otpExpire:
+          Date.now() + 10 * 60 * 1000
+      },
+
+      {
+        upsert: true,
+        new: true
+      }
+
+    );
+
+    await sendEmail(
+
+      email,
+
+      "Email Verification OTP",
+
+      `Your OTP is: ${otp}`
+
+    );
+
+    res.status(200).json({
+
+      success: true,
+
+      message:
+        "OTP sent successfully"
+
+    });
+
+  } catch(error){
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
+};
+
+exports.verifyRegistrationOTP =
+async (req, res) => {
+
+  try {
+
+    const { email, otp } = req.body;
+
+    const pendingUser =
+      await PendingUser.findOne({
+        email
+      });
+
+    if (!pendingUser) {
+
+      return res.status(404).json({
+        success: false,
+        message:
+          "Registration session expired"
+      });
+
+    }
+
+    if (
+      pendingUser.otp !== otp ||
+      pendingUser.otpExpire <
+      Date.now()
+    ) {
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid or expired OTP"
+      });
+
+    }
+
+    const user =
+      await User.create({
+
+        name:
+          pendingUser.name,
+
+        email:
+          pendingUser.email,
+
+        phoneNumber:
+          pendingUser.phoneNumber,
+
+        password:
+          pendingUser.password,
+
+        isEmailVerified: true
+
+      });
+
+    await PendingUser.deleteOne({
+      _id: pendingUser._id
+    });
+
+    res.status(201).json({
+
+      success: true,
+
+      message:
+        "Registration completed",
+
+      data: {
+        user
+      }
+
+    });
+
+  } catch(error){
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
+};
+
 exports.register = async (req, res) => {
 
   try {
@@ -96,6 +280,13 @@ exports.login = async (req, res) => {
         success: false,
         message: "Invalid phone number or password"
       });
+    }
+    if (!user.isEmailVerified) {
+
+      return res.status(400).json({
+      success: false,
+      message: "Please verify your email first"
+    });
     }
 
     // Compare password
@@ -301,6 +492,105 @@ exports.resetPassword = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Password reset successful"
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
+};
+exports.sendEmailOTP = async (req, res) => {
+
+  try {
+
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    const otp =
+      Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.emailOTP = otp;
+
+    user.emailOTPExpire =
+      Date.now() + 10 * 60 * 1000;
+
+    await user.save();
+
+    await sendEmail(
+      user.email,
+      "Email Verification OTP",
+      `Your OTP is: ${otp}`
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "OTP sent successfully"
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
+};
+exports.verifyEmailOTP = async (req, res) => {
+
+  try {
+
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({
+      email
+    });
+
+    if (!user) {
+
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+
+    }
+
+    if (
+      user.emailOTP !== otp ||
+      user.emailOTPExpire < Date.now()
+    ) {
+
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired OTP"
+      });
+
+    }
+
+    user.isEmailVerified = true;
+
+    user.emailOTP = undefined;
+    user.emailOTPExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully"
     });
 
   } catch (error) {

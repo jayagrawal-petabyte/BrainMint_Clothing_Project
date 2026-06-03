@@ -12,6 +12,16 @@ const adminMiddleware =
 require("../middleware/adminMiddleware");
 
 router.post(
+  "/send-registration-otp",
+  authController.sendRegistrationOTP
+);
+
+router.post(
+  "/verify-registration-otp",
+  authController.verifyRegistrationOTP
+);
+
+router.post(
   "/register",
   authController.register
 );
@@ -69,5 +79,14 @@ router.get(
 router.get("/", (req, res) => {
   res.send("Auth Route Working");
 });
+router.post(
+  "/send-email-otp",
+  authController.sendEmailOTP
+);
+
+router.post(
+  "/verify-email-otp",
+  authController.verifyEmailOTP
+);
 
 module.exports = router;

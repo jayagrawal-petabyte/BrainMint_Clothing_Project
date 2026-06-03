@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { fetchCart, syncAddToCart } from '../services/api';
+import { fetchCart, syncAddToCart, removeFromCartApi, updateCartQuantityApi } from '../services/api';
 
 const CartContext = createContext();
 
@@ -94,7 +94,7 @@ export const CartProvider = ({ children }) => {
   };
 
   // Use a unique combination of ID, size, and color for exact item matching
-  const removeFromCart = (productId, size = '', color = '') => {
+  const removeFromCart = async (productId, size = '', color = '') => {
     if (!isLoggedIn || !token) {
       setCartItems(prevItems => {
         const newItems = prevItems.filter(item => !(getId(item) === productId && item.size === size && item.color === color));
@@ -103,12 +103,12 @@ export const CartProvider = ({ children }) => {
       });
       return;
     }
-    // Note: assuming a backend API call exists or is implemented to remove item. 
-    // If not, we just update local state for logged in users as it currently did.
+    
+    await removeFromCartApi(productId, token);
     setCartItems(prevItems => prevItems.filter(item => !(getId(item) === productId && item.size === size && item.color === color)));
   };
 
-  const updateQuantity = (productId, quantity, size = '', color = '') => {
+  const updateQuantity = async (productId, quantity, size = '', color = '') => {
     if (quantity <= 0) {
       removeFromCart(productId, size, color);
       return;
@@ -123,6 +123,8 @@ export const CartProvider = ({ children }) => {
       });
       return;
     }
+    
+    await updateCartQuantityApi(productId, quantity, token);
     setCartItems(prevItems =>
       prevItems.map(item =>
         (getId(item) === productId && item.size === size && item.color === color) ? { ...item, quantity } : item

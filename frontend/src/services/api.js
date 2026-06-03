@@ -200,6 +200,36 @@ export const syncAddToCart = async (productId, quantity, size, color, token) => 
   }
 };
 
+export const removeFromCartApi = async (productId, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/cart/${productId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Remove from cart error:", error);
+    return null;
+  }
+};
+
+export const updateCartQuantityApi = async (productId, quantity, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/cart/${productId}`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}` 
+      },
+      body: JSON.stringify({ quantity }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Update cart error:", error);
+    return null;
+  }
+};
+
 export const fetchWishlist = async (token) => {
   try {
     const response = await fetch(`${CART_URL}/wishlist`, {

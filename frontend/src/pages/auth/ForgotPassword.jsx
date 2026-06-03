@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { forgotPasswordUser } from '../services/api';
+import { forgotPasswordUser } from '../../services/api';
 import './Login.css'; // Reusing Login.css for consistent auth styling
 
 const ForgotPassword = () => {

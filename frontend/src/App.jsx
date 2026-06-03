@@ -153,8 +153,8 @@ function App() {
                       }
                     />
 
-                    <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
-                    <Route path="/search" element={<PageTransition><Shop /></PageTransition>} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/search" element={<Shop />} />
                     <Route path="/product/:id" element={<PageTransition><ProductDetail /></PageTransition>} />
                     <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
                     <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />

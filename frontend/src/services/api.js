@@ -356,62 +356,64 @@ const FALLBACK_POPULAR_PRODUCTS = [
   }
 ];
 
-let trendingPromise = null;
+// Cache promises for endpoints to prevent redundant parallel requests
+let searchesPromise = null;
+let popularProductsPromise = null;
 
-const fetchTrendingData = async () => {
-  try {
-    const response = await fetch(`${PRODUCTS_URL}/products/trending`);
-    if (!response.ok) {
-      throw new Error(`API returned status ${response.status}`);
+export const fetchTrendingSearches = async () => {
+  if (searchesPromise) return searchesPromise;
+
+  searchesPromise = (async () => {
+    try {
+      const response = await fetch(`${PRODUCTS_URL}/products/popular-searches`);
+      if (!response.ok) {
+        throw new Error(`API returned status ${response.status}`);
+      }
+      const data = await response.json();
+      const payload = data.data || data;
+      
+      if (payload && Array.isArray(payload.popularSearches)) {
+        return payload.popularSearches;
+      }
+      return FALLBACK_TRENDING_SEARCHES;
+    } catch (error) {
+      console.warn("Using fallback trending searches due to API fetch error:", error);
+      return FALLBACK_TRENDING_SEARCHES;
     }
-    const data = await response.json();
-    const payload = data.data || data;
-    
-    let searches = FALLBACK_TRENDING_SEARCHES;
-    let products = FALLBACK_POPULAR_PRODUCTS;
-    
-    if (payload) {
-      if (Array.isArray(payload)) {
-        products = payload.map(p => ({ ...p, isTrending: true }));
-      } else {
-        if (Array.isArray(payload.products)) {
+  })();
+
+  return searchesPromise;
+};
+
+export const fetchPopularProducts = async () => {
+  if (popularProductsPromise) return popularProductsPromise;
+
+  popularProductsPromise = (async () => {
+    try {
+      const response = await fetch(`${PRODUCTS_URL}/products/trending`);
+      if (!response.ok) {
+        throw new Error(`API returned status ${response.status}`);
+      }
+      const data = await response.json();
+      const payload = data.data || data;
+      
+      let products = FALLBACK_POPULAR_PRODUCTS;
+      if (payload) {
+        if (Array.isArray(payload)) {
+          products = payload.map(p => ({ ...p, isTrending: true }));
+        } else if (Array.isArray(payload.products)) {
           products = payload.products.map(p => ({ ...p, isTrending: true }));
         } else if (Array.isArray(payload.popularProducts)) {
           products = payload.popularProducts.map(p => ({ ...p, isTrending: true }));
         }
-        
-        if (Array.isArray(payload.searches)) {
-          searches = payload.searches;
-        } else if (Array.isArray(payload.trendingSearches)) {
-          searches = payload.trendingSearches;
-        }
       }
+      return products;
+    } catch (error) {
+      console.warn("Using fallback popular products due to API fetch error:", error);
+      return FALLBACK_POPULAR_PRODUCTS;
     }
-    
-    return { searches, products };
-  } catch (error) {
-    console.warn("Using fallback trending data due to API fetch error:", error);
-    return {
-      searches: FALLBACK_TRENDING_SEARCHES,
-      products: FALLBACK_POPULAR_PRODUCTS
-    };
-  }
-};
+  })();
 
-const getTrendingCached = () => {
-  if (!trendingPromise) {
-    trendingPromise = fetchTrendingData();
-  }
-  return trendingPromise;
-};
-
-export const fetchTrendingSearches = async () => {
-  const data = await getTrendingCached();
-  return data.searches;
-};
-
-export const fetchPopularProducts = async () => {
-  const data = await getTrendingCached();
-  return data.products;
+  return popularProductsPromise;
 };
 

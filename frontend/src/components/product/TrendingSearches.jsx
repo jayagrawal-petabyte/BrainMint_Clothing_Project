@@ -31,8 +31,17 @@ const TrendingSearches = ({ compact = false }) => {
     };
   }, []);
 
-  const handleChipClick = (keyword) => {
-    navigate(`/search?q=${encodeURIComponent(keyword)}`);
+  const getKeywordText = (item) => {
+    if (!item) return '';
+    if (typeof item === 'string') return item;
+    return item.label || item.value || '';
+  };
+
+  const handleChipClick = (item) => {
+    const keyword = getKeywordText(item);
+    if (keyword) {
+      navigate(`/search?q=${encodeURIComponent(keyword)}`);
+    }
   };
 
   if (loading) {
@@ -65,20 +74,23 @@ const TrendingSearches = ({ compact = false }) => {
       )}
       {compact && <span className="trending-label-compact">Trending:</span>}
       <div className="trending-chips">
-        {searches.map((keyword, index) => (
-          <motion.button
-            key={keyword}
-            className="trending-chip"
-            onClick={() => handleChipClick(keyword)}
-            whileHover={{ scale: 1.02, y: -1 }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.04 }}
-          >
-            <span className="chip-text">{keyword}</span>
-          </motion.button>
-        ))}
+        {searches.map((item, index) => {
+          const text = getKeywordText(item);
+          return (
+            <motion.button
+              key={text || index}
+              className="trending-chip"
+              onClick={() => handleChipClick(item)}
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.04 }}
+            >
+              <span className="chip-text">{text}</span>
+            </motion.button>
+          );
+        })}
       </div>
     </div>
   );

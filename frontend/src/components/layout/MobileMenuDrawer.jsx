@@ -120,36 +120,39 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
                         textAlign: 'left'
                       }}>Trending Searches</div>
                       <ul className="suggestions-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                        {trendingKeywords.map((keyword) => (
-                          <li key={keyword} style={{ width: '100%' }}>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                window.location.href = `/search?q=${encodeURIComponent(keyword)}`;
-                                onClose();
-                                setIsFocused(false);
-                              }}
-                              className="suggestion-link"
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                width: '100%',
-                                padding: '10px 20px',
-                                background: 'transparent',
-                                border: 'none',
-                                textAlign: 'left',
-                                fontFamily: 'var(--ltn__body-font)',
-                                fontSize: '14px',
-                                color: 'var(--ltn__heading-color)',
-                                cursor: 'pointer'
-                              }}
-                            >
-                              <span>{keyword}</span>
-                              <ArrowUpRight size={14} style={{ opacity: 0.5 }} />
-                            </button>
-                          </li>
-                        ))}
+                        {trendingKeywords.map((item) => {
+                          const keyword = typeof item === 'string' ? item : (item.label || item.value || '');
+                          return (
+                            <li key={keyword} style={{ width: '100%' }}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  window.location.href = `/search?q=${encodeURIComponent(keyword)}`;
+                                  onClose();
+                                  setIsFocused(false);
+                                }}
+                                className="suggestion-link"
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  width: '100%',
+                                  padding: '10px 20px',
+                                  background: 'transparent',
+                                  border: 'none',
+                                  textAlign: 'left',
+                                  fontFamily: 'var(--ltn__body-font)',
+                                  fontSize: '14px',
+                                  color: 'var(--ltn__heading-color)',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <span>{keyword}</span>
+                                <ArrowUpRight size={14} style={{ opacity: 0.5 }} />
+                              </button>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </motion.div>
                   )}

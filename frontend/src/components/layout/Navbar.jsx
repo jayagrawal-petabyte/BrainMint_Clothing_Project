@@ -123,23 +123,26 @@ const Navbar = () => {
                     >
                       <div className="dropdown-header">Trending Searches</div>
                       <ul className="suggestions-list">
-                        {trendingKeywords.map((keyword) => (
-                          <li key={keyword} className="suggestion-item">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                navigate(`/search?q=${encodeURIComponent(keyword)}`);
-                                setIsFocused(false);
-                              }}
-                              className="suggestion-link"
-                            >
-                              <span className="suggestion-text">{keyword}</span>
-                              <span className="suggestion-arrow">
-                                <ArrowUpRight size={14} />
-                              </span>
-                            </button>
-                          </li>
-                        ))}
+                        {trendingKeywords.map((item) => {
+                          const keyword = typeof item === 'string' ? item : (item.label || item.value || '');
+                          return (
+                            <li key={keyword} className="suggestion-item">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  navigate(`/search?q=${encodeURIComponent(keyword)}`);
+                                  setIsFocused(false);
+                                }}
+                                className="suggestion-link"
+                              >
+                                <span className="suggestion-text">{keyword}</span>
+                                <span className="suggestion-arrow">
+                                  <ArrowUpRight size={14} />
+                                </span>
+                              </button>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </motion.div>
                   )}
@@ -334,36 +337,39 @@ const Navbar = () => {
                         textAlign: 'left'
                       }}>Trending Searches</div>
                       <ul className="suggestions-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                        {trendingKeywords.map((keyword) => (
-                          <li key={keyword} style={{ width: '100%' }}>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                navigate(`/search?q=${encodeURIComponent(keyword)}`);
-                                setIsMobileSearchOpen(false);
-                                setIsFocused(false);
-                              }}
-                              className="suggestion-link"
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                width: '100%',
-                                padding: '10px 20px',
-                                background: 'transparent',
-                                border: 'none',
-                                textAlign: 'left',
-                                fontFamily: 'var(--ltn__body-font)',
-                                fontSize: '14px',
-                                color: 'var(--ltn__heading-color)',
-                                cursor: 'pointer'
-                              }}
-                            >
-                              <span>{keyword}</span>
-                              <ArrowUpRight size={14} style={{ opacity: 0.5 }} />
-                            </button>
-                          </li>
-                        ))}
+                        {trendingKeywords.map((item) => {
+                          const keyword = typeof item === 'string' ? item : (item.label || item.value || '');
+                          return (
+                            <li key={keyword} style={{ width: '100%' }}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  navigate(`/search?q=${encodeURIComponent(keyword)}`);
+                                  setIsMobileSearchOpen(false);
+                                  setIsFocused(false);
+                                }}
+                                className="suggestion-link"
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  width: '100%',
+                                  padding: '10px 20px',
+                                  background: 'transparent',
+                                  border: 'none',
+                                  textAlign: 'left',
+                                  fontFamily: 'var(--ltn__body-font)',
+                                  fontSize: '14px',
+                                  color: 'var(--ltn__heading-color)',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <span>{keyword}</span>
+                                <ArrowUpRight size={14} style={{ opacity: 0.5 }} />
+                              </button>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </motion.div>
                   )}

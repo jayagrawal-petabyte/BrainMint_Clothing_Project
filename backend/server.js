@@ -9,6 +9,9 @@ const authRoutes = require('./person1-auth/src/routes/authRoutes');
 const productRoutes = require('./person2-products/src/routes/productRoutes');
 const categoryRoutes = require('./person2-products/src/routes/categoryRoutes');
 const adminProductRoutes = require('./person2-products/src/routes/adminRoutes');
+const couponRoutes = require('./person2-products/src/routes/couponRoutes');
+const analyticsRoutes = require('./person2-products/src/routes/analyticsRoutes');
+const newsletterRoutes = require('./person2-products/src/routes/newsletterRoutes');
 const cartRoutes = require('./person3-cart-orders/src/routes/cartRoutes');
 const wishlistRoutes = require('./person3-cart-orders/src/routes/wishlistRoutes');
 const orderRoutes = require('./person3-cart-orders/src/routes/orderRoutes');
@@ -19,6 +22,9 @@ const paymentRoutes = require('./person3-cart-orders/src/routes/paymentRoutes');
 require('./person1-auth/src/models/User');
 require('./person2-products/src/models/Product');
 require('./person2-products/src/models/Category');
+require('./person2-products/src/models/Coupon');
+require('./person2-products/src/models/Review');
+require('./person2-products/src/models/NewsletterSubscriber');
 
 const { errorHandler } = require('./person3-cart-orders/src/middleware/errorMiddleware');
 
@@ -38,6 +44,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/admin/products', adminProductRoutes);
+app.use('/api/admin/coupons', couponRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/discounts', couponRoutes);
+app.use('/api/admin/analytics', analyticsRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/orders', orderRoutes);
@@ -51,6 +62,7 @@ const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
+    console.log('Server ReadyState:', mongoose.connection.readyState);
     app.listen(PORT, () => {
       console.log(`BrainMint backend running on port ${PORT}`);
     });

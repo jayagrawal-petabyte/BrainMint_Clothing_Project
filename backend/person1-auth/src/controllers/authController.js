@@ -360,16 +360,16 @@ exports.updateProfile = async (req, res) => {
 
     const { name, email, phoneNumber, addresses } = req.body;
 
-    const user = await User.findByIdAndUpdate(req.user.id,
-    {
-      name,
-      email,
-      phoneNumber,
-      addresses
-    },
-    {
-      new: true
-    } 
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (phoneNumber !== undefined) updateData.phoneNumber = phoneNumber;
+    if (addresses !== undefined) updateData.addresses = addresses;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      updateData,
+      { new: true }
     ).select("-password");
 
     res.status(200).json({
@@ -502,7 +502,33 @@ exports.resetPassword = async (req, res) => {
     });
 
   }
+};
 
+exports.updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ success: false, message: "Please provide current and new password" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: "Invalid current password" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ success: true, message: "Password updated successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 exports.sendEmailOTP = async (req, res) => {
 

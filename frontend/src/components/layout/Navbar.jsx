@@ -239,15 +239,6 @@ const Navbar = () => {
                     </div>
                   </button>
                 </li>
-                <li className="mobile-menu-trigger">
-                  <button 
-                    onClick={() => setIsMobileMenuOpen(true)} 
-                    className="mobile-menu-toggle-btn"
-                    title="Open Menu"
-                  >
-                    <Menu size={24} />
-                  </button>
-                </li>
               </ul>
             </div>
           </div>

@@ -121,7 +121,7 @@ const Footer = () => {
         <div className="container">
           <div className="footer-bottom-inner">
             <p className="copyright-text">
-              Â© {new Date().getFullYear()} UrbanWear. All Rights Reserved.
+              &copy; {new Date().getFullYear()} UrbanWear. All Rights Reserved.
             </p>
             <div className="payment-methods">
               {/* Placeholders for payment icons */}

@@ -119,6 +119,34 @@ export const resetPasswordUser = async (token, password) => {
   }
 };
 
+export const sendRegistrationOtp = async (userData) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/send-registration-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Send OTP error:", error);
+    return null;
+  }
+};
+
+export const verifyRegistrationOtp = async (email, otp) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/verify-registration-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Verify OTP error:", error);
+    return null;
+  }
+};
+
 export const registerUser = async (name, email, phoneNumber, password) => {
   try {
     const response = await fetch(`${AUTH_URL}/auth/register`, {

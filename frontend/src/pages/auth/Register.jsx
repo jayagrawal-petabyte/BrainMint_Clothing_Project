@@ -11,10 +11,12 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { register, isLoading } = useAuth();
+  const [step, setStep] = useState(1);
+  const [otp, setOtp] = useState('');
+  const { sendOtp, verifyOtp, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -35,12 +37,31 @@ const Register = () => {
       return;
     }
 
-    const result = await register(firstName, lastName, email, phoneNumber, password);
+    const name = `${firstName} ${lastName}`.trim();
+    const result = await sendOtp({ name, email, phoneNumber, password });
+    
+    if (result.success) {
+      setStep(2);
+    } else {
+      setError(result.error || 'Failed to send OTP. Please try again.');
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!otp) {
+      setError('Please enter the OTP.');
+      return;
+    }
+
+    const result = await verifyOtp(email, otp);
     
     if (result.success) {
       navigate('/login');
     } else {
-      setError(result.error || 'Failed to create account. Please try again.');
+      setError(result.error || 'Failed to verify OTP. Please try again.');
     }
   };
 
@@ -129,13 +150,14 @@ const Register = () => {
             </div>
           )}
 
-          <motion.form 
-            variants={staggerContainer}
-            initial="hidden"
-            animate="show"
-            className="space-y-4 mt-8" 
-            onSubmit={handleSubmit}
-          >
+          {step === 1 ? (
+            <motion.form 
+              variants={staggerContainer}
+              initial="hidden"
+              animate="show"
+              className="space-y-4 mt-8" 
+              onSubmit={handleSendOtp}
+            >
             <div className="grid grid-cols-2 gap-4">
               <motion.div variants={itemVariant}>
                 <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-2">First Name</label>
@@ -241,6 +263,63 @@ const Register = () => {
               )}
             </motion.button>
           </motion.form>
+          ) : (
+            <motion.form 
+              variants={staggerContainer}
+              initial="hidden"
+              animate="show"
+              className="space-y-4 mt-8" 
+              onSubmit={handleVerifyOtp}
+            >
+              <motion.div variants={itemVariant}>
+                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-2 text-center">
+                  Enter the OTP sent to <strong>{email}</strong>
+                </label>
+                <div className="relative max-w-xs mx-auto">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    className="block w-full pl-11 pr-4 py-3 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-admin-heading dark:text-admin-heading-dark transition-all duration-200 tracking-[0.5em] text-center text-lg font-bold"
+                    placeholder="123456"
+                    maxLength={6}
+                  />
+                </div>
+              </motion.div>
+
+              <motion.button
+                variants={itemVariant}
+                type="submit"
+                disabled={isLoading}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full flex justify-center items-center py-3.5 px-4 mt-6 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-admin-accent hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-accent disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 group"
+              >
+                {isLoading ? (
+                  <Loader2 className="animate-spin h-5 w-5" />
+                ) : (
+                  <>
+                    Verify & Create Account
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </motion.button>
+              
+              <div className="text-center mt-4">
+                <button 
+                  type="button" 
+                  onClick={() => setStep(1)}
+                  className="text-sm font-medium text-admin-text dark:text-admin-text-dark hover:text-admin-accent transition-colors"
+                >
+                  Back to Registration
+                </button>
+              </div>
+            </motion.form>
+          )}
 
           <motion.div variants={itemVariant} className="mt-6 text-center">
             <p className="text-sm text-admin-text dark:text-admin-text-dark">

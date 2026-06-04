@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { loginUser as apiLogin, registerUser as apiRegister, fetchCurrentUser } from '../services/api';
+import { loginUser as apiLogin, registerUser as apiRegister, fetchCurrentUser, sendRegistrationOtp, verifyRegistrationOtp } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -85,6 +85,40 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const sendOtp = async (userData) => {
+    setIsLoading(true);
+    try {
+      const response = await sendRegistrationOtp(userData);
+      if (response && response.success !== false) {
+        return { success: true };
+      }
+      return { success: false, error: response?.message || 'Failed to send OTP' };
+    } catch (error) {
+      console.error("Send OTP failed:", error);
+      return { success: false, error: 'Network error. Please try again later.' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const verifyOtp = async (email, otp) => {
+    setIsLoading(true);
+    try {
+      const response = await verifyRegistrationOtp(email, otp);
+      if (response && response.success !== false) {
+        // Since verification is complete, the user can log in on the next screen.
+        // We do not auto-login here as the API response doesn't seem to return a token based on the user's description.
+        return { success: true };
+      }
+      return { success: false, error: response?.message || 'Failed to verify OTP' };
+    } catch (error) {
+      console.error("Verify OTP failed:", error);
+      return { success: false, error: 'Network error. Please try again later.' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -103,6 +137,8 @@ export const AuthProvider = ({ children }) => {
       isLoading,
       login,
       register,
+      sendOtp,
+      verifyOtp,
       logout,
       updateUser
     }}>

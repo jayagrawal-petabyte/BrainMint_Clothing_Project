@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 import { motion } from 'framer-motion';
 
-const defaultSalesData = [
-  { name: 'Jan', revenue: 4000, orders: 240 },
-  { name: 'Feb', revenue: 3000, orders: 139 },
-  { name: 'Mar', revenue: 2000, orders: 980 },
-  { name: 'Apr', revenue: 2780, orders: 390 },
-  { name: 'May', revenue: 1890, orders: 480 },
-  { name: 'Jun', revenue: 2390, orders: 380 },
-  { name: 'Jul', revenue: 3490, orders: 430 },
-];
+const defaultSalesData = [];
 
 const SalesCharts = ({ data }) => {
   const chartData = data && data.length > 0 ? data : defaultSalesData;

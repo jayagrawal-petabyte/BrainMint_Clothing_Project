@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minus, Plus, Heart } from 'lucide-react';
+import { Minus, Plus, Heart, Star } from 'lucide-react';
 import { fetchProductById, fetchProducts, fetchPopularProducts } from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
@@ -240,10 +240,13 @@ const ProductDetail = () => {
             style={{
               marginBottom:
                 '10px',
-              color: '#777'
+              color: '#777',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
             }}
           >
-            â­{' '}
+            <Star size={16} fill="#f5a623" stroke="#f5a623" />
             {product.rating
               ?.average || 0}{' '}
             (

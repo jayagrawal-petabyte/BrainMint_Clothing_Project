@@ -108,6 +108,19 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
   });
 });
 
+const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find()
+    .populate('user', 'name email')
+    .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    message: 'All orders fetched successfully',
+    data: orders
+  });
+});
+
 module.exports = {
-  getSalesDashboard
+  getSalesDashboard,
+  getAllOrders
 };

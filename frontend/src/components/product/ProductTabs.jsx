@@ -52,7 +52,7 @@ const ProductTabs = ({ productId }) => {
       setRating(5);
       loadReviews(); // reload to show the new review
     } else {
-      setSubmitMessage('Failed to submit review. You may have already reviewed this product.');
+      setSubmitMessage(res?.message || 'Failed to submit review. You may have already reviewed this product.');
     }
   };
 

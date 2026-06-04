@@ -43,14 +43,26 @@ export const submitProductReview = async (productId, reviewData, token) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(reviewData)
+      body: JSON.stringify(reviewData),
     });
-    return await response.json();
+    
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      return { success: false, message: `HTTP Error ${response.status}: Failed to parse JSON` };
+    }
+
+    if (!response.ok) {
+      return { success: false, message: data.message || `HTTP Error ${response.status}` };
+    }
+    
+    return data;
   } catch (error) {
     console.error("Submit review error:", error);
-    return null;
+    return { success: false, message: error.message };
   }
 };
 

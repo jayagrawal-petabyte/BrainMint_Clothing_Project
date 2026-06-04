@@ -52,11 +52,8 @@ async (req, res) => {
 
     }
 
-    const otp =
-      Math.floor(
-        100000 +
-        Math.random() * 900000
-      ).toString();
+    // Mock OTP for testing due to Render SMTP block
+    const otp = "123456";
 
     const hashedPassword =
       await bcrypt.hash(password, 10);
@@ -82,15 +79,13 @@ async (req, res) => {
 
     );
 
+    /* 
     await sendEmail(
-
       email,
-
       "Email Verification OTP",
-
       `Your OTP is: ${otp}`
-
     );
+    */
 
     res.status(200).json({
 

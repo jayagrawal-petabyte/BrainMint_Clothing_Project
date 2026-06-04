@@ -68,13 +68,13 @@ const AdminDashboard = () => {
 
         // Fetch real orders
         const backendOrders = await fetchAdminOrders(token);
-        if (backendOrders && backendOrders.data && backendOrders.data.orders) {
-          const mappedOrders = backendOrders.data.orders.slice(0, 5).map(o => ({
+        if (backendOrders && backendOrders.data && Array.isArray(backendOrders.data)) {
+          const mappedOrders = backendOrders.data.slice(0, 5).map(o => ({
             id: o._id,
             customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
-            product: o.orderItems?.length > 0 ? o.orderItems[0].name : 'Various Items',
+            product: o.items?.length > 0 ? o.items[0].product?.name || 'Item' : 'Various Items',
             amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
-            status: o.orderStatus ? (o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1).toLowerCase()) : 'Pending',
+            status: o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending',
             date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
           }));
           setOrders(mappedOrders);

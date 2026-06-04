@@ -14,6 +14,7 @@ const Account = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [activeTab, setActiveTab] = useState('orders'); // 'orders' or 'address' or 'details'
   
   // Profile edit state
@@ -48,13 +49,15 @@ const Account = () => {
           }
           
           if (profileRes && profileRes.success !== false) {
-            const p = profileRes.profile || profileRes.data || profileRes.user || user;
+            let p = profileRes.profile || profileRes.data?.user || profileRes.data || profileRes.user || user;
+            // Handle if API returns { data: { user: {...} } } vs { data: {...} }
+            if (p && p.user && !p.name) p = p.user;
             setProfile(p);
             setProfileForm({ name: p?.name || user?.name || '' });
             const defaultAddr = p?.addresses?.[0];
             if (defaultAddr) {
               setAddressForm({
-                street: defaultAddr.street || '',
+                street: defaultAddr.address || defaultAddr.street || '',
                 city: defaultAddr.city || '',
                 state: defaultAddr.state || '',
                 pincode: defaultAddr.pincode || '',
@@ -85,9 +88,18 @@ const Account = () => {
     e.preventDefault();
     if (!token) return;
     
-    const res = await updateUserProfile({ addresses: [addressForm] }, token);
+    // Map 'street' to 'address' for backend schema
+    const addressPayload = {
+      fullName: profile?.name || user?.name || "Customer",
+      phone: profile?.phoneNumber || user?.phoneNumber || user?.phone || "0000000000",
+      ...addressForm,
+      address: addressForm.street
+    };
+    delete addressPayload.street;
+
+    const res = await updateUserProfile({ addresses: [addressPayload] }, token);
     if (res && res.success !== false) {
-      setProfile(prev => ({ ...prev, addresses: [addressForm] }));
+      setProfile(prev => ({ ...prev, addresses: [addressPayload] }));
       setIsEditingAddress(false);
     } else {
       alert("Failed to update address. Please try again.");
@@ -260,9 +272,53 @@ const Account = () => {
                               <p className="order-value">{order.orderItems?.length || 1} item(s)</p>
                             </div>
                             <div className="order-actions">
-                              <button className="order-action-btn">View Details</button>
+                              <button 
+                                className="order-action-btn"
+                                onClick={() => setExpandedOrderId(expandedOrderId === (order._id || order.id) ? null : (order._id || order.id))}
+                              >
+                                {expandedOrderId === (order._id || order.id) ? 'Hide Details' : 'View Details'}
+                              </button>
                             </div>
                           </div>
+                          
+                          {/* Expanded Order Details */}
+                          {expandedOrderId === (order._id || order.id) && (
+                            <div className="order-expanded-details animate-in slide-in-from-top-2 duration-300">
+                              <div className="expanded-details-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', padding: '20px', borderTop: '1px solid var(--border-color-11)', backgroundColor: 'var(--section-bg-1)' }}>
+                                <div className="expanded-items">
+                                  <h4 style={{ fontSize: '14px', marginBottom: '15px', fontFamily: 'var(--ltn__heading-font)' }}>Items Ordered</h4>
+                                  <div className="order-items-list" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                    {(order.items || order.orderItems || []).map((item, i) => (
+                                      <div key={i} className="order-item-row" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                                        <div className="order-item-img" style={{ width: '60px', height: '60px', borderRadius: '4px', overflow: 'hidden', backgroundColor: 'var(--white-7)' }}>
+                                          <img 
+                                            src={item.product?.images?.[0]?.url || 'https://placehold.co/100x100?text=No+Image'} 
+                                            alt={item.product?.name || 'Product'} 
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                          />
+                                        </div>
+                                        <div className="order-item-info">
+                                          <p style={{ margin: 0, fontWeight: 500, fontSize: '13px', color: 'var(--ltn__heading-color)' }}>{item.product?.name || 'Unknown Product'}</p>
+                                          <p style={{ margin: 0, fontSize: '12px', color: 'var(--ltn__paragraph-color)' }}>
+                                            {item.quantity} × ₹{item.price?.toLocaleString('en-IN') || 0}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className="expanded-shipping">
+                                  <h4 style={{ fontSize: '14px', marginBottom: '15px', fontFamily: 'var(--ltn__heading-font)' }}>Shipping Address</h4>
+                                  <div style={{ fontSize: '13px', color: 'var(--ltn__paragraph-color)', lineHeight: '1.6' }}>
+                                    <p style={{ margin: 0, fontWeight: 500, color: 'var(--ltn__heading-color)' }}>{order.shippingAddress?.fullName || order.user?.name}</p>
+                                    <p style={{ margin: 0 }}>{order.shippingAddress?.address}</p>
+                                    <p style={{ margin: 0 }}>{order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.pincode}</p>
+                                    <p style={{ margin: 0, marginTop: '5px' }}>Phone: {order.shippingAddress?.phone}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

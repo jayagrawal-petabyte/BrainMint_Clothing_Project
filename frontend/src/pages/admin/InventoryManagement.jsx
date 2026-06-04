@@ -26,6 +26,7 @@ const InventoryManagement = () => {
 
     const payload = {
       ...product,
+      category: product.categoryId, // Ensure valid ObjectId is sent
       inventory: { ...product.inventory, stock: Number(newStock) }
     };
     

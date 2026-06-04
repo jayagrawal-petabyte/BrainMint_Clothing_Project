@@ -118,7 +118,7 @@
 .co__crumb-step.is-active .co__crumb-dot {
   background: var(--ltn__heading-color);
   border-color: var(--ltn__heading-color);
-  color: #fff;
+  color: var(--white-7);
 }
 .co__crumb-step.is-done .co__crumb-dot {
   background: var(--ltn__secondary-color);
@@ -398,7 +398,7 @@
   gap: 8px;
   padding: 16px 28px;
   background: var(--ltn__heading-color);
-  color: #fff;
+  color: var(--white-7);
   border: none;
   font-size: 14px;
   font-weight: 600;
@@ -507,7 +507,7 @@
 .co__item-qty {
   position: absolute; top: -7px; right: -7px;
   background: var(--ltn__heading-color);
-  color: #fff;
+  color: var(--white-7);
   font-size: 11px; font-weight: 700;
   width: 20px; height: 20px;
   border-radius: 50%;
@@ -554,7 +554,7 @@
 .co__coupon-btn {
   padding: 11px 18px;
   background: var(--ltn__heading-color);
-  color: #fff;
+  color: var(--white-7);
   border: none;
   border-radius: 5px;
   font-size: 13px;

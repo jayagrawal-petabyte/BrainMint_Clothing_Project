@@ -420,8 +420,11 @@ const ProductDetail = () => {
                   : ''
               }`}
               onClick={handleAddToCart}
+              disabled={product?.inventory?.stock === 0}
             >
-              {showPopup
+              {product?.inventory?.stock === 0
+                ? 'Out of Stock'
+                : showPopup
                 ? 'Added!'
                 : 'Add to Cart'}
             </button>

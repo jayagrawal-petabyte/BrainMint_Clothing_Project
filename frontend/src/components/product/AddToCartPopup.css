@@ -117,6 +117,7 @@
 
 .atc-btn-view:hover {
   background: var(--ltn__primary-color);
+  color: var(--white-7);
 }
 
 .atc-btn-checkout {

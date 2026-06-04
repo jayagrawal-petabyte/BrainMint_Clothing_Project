@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, ChevronRight, Check, ShoppingBag } from 'lucide-react';
+import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, ChevronRight, Check, ShoppingBag, ShoppingCart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -122,7 +122,7 @@ const Checkout = () => {
         phone: isPhoneEmpty ? (profileSource.phoneNumber || profileSource.phone || user?.phoneNumber || user?.phone || '') : prev.phone,
         firstName: isFirstNameEmpty ? (first || '') : prev.firstName,
         lastName: isLastNameEmpty ? (last || '') : prev.lastName,
-        address: isAddressEmpty ? (defaultAddr?.street || profileSource.address || user?.address || '') : prev.address,
+        address: isAddressEmpty ? (defaultAddr?.address || defaultAddr?.street || profileSource.address || user?.address || '') : prev.address,
         city: isCityEmpty ? (defaultAddr?.city || profileSource.city || user?.city || '') : prev.city,
         state: prev.state === 'Odisha' ? (defaultAddr?.state || profileSource.state || user?.state || 'Odisha') : prev.state,
         pincode: isPincodeEmpty ? (defaultAddr?.pincode || profileSource.pincode || user?.pincode || '') : prev.pincode,
@@ -213,7 +213,7 @@ const Checkout = () => {
       const res = await validateCoupon(coupon.trim());
       if (res && res.success !== false && (res.valid || res.discount || res.data)) {
         setCouponApplied(true);
-        const backendDiscount = res.discount || res.data?.discount || res.data?.discountPercentage || res.discountPercentage;
+        const backendDiscount = res.data?.coupon?.discountValue || res.discount || res.data?.discount || res.data?.discountPercentage || res.discountPercentage;
         setDiscountPercent(backendDiscount || 10);
       } else {
         setCouponError(true);
@@ -273,13 +273,30 @@ const Checkout = () => {
         paymentMethod: paymentMethod,
         items: cartItems
       };
-      
-      try {
-        const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
-        localOrders.unshift(newOrder);
-        localStorage.setItem('urbanwear_placed_orders', JSON.stringify(localOrders));
-      } catch (err) {
-        console.error("Failed to save order to localStorage", err);
+      // Backend order is placed successfully
+
+      // Save address if user checked "Save this information for next time"
+      if (form.saveInfo) {
+        const addressPayload = {
+          fullName: `${form.firstName} ${form.lastName}`.trim() || user?.name || "Customer",
+          phone: form.phone || user?.phoneNumber || user?.phone || "0000000000",
+          address: form.address,
+          city: form.city,
+          state: form.state,
+          pincode: form.pincode,
+          country: "India"
+        };
+        // Update live backend
+        import('../../services/api').then(({ updateUserProfile }) => {
+          updateUserProfile({ addresses: [addressPayload] }, token).catch(() => {});
+        });
+        
+        // Update local storage so it persists if API is mocked/fails
+        try {
+          const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+          storedUser.addresses = [addressPayload];
+          localStorage.setItem('user', JSON.stringify(storedUser));
+        } catch (e) {}
       }
 
       setPlacedOrderTotal(finalTotal);
@@ -421,6 +438,20 @@ const Checkout = () => {
         )}
       </AnimatePresence>
 
+
+      <button 
+        className="co-mob" 
+        onClick={() => setSummaryOpen(!summaryOpen)}
+      >
+        <div className="co-mob-left">
+          <ShoppingCart size={16} />
+          <span>{summaryOpen ? 'Hide order summary' : 'Show order summary'}</span>
+          <ChevronDown size={14} style={{ transform: summaryOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }} />
+        </div>
+        <div className="co-mob-right">
+          ₹{finalTotal.toLocaleString('en-IN')}
+        </div>
+      </button>
 
       <div className={`co-mob-drawer ${summaryOpen ? 'co-mob-drawer--open' : ''}`}>
         <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId, isVerifyingCoupon, discountPercent }} />

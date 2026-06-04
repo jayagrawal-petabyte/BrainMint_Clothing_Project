@@ -2,6 +2,7 @@
 const AUTH_URL = "https://brainmint-clothing-project-final.onrender.com/api";
 const PRODUCTS_URL = "https://brainmint-clothing-project-person2.onrender.com/api";
 const CART_URL = "https://brainmint-clothing-project-1.onrender.com/api";
+const COMBINED_URL = "https://brainmint-clothing-project-final.onrender.com/api";
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 export const fetchProducts = async (params = "") => {
@@ -601,13 +602,27 @@ export const fetchMyOrders = async (token) => {
 
 export const fetchAdminOrders = async (token) => {
   try {
+    // Try Person 2's analytics endpoint first (has User model registered)
+    const response = await fetch(`${PRODUCTS_URL}/admin/analytics/orders`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    if (data && data.success && Array.isArray(data.data)) {
+      return data;
+    }
+  } catch (error) {
+    // Fall through to Person 3
+  }
+
+  try {
+    // Fallback to Person 3's endpoint
     const response = await fetch(`${CART_URL}/orders/all`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch admin orders error:", error);
     return null;
   }
 };

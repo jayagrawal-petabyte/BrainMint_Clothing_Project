@@ -10,7 +10,7 @@
 }
 
 .size-modal {
-  background: #fff;
+  background: var(--white-7);
   max-width: 600px;
   width: 100%;
   padding: 40px;
@@ -73,7 +73,7 @@
 
 .size-guide-table thead th {
   background-color: var(--ltn__heading-color);
-  color: #fff;
+  color: var(--white-7);
   font-family: var(--ltn__heading-font);
   font-weight: 600;
   text-transform: uppercase;
@@ -82,7 +82,7 @@
 }
 
 .size-guide-table tbody tr:nth-child(even) {
-  background-color: #f7f7f7;
+  background-color: var(--section-bg-1);
 }
 
 .size-guide-table tbody td {

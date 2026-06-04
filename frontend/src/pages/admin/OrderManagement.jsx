@@ -7,7 +7,7 @@ const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const tabs = ['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+  const tabs = ['All', 'Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
 
   const loadOrders = async () => {
     setIsLoading(true);
@@ -16,30 +16,20 @@ const OrderManagement = () => {
     // First try to fetch real backend orders
     const backendOrders = await fetchAdminOrders(token);
     
-    if (backendOrders && backendOrders.data && backendOrders.data.orders) {
+    if (backendOrders && backendOrders.data && Array.isArray(backendOrders.data)) {
       // Map backend orders to frontend format
-      const mappedOrders = backendOrders.data.orders.map(o => ({
+      const mappedOrders = backendOrders.data.map(o => ({
         id: o._id,
         customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
         email: o.user?.email || 'N/A',
         amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
-        status: o.orderStatus ? (o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1).toLowerCase()) : 'Pending',
+        status: o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending',
         date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         _original: o // keep original for updates
       }));
       setOrders(mappedOrders);
     } else {
-      // Fallback to local storage if backend is empty or failing
-      try {
-        const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
-        const normalizedLocal = localOrders.map(o => ({
-          ...o,
-          status: o.status ? (o.status === 'COD' ? 'Pending' : o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending'
-        }));
-        setOrders(normalizedLocal);
-      } catch (e) {
-        setOrders([]);
-      }
+      setOrders([]);
     }
     setIsLoading(false);
   };

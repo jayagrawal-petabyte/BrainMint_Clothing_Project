@@ -32,7 +32,8 @@ const CategoryManagement = () => {
     setError(null);
     setIsSubmitting(true);
     const token = localStorage.getItem('adminToken');
-    const categoryData = { name: name.trim() };
+    const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    const categoryData = { name: name.trim(), slug };
 
     let res;
     if (isEditing && currentId) {

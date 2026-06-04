@@ -124,6 +124,10 @@ const ProductCard = ({ product, badgeText }) => {
 
   const handleCart = e => {
     e.preventDefault();
+    if (product?.inventory?.stock === 0) {
+      alert("This product is out of stock.");
+      return;
+    }
     const defaultSize = product?.sizes?.[0] || '';
     const defaultColor = product?.colors?.[0] || '';
     addToCart(product, 1, defaultSize, defaultColor);

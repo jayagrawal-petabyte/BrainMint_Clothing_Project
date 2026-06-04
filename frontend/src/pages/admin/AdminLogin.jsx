@@ -17,17 +17,6 @@ const AdminLogin = () => {
     setError(null);
     
     try {
-      // BYPASS: Directly log in as admin for testing
-      // Uncomment the code below to restore actual backend verification
-      localStorage.setItem('adminToken', 'bypass-admin-token');
-      
-      // Artificial delay to show the loading spinner briefly
-      setTimeout(() => {
-        navigate('/admin/dashboard');
-        setIsLoading(false);
-      }, 600);
-      
-      /*
       const res = await loginUser(phoneNumber, password);
       
       if (res && res.success) {
@@ -44,8 +33,8 @@ const AdminLogin = () => {
         }, 100);
       } else {
         setError(res?.message || 'Invalid phone number or password.');
+        setIsLoading(false);
       }
-      */
     } catch (err) {
       setError('An error occurred during login.');
       setIsLoading(false);

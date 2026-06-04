@@ -14,13 +14,13 @@ const Wishlist = () => {
   return (
     <div className="wishlist-page">
       {/* Header */}
-      <div className="wishlist-header">
+      <div className="wishlist-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
         <div className="wishlist-eyebrow">
           <span className="eyebrow-dash" />
           <span className="eyebrow-text">Saved Collection</span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '15px' }}>
-          <div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+          <div style={{ textAlign: 'center' }}>
             <h1 className="wishlist-heading" style={{ marginBottom: '5px' }}>My Wishlist</h1>
             <p className="wishlist-sub" style={{ margin: 0 }}>Your curated collection of favorite styles.</p>
           </div>

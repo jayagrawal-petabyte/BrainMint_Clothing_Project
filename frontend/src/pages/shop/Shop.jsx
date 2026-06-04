@@ -130,28 +130,7 @@ const Shop = () => {
 
   return (
     <div className="shop-page">
-      {/* Header */}
-      <div className="shop-page-header">
-        <h1 className="page-title">
-          {isSearchPage && searchQuery
-            ? `Search: "${searchQuery}"`
-            : 'Shop'}
-        </h1>
-
-        <div className="breadcrumb">
-          <Link to="/">Home</Link>
-          {' > '}
-          {isSearchPage ? (
-            <span className="current">
-              Search Results
-            </span>
-          ) : (
-            <span className="current">
-              Shop
-            </span>
-          )}
-        </div>
-      </div>
+      {/* Header Removed as requested */}
 
       {isSearchPage && (
         <div style={{ maxWidth: "1250px", margin: "20px auto 0", padding: "0 20px" }}>

@@ -46,3 +46,10 @@
   color: #fff;
   transform: scale(1.05);
 }
+
+@media (max-width: 991px) {
+  .about-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Phone, Lock, User, Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { Phone, Lock, User, Mail, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 
@@ -99,12 +99,23 @@ const Register = () => {
       </motion.div>
 
       {/* Right side - Register Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative">
+        
+        {/* Mobile Back Arrow */}
+        <div className="absolute top-6 left-6 lg:hidden">
+          <button 
+            onClick={() => navigate(-1)}
+            className="p-2 rounded-full bg-admin-bg dark:bg-[#1a1a1a] border border-admin-border dark:border-admin-border-dark text-admin-text dark:text-admin-text-dark shadow-sm hover:bg-gray-100 dark:hover:bg-[#222] transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+        </div>
+
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="w-full max-w-md space-y-8 bg-white dark:bg-admin-card-dark p-10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-admin-border dark:border-admin-border-dark transition-all duration-300"
+          className="w-full max-w-md space-y-8 bg-white dark:bg-admin-card-dark p-10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-admin-border dark:border-admin-border-dark transition-all duration-300 mt-12 lg:mt-0"
         >
           
           <div className="text-center">

@@ -1,4 +1,4 @@
-﻿import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../context/ThemeContext";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -173,6 +173,7 @@ const { theme } = useTheme();
 
         {/* ABOUT CONTENT */}
         <motion.section
+          className="about-content-grid"
           style={{
             maxWidth: "1250px",
             margin: "70px auto 0",

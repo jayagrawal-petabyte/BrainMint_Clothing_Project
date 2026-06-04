@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { forgotPasswordUser } from '../../services/api';
+import { ArrowLeft } from 'lucide-react';
 import './Login.css'; // Reusing Login.css for consistent auth styling
 
 const ForgotPassword = () => {
@@ -8,6 +9,7 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +49,17 @@ const ForgotPassword = () => {
         </div>
       </div>
 
-      <div className="auth-container">
+      <div className="auth-container relative">
+        {/* Mobile Back Arrow */}
+        <div className="absolute top-2 left-4 md:hidden z-10" style={{ paddingBottom: '10px' }}>
+          <button 
+            onClick={() => navigate(-1)}
+            style={{ display: 'flex', alignItems: 'center', padding: '8px', borderRadius: '50%', background: 'transparent', border: 'none', cursor: 'pointer', color: 'inherit' }}
+          >
+            <ArrowLeft size={20} />
+          </button>
+        </div>
+
         <div className="auth-form-wrapper stitch-card">
           <div className="auth-form-header">
             <h2>Forgot Password</h2>

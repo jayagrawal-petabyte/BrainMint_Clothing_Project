@@ -95,7 +95,6 @@ function App() {
               } />
 
             {/* Admin Routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute />}>
               <Route element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
@@ -166,6 +165,8 @@ function App() {
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/account" element={<Account />} />
+                    
+                    <Route path="/admin/login" element={<AdminLogin />} />
 
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />

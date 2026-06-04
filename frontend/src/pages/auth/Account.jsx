@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchMyOrders, fetchUserProfile, updateUserProfile, updateUserPassword } from '../../services/api';
 import { Package, MapPin, User, LogOut, Edit2, Check, Clock, ChevronRight, ShoppingBag, Settings, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { toast } from 'react-hot-toast';
 import { getColorName } from '../../utils/helpers';
 import './Account.css';
 
@@ -301,9 +300,9 @@ const Account = () => {
                                         </div>
                                         <div className="order-item-info">
                                           <p style={{ margin: 0, fontWeight: 500, fontSize: '13px', color: 'var(--ltn__heading-color)' }}>{item.product?.name || 'Unknown Product'}</p>
-                                          {item.size && item.color && (
+                                          {(item.size || item.color) && (
                                             <p style={{ margin: '2px 0', fontSize: '12px', color: 'var(--ltn__paragraph-color)' }}>
-                                              {item.size} / {item.color.startsWith('#') ? getColorName(item.color) : item.color}
+                                              {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color.startsWith('#') ? getColorName(item.color) : item.color}`}
                                             </p>
                                           )}
                                           <p style={{ margin: 0, fontSize: '12px', color: 'var(--ltn__paragraph-color)' }}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, Edit2, Check, X } from 'lucide-react';
-import { getColorName } from '../../../utils/helpers';
+import { getColorName } from '../../utils/helpers';
 
 const OrderDetailsModal = ({ order, onClose }) => {
   if (!order) return null;
@@ -70,9 +70,9 @@ const OrderDetailsModal = ({ order, onClose }) => {
                         />
                         <div className="flex flex-col">
                           <span className="font-medium">{item.product?.name || 'Unknown Product'}</span>
-                          {item.size && item.color && (
+                          {(item.size || item.color) && (
                             <span className="text-xs text-gray-500 dark:text-gray-400">
-                              {item.size} / {item.color.startsWith('#') ? getColorName(item.color) : item.color}
+                              {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color.startsWith('#') ? getColorName(item.color) : item.color}`}
                             </span>
                           )}
                         </div>

@@ -30,12 +30,25 @@ async (req, res) => {
     });
 
   } catch(error){
-
     res.status(500).json({
       success: false,
       message: error.message
     });
-
   }
+};
 
+exports.getAllContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      message: "Contacts retrieved successfully",
+      data: contacts
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 };

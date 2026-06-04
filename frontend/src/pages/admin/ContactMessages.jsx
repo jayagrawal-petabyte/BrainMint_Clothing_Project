@@ -2,22 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Loader2, Calendar, User, AlignLeft } from 'lucide-react';
 import { fetchContactMessages } from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
 
 const ContactMessages = () => {
-  const { token } = useAuth();
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     loadMessages();
-  }, [token]);
+  }, []);
 
   const loadMessages = async () => {
     setIsLoading(true);
+    const adminToken = localStorage.getItem('adminToken');
     try {
-      const res = await fetchContactMessages(token);
+      const res = await fetchContactMessages(adminToken);
       if (res && res.success) {
         setMessages(res.data || []);
         setError(null);

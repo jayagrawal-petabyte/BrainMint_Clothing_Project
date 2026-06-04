@@ -11,7 +11,7 @@ const OrderManagement = () => {
 
   const loadOrders = async () => {
     setIsLoading(true);
-    const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+    const token = localStorage.getItem('adminToken');
     
     // First try to fetch real backend orders
     const backendOrders = await fetchAdminOrders(token);
@@ -49,7 +49,7 @@ const OrderManagement = () => {
   }, []);
 
   const handleUpdateStatus = async (orderId, newStatus) => {
-    const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+    const token = localStorage.getItem('adminToken');
     const res = await updateOrderStatus(orderId, newStatus.toLowerCase(), token);
     
     if (res && res.success !== false) {

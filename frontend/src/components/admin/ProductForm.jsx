@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = [] }) => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(initialData || {
     name: '',
     description: '',
@@ -33,14 +35,36 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      await onSubmit(formData);
+    setError(null);
+    setIsSubmitting(true);
+    
+    try {
+      if (onSubmit) {
+        const res = await onSubmit(formData);
+        if (res && res.success === false) {
+          setError(res.message || 'Failed to save product. Please check the details and try again.');
+        } else if (res === false) {
+          setError('Failed to save product. Please check the details and try again.');
+        } else {
+          navigate('/admin/products');
+        }
+      } else {
+        navigate('/admin/products');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred.');
+    } finally {
+      setIsSubmitting(false);
     }
-    navigate('/admin/products');
   };
 
   return (
     <form onSubmit={handleSubmit} className="font-rubik space-y-8">
+      {error && (
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 border border-red-200 dark:border-red-800 rounded-xl text-sm font-medium">
+          {error}
+        </div>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Left Column - Main Details */}
@@ -201,9 +225,14 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
         </button>
         <button 
           type="submit"
-          className="px-6 py-3 bg-admin-accent hover:bg-red-600 text-white rounded-xl font-semibold shadow-sm transition-colors"
+          disabled={isSubmitting}
+          className="px-6 py-3 bg-admin-accent hover:bg-red-600 text-white rounded-xl font-semibold shadow-sm transition-colors disabled:opacity-50 flex items-center justify-center min-w-[150px]"
         >
-          {isEditing ? 'Update Product' : 'Publish Product'}
+          {isSubmitting ? (
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            isEditing ? 'Update Product' : 'Publish Product'
+          )}
         </button>
       </div>
     </form>

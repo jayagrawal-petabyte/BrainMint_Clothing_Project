@@ -46,7 +46,7 @@ const EditProduct = () => {
       images: formData.imageUrl ? [{ url: formData.imageUrl }] : []
     };
     
-    await adminUpdateProduct(id, payload, token);
+    return await adminUpdateProduct(id, payload, token);
   };
 
   return (

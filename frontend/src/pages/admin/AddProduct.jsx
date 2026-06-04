@@ -29,7 +29,7 @@ const AddProduct = () => {
       images: formData.imageUrl ? [{ url: formData.imageUrl }] : []
     };
     
-    await adminCreateProduct(payload, token);
+    return await adminCreateProduct(payload, token);
   };
 
   return (

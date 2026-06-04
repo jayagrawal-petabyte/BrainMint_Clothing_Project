@@ -12,6 +12,7 @@ const CategoryManagement = () => {
   const [currentId, setCurrentId] = useState(null);
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const loadCategories = async () => {
     setIsLoading(true);
@@ -28,21 +29,30 @@ const CategoryManagement = () => {
     e.preventDefault();
     if (!name.trim()) return;
     
+    setError(null);
     setIsSubmitting(true);
     const token = localStorage.getItem('adminToken');
     const categoryData = { name: name.trim() };
 
+    let res;
     if (isEditing && currentId) {
-      await adminUpdateCategory(currentId, categoryData, token);
+      res = await adminUpdateCategory(currentId, categoryData, token);
     } else {
-      await adminCreateCategory(categoryData, token);
+      res = await adminCreateCategory(categoryData, token);
     }
 
-    setName('');
-    setIsEditing(false);
-    setCurrentId(null);
+    if (res && res.success === false) {
+      setError(res.message || 'Failed to save category.');
+    } else if (res === false || res === null) {
+      setError('An unexpected error occurred.');
+    } else {
+      setName('');
+      setIsEditing(false);
+      setCurrentId(null);
+      loadCategories();
+    }
+    
     setIsSubmitting(false);
-    loadCategories();
   };
 
   const handleEdit = (category) => {
@@ -82,6 +92,11 @@ const CategoryManagement = () => {
             </div>
             <div className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 border border-red-200 dark:border-red-800 rounded-xl text-sm font-medium">
+                    {error}
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-admin-text dark:text-admin-text-dark mb-1.5">Category Name *</label>
                   <input

@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const loadDashboard = async () => {
       setIsLoading(true);
-      const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+      const token = localStorage.getItem('adminToken');
       
       try {
         // Fetch real analytics

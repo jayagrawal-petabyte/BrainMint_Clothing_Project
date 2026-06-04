@@ -43,6 +43,12 @@ router.put(
   authController.updateProfile
 );
 
+router.put(
+  "/update-password",
+  authMiddleware,
+  authController.updatePassword
+);
+
 router.get(
   "/me",
   authMiddleware,

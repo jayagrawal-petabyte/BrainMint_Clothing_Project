@@ -1,7 +1,9 @@
-import React from 'react';
-import { Eye, Edit2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Eye, Edit2, Check, X } from 'lucide-react';
 
-const OrderTable = ({ orders, statusFilter }) => {
+const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
+  const [editingId, setEditingId] = useState(null);
+  const [editStatus, setEditStatus] = useState('');
   const filteredOrders = statusFilter === 'All' 
     ? orders 
     : orders.filter(order => order.status === statusFilter);
@@ -42,12 +44,53 @@ const OrderTable = ({ orders, statusFilter }) => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right text-sm font-medium space-x-3">
-                  <button className="text-admin-text hover:text-blue-500 dark:text-admin-text-dark dark:hover:text-blue-400 transition-colors" title="View Details">
+                  <button className="text-admin-text hover:text-blue-500 dark:text-admin-text-dark dark:hover:text-blue-400 transition-colors inline-block" title="View Details">
                     <Eye size={18} />
                   </button>
-                  <button className="text-admin-text hover:text-emerald-500 dark:text-admin-text-dark dark:hover:text-emerald-400 transition-colors" title="Update Status">
-                    <Edit2 size={18} />
-                  </button>
+                  
+                  {editingId === order.id ? (
+                    <div className="inline-flex items-center space-x-1 bg-white dark:bg-[#333] p-1 rounded border border-gray-200 dark:border-gray-700">
+                      <select 
+                        value={editStatus} 
+                        onChange={(e) => setEditStatus(e.target.value)}
+                        className="text-xs bg-transparent outline-none text-admin-heading dark:text-admin-heading-dark"
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                      <button 
+                        onClick={() => {
+                          if (onUpdateStatus && editStatus !== order.status) {
+                            onUpdateStatus(order.id, editStatus);
+                          }
+                          setEditingId(null);
+                        }}
+                        className="text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 p-1 rounded"
+                      >
+                        <Check size={14} />
+                      </button>
+                      <button 
+                        onClick={() => setEditingId(null)}
+                        className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 p-1 rounded"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => {
+                        setEditingId(order.id);
+                        setEditStatus(order.status);
+                      }}
+                      className="text-admin-text hover:text-emerald-500 dark:text-admin-text-dark dark:hover:text-emerald-400 transition-colors inline-block" 
+                      title="Update Status"
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

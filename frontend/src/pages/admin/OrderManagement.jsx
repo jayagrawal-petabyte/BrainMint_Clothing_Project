@@ -1,34 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import OrderTable from '../../components/admin/OrderTable';
-
-const mockOrders = [
-  { id: '#UW-1042', customer: 'Aarav Sharma', email: 'aarav@example.com', amount: '₹4,999', status: 'Delivered', date: 'May 28, 2026' },
-  { id: '#UW-1041', customer: 'Priya Mehta', email: 'priya@example.com', amount: '₹3,499', status: 'Processing', date: 'May 28, 2026' },
-  { id: '#UW-1040', customer: 'Rohan Verma', email: 'rohan@example.com', amount: '₹5,999', status: 'Shipped', date: 'May 27, 2026' },
-  { id: '#UW-1039', customer: 'Sneha Kapoor', email: 'sneha@example.com', amount: '₹6,999', status: 'Pending', date: 'May 27, 2026' },
-  { id: '#UW-1038', customer: 'Aditya Singh', email: 'aditya@example.com', amount: '₹3,999', status: 'Delivered', date: 'May 26, 2026' },
-  { id: '#UW-1037', customer: 'Kavya Patel', email: 'kavya@example.com', amount: '₹2,499', status: 'Cancelled', date: 'May 25, 2026' },
-];
+import { fetchAdminOrders, updateOrderStatus } from '../../services/api';
+import { Loader2 } from 'lucide-react';
 
 const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const tabs = ['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
-  useEffect(() => {
-    try {
-      const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
-      // Normalize statuses (Title Case) to match CSS mapping in table status badges
-      const normalizedLocal = localOrders.map(o => ({
-        ...o,
-        status: o.status ? (o.status === 'COD' ? 'Pending' : o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending'
+  const loadOrders = async () => {
+    setIsLoading(true);
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+    
+    // First try to fetch real backend orders
+    const backendOrders = await fetchAdminOrders(token);
+    
+    if (backendOrders && backendOrders.data && backendOrders.data.orders) {
+      // Map backend orders to frontend format
+      const mappedOrders = backendOrders.data.orders.map(o => ({
+        id: o._id,
+        customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
+        email: o.user?.email || 'N/A',
+        amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
+        status: o.orderStatus ? (o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1).toLowerCase()) : 'Pending',
+        date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        _original: o // keep original for updates
       }));
-      setOrders([...normalizedLocal, ...mockOrders]);
-    } catch (e) {
-      console.error("Failed to load local orders in OrderManagement", e);
-      setOrders(mockOrders);
+      setOrders(mappedOrders);
+    } else {
+      // Fallback to local storage if backend is empty or failing
+      try {
+        const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
+        const normalizedLocal = localOrders.map(o => ({
+          ...o,
+          status: o.status ? (o.status === 'COD' ? 'Pending' : o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending'
+        }));
+        setOrders(normalizedLocal);
+      } catch (e) {
+        setOrders([]);
+      }
     }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadOrders();
   }, []);
+
+  const handleUpdateStatus = async (orderId, newStatus) => {
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+    const res = await updateOrderStatus(orderId, newStatus.toLowerCase(), token);
+    
+    if (res && res.success !== false) {
+      // Update local state
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    } else {
+      alert("Failed to update status. Please try again.");
+    }
+  };
 
   return (
     <div className="animate-in fade-in duration-500 font-rubik">
@@ -53,7 +83,13 @@ const OrderManagement = () => {
         ))}
       </div>
 
-      <OrderTable orders={orders} statusFilter={activeTab} />
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="animate-spin text-admin-accent h-8 w-8" />
+        </div>
+      ) : (
+        <OrderTable orders={orders} statusFilter={activeTab} onUpdateStatus={handleUpdateStatus} />
+      )}
     </div>
   );
 };

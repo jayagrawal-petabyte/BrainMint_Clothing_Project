@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import DashboardCards from '../../components/admin/DashboardCards';
 import SalesCharts from '../../components/admin/SalesCharts';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { fetchSalesAnalytics, fetchAdminOrders } from '../../services/api';
 
 const recentOrders = [
   { id: '#UW-1042', customer: 'Aarav Sharma', product: 'Floral Maxi Dress', amount: '₹4,999', status: 'Delivered', date: 'May 28' },
@@ -13,21 +14,92 @@ const recentOrders = [
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [salesData, setSalesData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
-      // Normalize statuses (Title Case) to match CSS mapping in table status badges
-      const normalizedLocal = localOrders.map(o => ({
-        ...o,
-        status: o.status ? (o.status === 'COD' ? 'Pending' : o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending'
-      }));
-      setOrders([...normalizedLocal, ...recentOrders]);
-    } catch (e) {
-      console.error("Failed to load local orders in AdminDashboard", e);
-      setOrders(recentOrders);
-    }
+    const loadDashboard = async () => {
+      setIsLoading(true);
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+      
+      try {
+        // Fetch real analytics
+        const analytics = await fetchSalesAnalytics(token);
+        if (analytics && analytics.data) {
+          // Format the stats for DashboardCards
+          const newStats = [
+            {
+              title: 'Total Revenue',
+              value: `₹${(analytics.data.totalRevenue || 0).toLocaleString('en-IN')}`,
+              change: '+10%', // mock change for now until backend supports historical
+              isPositive: true,
+              icon: <ArrowRight size={24} className="text-white" />,
+              color: 'bg-emerald-500',
+            },
+            {
+              title: 'Total Orders',
+              value: `${analytics.data.totalOrders || 0}`,
+              change: '+5%',
+              isPositive: true,
+              icon: <ArrowRight size={24} className="text-white" />,
+              color: 'bg-blue-500',
+            },
+            {
+              title: 'Total Customers',
+              value: '3,842', // Backend might not have this yet, keep static
+              change: '-2.4%',
+              isPositive: false,
+              icon: <ArrowRight size={24} className="text-white" />,
+              color: 'bg-purple-500',
+            },
+            {
+              title: 'Products',
+              value: '428',
+              change: '+14.1%',
+              isPositive: true,
+              icon: <ArrowRight size={24} className="text-white" />,
+              color: 'bg-orange-500',
+            },
+          ];
+          setStats(newStats);
+        }
+
+        // Fetch real orders
+        const backendOrders = await fetchAdminOrders(token);
+        if (backendOrders && backendOrders.data && backendOrders.data.orders) {
+          const mappedOrders = backendOrders.data.orders.slice(0, 5).map(o => ({
+            id: o._id,
+            customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
+            product: o.orderItems?.length > 0 ? o.orderItems[0].name : 'Various Items',
+            amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
+            status: o.orderStatus ? (o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1).toLowerCase()) : 'Pending',
+            date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          }));
+          setOrders(mappedOrders);
+        } else {
+          // Fallback
+          setOrders(recentOrders);
+        }
+      } catch (e) {
+        console.error("Failed to load dashboard data", e);
+        setOrders(recentOrders);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadDashboard();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full min-h-[500px]">
+        <Loader2 className="animate-spin text-admin-accent h-10 w-10" />
+      </div>
+    );
+  }
+
   return (
     <div className="animate-in fade-in duration-500">
       <div className="mb-8">
@@ -35,8 +107,8 @@ const AdminDashboard = () => {
         <p className="text-admin-text dark:text-admin-text-dark mt-1">Welcome back! Here's what's happening with your store today.</p>
       </div>
 
-      <DashboardCards />
-      <SalesCharts />
+      <DashboardCards stats={stats} />
+      <SalesCharts data={salesData} />
 
       {/* Recent Orders Section */}
       <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl shadow-sm border border-admin-border dark:border-admin-border-dark overflow-hidden">

@@ -91,6 +91,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('urbanwear_token');
   };
 
+  const updateUser = (userData) => {
+    setUser(prev => ({ ...prev, ...userData }));
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -99,7 +103,8 @@ export const AuthProvider = ({ children }) => {
       isLoading,
       login,
       register,
-      logout
+      logout,
+      updateUser
     }}>
       {children}
     </AuthContext.Provider>

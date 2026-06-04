@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 import { motion } from 'framer-motion';
 
-const salesData = [
+const defaultSalesData = [
   { name: 'Jan', revenue: 4000, orders: 240 },
   { name: 'Feb', revenue: 3000, orders: 139 },
   { name: 'Mar', revenue: 2000, orders: 980 },
@@ -12,7 +12,8 @@ const salesData = [
   { name: 'Jul', revenue: 3490, orders: 430 },
 ];
 
-const SalesCharts = () => {
+const SalesCharts = ({ data }) => {
+  const chartData = data && data.length > 0 ? data : defaultSalesData;
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const SalesCharts = () => {
         </div>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={salesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#F24C5C" stopOpacity={0.3}/>
@@ -77,7 +78,7 @@ const SalesCharts = () => {
         </div>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={salesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
               <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: textColor, fontSize: 12 }} dy={10} />
               <YAxis axisLine={false} tickLine={false} tick={{ fill: textColor, fontSize: 12 }} />

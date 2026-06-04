@@ -1,9 +1,34 @@
-
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Send } from 'lucide-react';
+import { Send, Loader2, Check } from 'lucide-react';
+import { subscribeNewsletter } from '../../services/api';
 import './Footer.css';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [message, setMessage] = useState('');
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    
+    setStatus('loading');
+    const res = await subscribeNewsletter(email);
+    
+    if (res && res.success !== false) {
+      setStatus('success');
+      setMessage('Successfully subscribed!');
+      setEmail('');
+      setTimeout(() => {
+        setStatus('idle');
+        setMessage('');
+      }, 5000);
+    } else {
+      setStatus('error');
+      setMessage('Failed to subscribe. Try again.');
+    }
+  };
   return (
     <footer className="footer-area">
       <div className="footer-top">
@@ -65,13 +90,27 @@ const Footer = () => {
             <div className="footer-widget">
               <h4 className="footer-title">Newsletter</h4>
               <p>Subscribe to our newsletter to get updates on our latest offers!</p>
-              <div className="newsletter-form">
-                <form action="#" onSubmit={(e) => e.preventDefault()}>
-                  <input type="email" placeholder="Email address" required />
-                  <button type="submit" aria-label="Subscribe">
-                    <Send size={18} />
+              <div className="newsletter-form relative">
+                <form onSubmit={handleSubscribe}>
+                  <input 
+                    type="email" 
+                    placeholder="Email address" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required 
+                    disabled={status === 'loading' || status === 'success'}
+                  />
+                  <button type="submit" aria-label="Subscribe" disabled={status === 'loading' || status === 'success'}>
+                    {status === 'loading' ? <Loader2 size={18} className="animate-spin" /> : 
+                     status === 'success' ? <Check size={18} className="text-emerald-500" /> : 
+                     <Send size={18} />}
                   </button>
                 </form>
+                {message && (
+                  <p className={`absolute -bottom-6 left-0 text-xs font-medium ${status === 'success' ? 'text-emerald-500' : 'text-red-500'}`}>
+                    {message}
+                  </p>
+                )}
               </div>
             </div>
           </div>

@@ -26,6 +26,34 @@ export const fetchProductById = async (id) => {
   }
 };
 
+export const fetchProductReviews = async (productId) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/products/${productId}/reviews`);
+    const data = await response.json();
+    return data.data || [];
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    return [];
+  }
+};
+
+export const submitProductReview = async (productId, reviewData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/products/${productId}/reviews`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(reviewData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Submit review error:", error);
+    return null;
+  }
+};
+
 export const fetchNewArrivals = async () => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/products/new-arrivals`);
@@ -150,7 +178,30 @@ export const updateUserProfile = async (profileData, token) => {
     return await response.json();
   } catch (error) {
     console.error("Update profile error:", error);
-    return null;
+    return { success: false, message: error.message };
+  }
+};
+
+export const updateUserPassword = async (currentPassword, newPassword, token) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/auth/update-password`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errorData = await response.json().catch(() => ({}));
+      return { success: false, message: errorData.message || "Failed to update password" };
+    }
+  } catch (error) {
+    console.error("Update password error:", error);
+    return { success: false, message: error.message };
   }
 };
 
@@ -164,6 +215,20 @@ export const submitContactForm = async (contactData) => {
     return await response.json();
   } catch (error) {
     console.error("Contact form error:", error);
+    return null;
+  }
+};
+
+export const subscribeNewsletter = async (email) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/newsletter/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Newsletter error:", error);
     return null;
   }
 };
@@ -271,6 +336,19 @@ export const adminDeleteCategory = async (id, token) => {
     return await response.json();
   } catch (error) {
     console.error("Delete category error:", error);
+    return null;
+  }
+};
+
+export const fetchSalesAnalytics = async (token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/analytics/sales`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch analytics error:", error);
     return null;
   }
 };
@@ -417,6 +495,50 @@ export const fetchMyOrders = async (token) => {
     return await response.json();
   } catch (error) {
     console.error("Fetch orders error:", error);
+    return null;
+  }
+};
+
+export const fetchAdminOrders = async (token) => {
+  try {
+    const response = await fetch(`${CART_URL}/orders/all`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch admin orders error:", error);
+    return null;
+  }
+};
+
+export const updateOrderStatus = async (orderId, status, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/orders/${orderId}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ status })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Update order status error:", error);
+    return null;
+  }
+};
+
+export const validateCoupon = async (code) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/coupons/validate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Validate coupon error:", error);
     return null;
   }
 };

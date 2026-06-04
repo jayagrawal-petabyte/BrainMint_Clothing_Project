@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, Chevr
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { placeOrder, fetchUserProfile } from '../../services/api';
+import { placeOrder, fetchUserProfile, validateCoupon } from '../../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -63,6 +63,8 @@ const Checkout = () => {
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState(false);
+  const [discountPercent, setDiscountPercent] = useState(10);
+  const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const [fetchedProfile, setFetchedProfile] = useState(null);
   const [errors, setErrors] = useState({});
@@ -199,12 +201,28 @@ const Checkout = () => {
   const getId   = (item) => item?._id || item?.id;
 
   const shipping    = cartTotal > 999 ? 0 : 99;
-  const discount    = couponApplied ? Math.round(cartTotal * 0.1) : 0;
+  const discount    = couponApplied ? Math.round(cartTotal * (discountPercent / 100)) : 0;
   const finalTotal  = cartTotal + shipping - discount;
 
-  const handleCoupon = () => {
-    if (coupon.trim().toUpperCase() === 'URBAN10') { setCouponApplied(true); setCouponError(false); }
-    else setCouponError(true);
+  const handleCoupon = async () => {
+    if (!coupon.trim()) return;
+    setIsVerifyingCoupon(true);
+    setCouponError(false);
+    
+    try {
+      const res = await validateCoupon(coupon.trim());
+      if (res && res.success !== false && (res.valid || res.discount || res.data)) {
+        setCouponApplied(true);
+        const backendDiscount = res.discount || res.data?.discount || res.data?.discountPercentage || res.discountPercentage;
+        setDiscountPercent(backendDiscount || 10);
+      } else {
+        setCouponError(true);
+      }
+    } catch (error) {
+      setCouponError(true);
+    } finally {
+      setIsVerifyingCoupon(false);
+    }
   };
 
   const handlePlaceOrder = async () => {
@@ -405,7 +423,7 @@ const Checkout = () => {
 
 
       <div className={`co-mob-drawer ${summaryOpen ? 'co-mob-drawer--open' : ''}`}>
-        <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId }} />
+        <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId, isVerifyingCoupon, discountPercent }} />
       </div>
 
       <div className="co__grid">
@@ -599,7 +617,7 @@ const Checkout = () => {
         {/* ══ RIGHT ══ */}
         <aside className="co__right">
           <div className="co__right-inner">
-            <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId }} />
+            <SummaryContent {...{ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId, isVerifyingCoupon, discountPercent }} />
           </div>
         </aside>
 
@@ -608,7 +626,7 @@ const Checkout = () => {
   );
 };
 
-const SummaryContent = ({ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId }) => (
+const SummaryContent = ({ cartItems, cartTotal, shipping, discount, finalTotal, coupon, setCoupon, couponApplied, couponError, handleCoupon, getImage, getPrice, getId, isVerifyingCoupon, discountPercent }) => (
   <div className="co__summary">
     {cartItems.length === 0 ? (
       <p className="co__empty">Cart is empty. <Link to="/shop">Browse the store →</Link></p>
@@ -641,16 +659,16 @@ const SummaryContent = ({ cartItems, cartTotal, shipping, discount, finalTotal, 
           disabled={couponApplied}
         />
       </div>
-      <button className={`co__coupon-btn ${couponApplied ? 'co__coupon-btn--ok' : ''}`} onClick={handleCoupon} disabled={couponApplied}>
-        {couponApplied ? <Check size={14} /> : 'Apply'}
+      <button className={`co__coupon-btn ${couponApplied ? 'co__coupon-btn--ok' : ''}`} onClick={handleCoupon} disabled={couponApplied || isVerifyingCoupon}>
+        {isVerifyingCoupon ? '...' : (couponApplied ? <Check size={14} /> : 'Apply')}
       </button>
     </div>
-    {couponError   && <p className="co__coupon-err">Invalid code — try <strong>URBAN10</strong></p>}
-    {couponApplied && <p className="co__coupon-ok">URBAN10 applied — 10% off!</p>}
+    {couponError   && <p className="co__coupon-err">Invalid or expired coupon code</p>}
+    {couponApplied && <p className="co__coupon-ok">{coupon.toUpperCase()} applied — {discountPercent}% off!</p>}
 
     <div className="co__divider" />
     <div className="co__sum-row"><span>Subtotal</span><span>₹{cartTotal.toLocaleString('en-IN')}</span></div>
-    {discount > 0 && <div className="co__sum-row co__sum-row--discount"><span>Discount (URBAN10)</span><span>−₹{discount.toLocaleString('en-IN')}</span></div>}
+    {discount > 0 && <div className="co__sum-row co__sum-row--discount"><span>Discount ({coupon.toUpperCase()})</span><span>−₹{discount.toLocaleString('en-IN')}</span></div>}
     <div className="co__sum-row">
       <span>Shipping</span>
       <span>{shipping === 0 ? <em className="co__free">Free</em> : `₹${shipping}`}</span>

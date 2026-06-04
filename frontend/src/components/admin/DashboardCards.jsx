@@ -2,8 +2,8 @@ import React from 'react';
 import { Package, IndianRupee, Users, ShoppingBag, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const DashboardCards = () => {
-  const stats = [
+const DashboardCards = ({ stats }) => {
+  const defaultStats = [
     {
       title: 'Total Revenue',
       value: '₹24.5L',
@@ -38,6 +38,8 @@ const DashboardCards = () => {
     },
   ];
 
+  const displayStats = stats || defaultStats;
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -69,7 +71,7 @@ const DashboardCards = () => {
       initial="hidden"
       animate="show"
     >
-      {stats.map((stat, index) => (
+      {displayStats.map((stat, index) => (
         <motion.div 
           key={index} 
           variants={itemVariants}

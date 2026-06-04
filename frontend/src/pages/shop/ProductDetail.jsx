@@ -511,7 +511,7 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      <ProductTabs />
+      <ProductTabs productId={product._id || product.id} />
 
       {similarProducts.length > 0 && (
         <ProductSlider title="Similar Products" products={similarProducts} />

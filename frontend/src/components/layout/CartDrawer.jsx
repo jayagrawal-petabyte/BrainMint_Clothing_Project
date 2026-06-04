@@ -3,6 +3,7 @@ import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../context/CartContext";
+import { getColorName } from "../../utils/helpers";
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const {
@@ -170,7 +171,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                           
                           {(item.size || item.color) && (
                             <p style={{ fontSize: "12px", color: "var(--ltn__paragraph-color)", marginBottom: "8px" }}>
-                              {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color}`}
+                              {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color.startsWith('#') ? getColorName(item.color) : item.color}`}
                             </p>
                           )}
 

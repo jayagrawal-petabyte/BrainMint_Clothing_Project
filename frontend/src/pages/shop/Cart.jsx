@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Minus, Plus, X, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { getColorName } from '../../utils/helpers';
 import './Cart.css';
 
 const Cart = () => {
@@ -56,7 +57,7 @@ const Cart = () => {
                   <Link to={`/product/${getId(item)}`} className="cart-row-name">{item.name}</Link>
                   {(item.size || item.color) && (
                     <span className="cart-row-variant" style={{ color: "var(--ltn__paragraph-color)", fontSize: "13px" }}>
-                      {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color}`}
+                      {item.size && `Size: ${item.size}`}{item.size && item.color && ' | '}{item.color && `Color: ${item.color.startsWith('#') ? getColorName(item.color) : item.color}`}
                     </span>
                   )}
                 </div>

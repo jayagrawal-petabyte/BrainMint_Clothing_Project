@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 const asyncHandler = require('../utils/asyncHandler');
 
 const getSalesDashboard = asyncHandler(async (req, res) => {
@@ -8,7 +9,9 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
     orderTotals,
     statusBreakdown,
     recentOrders,
-    topSellingProducts
+    topSellingProducts,
+    totalProducts,
+    monthlyData
   ] = await Promise.all([
     Order.aggregate([
       { $match: revenueMatch },
@@ -59,6 +62,18 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
           revenue: 1
         }
       }
+    ]),
+    Product.countDocuments(),
+    Order.aggregate([
+      { $match: revenueMatch },
+      {
+        $group: {
+          _id: { month: { $month: '$createdAt' } },
+          revenue: { $sum: '$totalPrice' },
+          orders: { $sum: 1 }
+        }
+      },
+      { $sort: { '_id.month': 1 } }
     ])
   ]);
 
@@ -68,6 +83,13 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
     averageOrderValue: 0
   };
 
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const chartData = monthlyData.map(item => ({
+    name: monthNames[item._id.month - 1],
+    revenue: item.revenue,
+    orders: item.orders
+  }));
+
   res.json({
     success: true,
     message: 'Admin sales analytics fetched successfully',
@@ -75,8 +97,10 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
       stats: {
         totalRevenue: totals.totalRevenue || 0,
         totalOrders: totals.totalOrders || 0,
-        averageOrderValue: Math.round(totals.averageOrderValue || 0)
+        averageOrderValue: Math.round(totals.averageOrderValue || 0),
+        totalProducts
       },
+      chartData,
       statusBreakdown,
       topSellingProducts,
       recentOrders

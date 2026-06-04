@@ -20,7 +20,8 @@ const AdminLogin = () => {
       const res = await loginUser(phoneNumber, password);
       
       if (res && res.success) {
-        if (res.data && res.data.role !== 'admin') {
+        const userRole = res.data?.user?.role || res.data?.role;
+        if (userRole !== 'admin') {
           setError('Access denied. Admin only.');
           setIsLoading(false);
           return;

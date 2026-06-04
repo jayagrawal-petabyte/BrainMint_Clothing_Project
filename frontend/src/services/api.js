@@ -429,16 +429,16 @@ export const adminDeleteCoupon = async (id, token) => {
 };
 
 export const fetchSalesAnalytics = async (token) => {
-  try {
-    const response = await fetch(`${PRODUCTS_URL}/analytics/sales`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return await response.json();
-  } catch (error) {
-    console.error("Fetch analytics error:", error);
-    return null;
-  }
+    try {
+      const response = await fetch(`${PRODUCTS_URL}/admin/analytics/sales`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Fetch analytics error:", error);
+      return null;
+    }
 };
 
 // ─── Cart / Orders ─────────────────────────────────────────────────────────────

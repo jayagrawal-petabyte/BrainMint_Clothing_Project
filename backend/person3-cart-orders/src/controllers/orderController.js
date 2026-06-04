@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
-require('../models/User');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -80,9 +79,11 @@ const createOrder = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private
 const getUserOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user.id }).sort({
-    createdAt: -1
-  });
+  const orders = await Order.find({ user: req.user.id })
+    .populate('items.product', 'name images')
+    .sort({
+      createdAt: -1
+    });
 
   res.status(200).json({
     success: true,
@@ -97,6 +98,7 @@ const getUserOrders = asyncHandler(async (req, res) => {
 const getAllOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find()
     .populate('user', 'name email')
+    .populate('items.product', 'name images')
     .sort({ createdAt: -1 });
 
   res.status(200).json({
@@ -110,7 +112,8 @@ const getAllOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:orderId
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.orderId);
+  const order = await Order.findById(req.params.orderId)
+    .populate('items.product', 'name images');
 
   if (!order) {
     throw new ApiError(404, 'Order not found');

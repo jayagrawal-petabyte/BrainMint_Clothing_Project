@@ -52,22 +52,12 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
           as: 'product'
         }
       },
-      { $unwind: { path: '$product', preserveNullAndEmptyArrays: false } },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'product.category',
-          foreignField: '_id',
-          as: 'category'
-        }
-      },
-      { $unwind: { path: '$category', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: '$product', preserveNullAndEmptyArrays: true } },
       {
         $project: {
           productId: '$_id',
           name: '$product.name',
           slug: '$product.slug',
-          category: '$category.name',
           quantitySold: 1,
           revenue: 1
         }
@@ -118,14 +108,18 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get all orders (Admin Fallback)
+// @route   GET /api/admin/analytics/orders
+// @access  Admin
 const getAllOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find()
     .populate('user', 'name email')
+    .populate('items.product', 'name images')
     .sort({ createdAt: -1 });
 
   res.json({
     success: true,
-    message: 'All orders fetched successfully',
+    message: 'Orders fetched successfully',
     data: orders
   });
 });

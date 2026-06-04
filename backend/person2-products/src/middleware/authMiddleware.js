@@ -31,12 +31,10 @@ const protect = (req, res, next) => {
     return next();
   }
 
-  if (!process.env.JWT_SECRET) {
-    throw new ApiError(500, 'JWT secret is not configured');
-  }
+  const secret = process.env.JWT_SECRET || 'your_jwt_secret';
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, secret);
 
     if (!decoded.id || !decoded.role) {
       throw new ApiError(401, 'Invalid authentication token payload');

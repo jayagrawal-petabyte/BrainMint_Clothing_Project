@@ -18,9 +18,10 @@ const authMiddleware = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     // Verify token
+    const secret = process.env.JWT_SECRET || 'your_jwt_secret';
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET
+      secret
     );
 
     // Store user data in req

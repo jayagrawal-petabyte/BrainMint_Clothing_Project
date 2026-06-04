@@ -43,6 +43,27 @@ isEmailVerified: {
   type: Boolean,
   default: false
 },
+
+  isVerified: {
+    type: Boolean,
+    default: true
+  },
+
+  emailVerified: {
+    type: Boolean,
+    default: true
+  },
+
+  phoneVerified: {
+    type: Boolean,
+    default: true
+  },
+
+  verified: {
+    type: Boolean,
+    default: true
+  },
+
   addresses: [
   {
     fullName: String,

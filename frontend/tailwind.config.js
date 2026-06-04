@@ -10,16 +10,16 @@ export default {
       colors: {
         admin: {
           bg: '#f8fafc',
-          'bg-dark': '#0f172a',
+          'bg-dark': '#111111',
           card: '#ffffff',
-          'card-dark': '#1e293b',
+          'card-dark': '#1a1a1a',
           border: '#e2e8f0',
-          'border-dark': '#334155',
+          'border-dark': '#333333',
           text: '#475569',
-          'text-dark': '#cbd5e1',
+          'text-dark': '#aaaaaa',
           heading: '#0f172a',
-          'heading-dark': '#f8fafc',
-          accent: '#ef4444', // red-500 matching the hover effect
+          'heading-dark': '#f5f5f5',
+          accent: '#f24c5c', // matching global secondary color
         }
       },
       fontFamily: {

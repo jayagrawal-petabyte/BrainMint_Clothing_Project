@@ -45,7 +45,9 @@ const createOrder = asyncHandler(async (req, res) => {
       price: item.product.discountPrice || item.product.price,
       discountPrice: item.product.discountPrice || null,
       image: item.product.images[0]?.url || null,
-      quantity: item.quantity
+      quantity: item.quantity,
+      size: item.size,
+      color: item.color
     });
   }
 

@@ -31,7 +31,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @route   POST /api/cart
 // @access  Private
 const addToCart = asyncHandler(async (req, res) => {
-  const { productId, quantity } = req.body;
+  const { productId, quantity, size, color } = req.body;
 
   if (!productId || !quantity) {
     throw new ApiError(400, 'productId and quantity are required');
@@ -51,12 +51,12 @@ const addToCart = asyncHandler(async (req, res) => {
   if (!cart) {
     cart = await Cart.create({
       user: req.user.id,
-      items: [{ product: productId, quantity, price: effectivePrice }],
+      items: [{ product: productId, quantity, price: effectivePrice, size, color }],
       totalPrice: quantity * effectivePrice
     });
   } else {
     const existingItem = cart.items.find(
-      (item) => item.product.toString() === productId
+      (item) => item.product.toString() === productId && item.size === size && item.color === color
     );
 
     if (existingItem) {
@@ -68,7 +68,7 @@ const addToCart = asyncHandler(async (req, res) => {
       }
       existingItem.quantity = updatedQuantity;
     } else {
-      cart.items.push({ product: productId, quantity, price: effectivePrice });
+      cart.items.push({ product: productId, quantity, price: effectivePrice, size, color });
     }
 
     cart.totalPrice = cart.items.reduce(

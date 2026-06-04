@@ -143,32 +143,7 @@ const ProductDetail = () => {
 
   return (
     <div className="product-detail-page">
-      {/* HEADER */}
-      <div className="product-detail-header">
-        <h1 className="page-title">
-          Product
-        </h1>
 
-        <div className="breadcrumb">
-          <Link to="/">Home</Link>
-
-          <span className="separator">
-            {'>'}
-          </span>
-
-          <Link to="/shop">
-            Shop
-          </Link>
-
-          <span className="separator">
-            {'>'}
-          </span>
-
-          <span className="current">
-            {product.name}
-          </span>
-        </div>
-      </div>
 
       <div className="product-detail-container">
         {/* LEFT IMAGE */}

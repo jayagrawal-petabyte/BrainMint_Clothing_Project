@@ -5,9 +5,10 @@ const router =
 express.Router();
 
 const contactController = require("../controllers/contactController");
-const { protect, adminOnly } = require("../middleware/authMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 router.post("/", contactController.createContact);
-router.get("/", protect, adminOnly, contactController.getAllContacts);
+router.get("/", authMiddleware, adminMiddleware, contactController.getAllContacts);
 
 module.exports = router;

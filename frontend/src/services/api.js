@@ -30,7 +30,7 @@ export const fetchProductReviews = async (productId) => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/products/${productId}/reviews`);
     const data = await response.json();
-    return data.data || [];
+    return data.data?.reviews || [];
   } catch (error) {
     console.error("Error fetching reviews:", error);
     return [];
@@ -775,4 +775,5 @@ export const fetchPopularProducts = async () => {
 
   return popularProductsPromise;
 };
+
 

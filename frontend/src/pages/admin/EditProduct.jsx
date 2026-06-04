@@ -23,7 +23,9 @@ const EditProduct = () => {
           discount: data.discountPrice ? Math.round(((data.price - data.discountPrice) / data.price) * 100) : '',
           stock: data.inventory?.stock || '',
           status: data.isActive ? 'Active' : 'Draft',
-          imageUrl: data.images && data.images[0] ? data.images[0].url : ''
+          sizes: data.sizes || [],
+          colors: data.colors || [],
+          images: data.images && data.images.length > 0 ? data.images.map(img => img.url) : ['']
         });
       }
       setIsLoading(false);
@@ -42,8 +44,10 @@ const EditProduct = () => {
       inventory: { 
         stock: Number(formData.stock)
       },
+      sizes: formData.sizes || [],
+      colors: formData.colors || [],
       isActive: formData.status === 'Active',
-      images: formData.imageUrl ? [{ url: formData.imageUrl }] : []
+      images: formData.images ? formData.images.map(url => ({ url })) : []
     };
     
     return await adminUpdateProduct(id, payload, token);

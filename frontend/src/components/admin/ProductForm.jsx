@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { Upload, X } from 'lucide-react';
+import { Upload, X, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getColorName } from '../../utils/helpers';
+
+const AVAILABLE_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const AVAILABLE_COLORS = [
+  '#000000', '#FFFFFF', '#FF0000', '#0000FF', '#008000', 
+  '#FFFF00', '#808080', '#000080', '#FFC0CB', '#800080', '#FFA500', '#A52A2A'
+];
 
 const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = [] }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const [formData, setFormData] = useState(initialData || {
     name: '',
     description: '',
@@ -14,23 +22,43 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
     discount: '',
     stock: '',
     status: 'Active',
-    imageUrl: ''
+    sizes: [],
+    colors: [],
+    images: [''] // start with 1 empty input
   });
-
-  const [previewImage, setPreviewImage] = useState(initialData?.imageUrl || null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
-    if (name === 'imageUrl') {
-      setPreviewImage(value);
+  };
+
+  const handleCheckboxChange = (field, value) => {
+    setFormData(prev => {
+      const current = prev[field] || [];
+      if (current.includes(value)) {
+        return { ...prev, [field]: current.filter(item => item !== value) };
+      } else {
+        return { ...prev, [field]: [...current, value] };
+      }
+    });
+  };
+
+  const handleImageChange = (index, value) => {
+    const newImages = [...formData.images];
+    newImages[index] = value;
+    setFormData(prev => ({ ...prev, images: newImages }));
+  };
+
+  const addImageField = () => {
+    if (formData.images.length < 4) {
+      setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
     }
   };
 
-  const removeImage = () => {
-    setPreviewImage(null);
-    setFormData(prev => ({ ...prev, imageUrl: '' }));
+  const removeImageField = (index) => {
+    const newImages = formData.images.filter((_, i) => i !== index);
+    if (newImages.length === 0) newImages.push(''); // ensure at least 1 input
+    setFormData(prev => ({ ...prev, images: newImages }));
   };
 
   const handleSubmit = async (e) => {
@@ -38,9 +66,15 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
     setError(null);
     setIsSubmitting(true);
     
+    // Filter out empty images
+    const cleanedFormData = {
+      ...formData,
+      images: formData.images.filter(url => url.trim() !== '')
+    };
+    
     try {
       if (onSubmit) {
-        const res = await onSubmit(formData);
+        const res = await onSubmit(cleanedFormData);
         if (res && res.success === false) {
           setError(res.message || 'Failed to save product. Please check the details and try again.');
         } else if (res === false) {
@@ -160,40 +194,94 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
               </div>
             </div>
           </div>
+
+          <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark">
+            <h3 className="text-lg font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark mb-6">Variants</h3>
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-3">Sizes</label>
+                <div className="flex flex-wrap gap-3">
+                  {AVAILABLE_SIZES.map(size => (
+                    <label key={size} className="flex items-center gap-2 cursor-pointer bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-[#444] px-4 py-2 rounded-lg hover:border-admin-accent transition-colors">
+                      <input 
+                        type="checkbox" 
+                        checked={(formData.sizes || []).includes(size)}
+                        onChange={() => handleCheckboxChange('sizes', size)}
+                        className="accent-admin-accent w-4 h-4"
+                      />
+                      <span className="text-sm font-medium text-admin-heading dark:text-admin-heading-dark">{size}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-3">Colors</label>
+                <div className="flex flex-wrap gap-3">
+                  {AVAILABLE_COLORS.map(color => (
+                    <label key={color} className="flex items-center gap-2 cursor-pointer bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-[#444] px-4 py-2 rounded-lg hover:border-admin-accent transition-colors">
+                      <input 
+                        type="checkbox" 
+                        checked={(formData.colors || []).includes(color)}
+                        onChange={() => handleCheckboxChange('colors', color)}
+                        className="accent-admin-accent w-4 h-4"
+                      />
+                      <div className="w-4 h-4 rounded-full border border-gray-300 dark:border-gray-600 shadow-sm" style={{ backgroundColor: color }}></div>
+                      <span className="text-sm font-medium text-admin-heading dark:text-admin-heading-dark">{getColorName(color)}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* Right Column - Media & Status */}
         <div className="space-y-6">
           <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark">
-            <h3 className="text-lg font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark mb-6">Product Media</h3>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark">Product Images</h3>
+              {formData.images.length < 4 && (
+                <button type="button" onClick={addImageField} className="text-xs flex items-center gap-1 text-admin-accent hover:text-admin-accent/80 font-medium">
+                  <Plus size={14} /> Add Image
+                </button>
+              )}
+            </div>
             
             <div className="space-y-4">
-                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-2">Image URL</label>
-                <input
-                  type="url"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleChange}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-4 py-3 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-admin-heading dark:text-admin-heading-dark transition-all mb-4"
-                />
-                
-                {previewImage ? (
-                  <div className="relative rounded-xl overflow-hidden border border-admin-border dark:border-admin-border-dark aspect-[3/4]">
-                    <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
+              {formData.images.map((url, index) => (
+                <div key={index} className="space-y-3 p-4 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-[#444] rounded-xl relative">
+                  {formData.images.length > 1 && (
                     <button 
                       type="button" 
-                      onClick={removeImage}
-                      className="absolute top-2 right-2 bg-white text-red-500 p-1.5 rounded-full shadow-md hover:bg-red-50 transition-colors"
+                      onClick={() => removeImageField(index)}
+                      className="absolute top-2 right-2 text-red-500 hover:text-red-600 bg-white/80 dark:bg-black/50 rounded-full p-1"
                     >
-                      <X size={16} />
+                      <X size={14} />
                     </button>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center w-full aspect-[3/4] border-2 border-dashed border-admin-border dark:border-[#444] rounded-xl bg-admin-bg/50 dark:bg-[#1A1A1A]/50">
-                    <p className="text-sm text-admin-text dark:text-admin-text-dark font-medium">Image preview will appear here</p>
-                  </div>
-                )}
+                  )}
+                  <label className="block text-xs font-medium text-admin-heading dark:text-admin-heading-dark">Image URL {index + 1}</label>
+                  <input
+                    type="url"
+                    value={url}
+                    onChange={(e) => handleImageChange(index, e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                    className="w-full px-3 py-2 bg-white dark:bg-[#222] border border-admin-border dark:border-admin-border-dark rounded-lg focus:ring-1 focus:ring-admin-accent outline-none text-sm text-admin-heading dark:text-admin-heading-dark transition-all"
+                  />
+                  
+                  {url ? (
+                    <div className="rounded-lg overflow-hidden border border-admin-border dark:border-admin-border-dark aspect-[4/3] relative">
+                      <img src={url} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center w-full aspect-[4/3] border border-dashed border-admin-border dark:border-[#555] rounded-lg bg-white/50 dark:bg-[#222]/50">
+                      <p className="text-xs text-admin-text dark:text-admin-text-dark font-medium">Image preview</p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 

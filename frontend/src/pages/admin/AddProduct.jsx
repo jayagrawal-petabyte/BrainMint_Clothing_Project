@@ -25,8 +25,10 @@ const AddProduct = () => {
         stock: Number(formData.stock),
         sku: 'SKU-' + Date.now() + Math.random().toString(36).substring(2, 6).toUpperCase()
       },
+      sizes: formData.sizes || [],
+      colors: formData.colors || [],
       isActive: formData.status === 'Active',
-      images: formData.imageUrl ? [{ url: formData.imageUrl }] : []
+      images: formData.images ? formData.images.map(url => ({ url })) : []
     };
     
     return await adminCreateProduct(payload, token);

@@ -10,7 +10,8 @@ import {
   BarChart3, 
   LogOut,
   Settings,
-  Folder
+  Folder,
+  Mail
 } from 'lucide-react';
 
 const AdminSidebar = () => {
@@ -23,6 +24,7 @@ const AdminSidebar = () => {
     { name: 'Inventory', path: '/admin/inventory', icon: <Tags size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
     { name: 'Discounts', path: '/admin/discounts', icon: <Tags size={20} /> },
+    { name: 'Messages', path: '/admin/messages', icon: <Mail size={20} /> },
   ];
 
   return (

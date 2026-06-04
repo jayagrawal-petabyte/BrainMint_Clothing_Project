@@ -803,4 +803,19 @@ export const fetchPopularProducts = async () => {
   return popularProductsPromise;
 };
 
+export const fetchContactMessages = async (token) => {
+  try {
+    const response = await fetch(`${AUTH_URL}/contact`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch contact messages error:", error);
+    return null;
+  }
+};
+
 

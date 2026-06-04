@@ -33,7 +33,6 @@ import CategoryManagement from './pages/admin/CategoryManagement';
 import InventoryManagement from './pages/admin/InventoryManagement';
 import OrderManagement from './pages/admin/OrderManagement';
 import DiscountManagement from './pages/admin/DiscountManagement';
-import SalesAnalytics from './pages/admin/SalesAnalytics';
 
 import ScrollToTop from './components/ui/ScrollToTop';
 import ScrollToTopRoute from './components/ui/ScrollToTopRoute';
@@ -106,7 +105,6 @@ function App() {
                 <Route path="inventory" element={<InventoryManagement />} />
                 <Route path="orders" element={<OrderManagement />} />
                 <Route path="discounts" element={<DiscountManagement />} />
-                <Route path="analytics" element={<SalesAnalytics />} />
               </Route>
             </Route>
 

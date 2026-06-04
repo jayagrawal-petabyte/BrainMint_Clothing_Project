@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 
 const AdminSidebar = () => {
+  const navigate = useNavigate();
+  
   const navItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'Products', path: '/admin/products', icon: <Package size={20} /> },
@@ -21,15 +23,16 @@ const AdminSidebar = () => {
     { name: 'Inventory', path: '/admin/inventory', icon: <Tags size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
     { name: 'Discounts', path: '/admin/discounts', icon: <Tags size={20} /> },
-    { name: 'Analytics', path: '/admin/analytics', icon: <BarChart3 size={20} /> },
   ];
 
   return (
     <aside className="w-64 bg-admin-card dark:bg-admin-card-dark border-r border-admin-border dark:border-admin-border-dark flex flex-col h-screen sticky top-0 transition-colors duration-300">
       <div className="p-6 border-b border-admin-border dark:border-admin-border-dark">
-        <h2 className="text-2xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark tracking-wide">
-          URBAN<span className="text-admin-accent">WEAR</span>
-        </h2>
+        <Link to="/" className="inline-block">
+          <h2 className="text-2xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark tracking-wide">
+            URBAN<span className="text-admin-accent">WEAR</span>
+          </h2>
+        </Link>
         <p className="text-xs text-admin-text dark:text-admin-text-dark mt-1 font-rubik tracking-wider uppercase">Admin Panel</p>
       </div>
       
@@ -68,7 +71,13 @@ const AdminSidebar = () => {
           <Settings size={20} />
           <span>Settings</span>
         </button>
-        <button className="bg-transparent border-none outline-none w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-admin-accent hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-200 font-medium">
+        <button 
+          onClick={() => {
+            localStorage.removeItem('adminToken');
+            navigate('/admin/login');
+          }}
+          className="bg-transparent border-none outline-none w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-admin-accent hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-200 font-medium"
+        >
           <LogOut size={20} />
           <span>Logout</span>
         </button>

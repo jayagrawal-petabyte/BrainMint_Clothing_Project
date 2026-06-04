@@ -1,7 +1,7 @@
 // ─── Backend Service URLs ────────────────────────────────────────────────────
-const AUTH_URL    = "https://brainmint-clothing-project-combined.onrender.com/api";
+const AUTH_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
 const PRODUCTS_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
-const CART_URL    = "https://brainmint-clothing-project-combined.onrender.com/api";
+const CART_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 export const fetchProducts = async (params = "") => {
@@ -220,7 +220,7 @@ export const updateUserPassword = async (currentPassword, newPassword, token) =>
       },
       body: JSON.stringify({ currentPassword, newPassword })
     });
-    
+
     if (response.ok) {
       return await response.json();
     } else {
@@ -368,6 +368,66 @@ export const adminDeleteCategory = async (id, token) => {
   }
 };
 
+// --- Admin Coupons ---
+export const fetchAdminCoupons = async (token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/admin/coupons`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch admin coupons error:", error);
+    return null;
+  }
+};
+
+export const adminCreateCoupon = async (couponData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/admin/coupons`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}` 
+      },
+      body: JSON.stringify(couponData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Create coupon error:", error);
+    return null;
+  }
+};
+
+export const adminUpdateCoupon = async (id, couponData, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/admin/coupons/${id}`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}` 
+      },
+      body: JSON.stringify(couponData)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Update coupon error:", error);
+    return null;
+  }
+};
+
+export const adminDeleteCoupon = async (id, token) => {
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/admin/coupons/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Delete coupon error:", error);
+    return null;
+  }
+};
+
 export const fetchSalesAnalytics = async (token) => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/analytics/sales`, {
@@ -399,9 +459,9 @@ export const syncAddToCart = async (productId, quantity, size, color, token) => 
   try {
     const response = await fetch(`${CART_URL}/cart`, {
       method: "POST",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` 
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ productId, quantity, size, color }),
     });
@@ -429,9 +489,9 @@ export const updateCartQuantityApi = async (productId, quantity, token) => {
   try {
     const response = await fetch(`${CART_URL}/cart/${productId}`, {
       method: "PUT",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` 
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ quantity }),
     });
@@ -670,7 +730,7 @@ export const fetchTrendingSearches = async () => {
       }
       const data = await response.json();
       const payload = data.data || data;
-      
+
       if (payload && Array.isArray(payload.popularSearches)) {
         return payload.popularSearches;
       }
@@ -695,7 +755,7 @@ export const fetchPopularProducts = async () => {
       }
       const data = await response.json();
       const payload = data.data || data;
-      
+
       let products = FALLBACK_POPULAR_PRODUCTS;
       if (payload) {
         if (Array.isArray(payload)) {

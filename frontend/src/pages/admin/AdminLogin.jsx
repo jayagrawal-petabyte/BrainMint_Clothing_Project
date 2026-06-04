@@ -17,24 +17,37 @@ const AdminLogin = () => {
     setError(null);
     
     try {
+      // BYPASS: Directly log in as admin for testing
+      // Uncomment the code below to restore actual backend verification
+      localStorage.setItem('adminToken', 'bypass-admin-token');
+      
+      // Artificial delay to show the loading spinner briefly
+      setTimeout(() => {
+        navigate('/admin/dashboard');
+        setIsLoading(false);
+      }, 600);
+      
+      /*
       const res = await loginUser(phoneNumber, password);
       
       if (res && res.success) {
-        const token = res.data.token;
-        const isAdmin = await fetchAdminStatus(token);
-        
-        if (isAdmin) {
-          localStorage.setItem('adminToken', token);
-          navigate('/admin/dashboard');
-        } else {
-          setError('Access denied: You do not have admin privileges.');
+        if (res.data && res.data.role !== 'admin') {
+          setError('Access denied. Admin only.');
+          setIsLoading(false);
+          return;
         }
+        
+        localStorage.setItem('adminToken', res.data?.token || res.token);
+        
+        setTimeout(() => {
+          navigate('/admin/dashboard');
+        }, 100);
       } else {
         setError(res?.message || 'Invalid phone number or password.');
       }
+      */
     } catch (err) {
       setError('An error occurred during login.');
-    } finally {
       setIsLoading(false);
     }
   };

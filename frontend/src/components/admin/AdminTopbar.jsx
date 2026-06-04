@@ -1,13 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Bell, Sun, Moon, User } from 'lucide-react';
+import { fetchAdminOrders } from '../../services/api';
+import { Link } from 'react-router-dom';
 
 const AdminTopbar = () => {
   const [isDark, setIsDark] = useState(false);
+  const [pendingOrders, setPendingOrders] = useState([]);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     // Check initial theme
     const theme = document.documentElement.getAttribute('data-theme');
     setIsDark(theme === 'dark');
+
+    // Fetch pending orders for notifications
+    const loadPendingOrders = async () => {
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+      if (token) {
+        const response = await fetchAdminOrders(token);
+        if (response && response.data && response.data.orders) {
+          const pending = response.data.orders.filter(
+            order => order.orderStatus && order.orderStatus.toLowerCase() === 'pending'
+          );
+          setPendingOrders(pending);
+        }
+      }
+    };
+    loadPendingOrders();
+    
+    // Close dropdown on outside click
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const toggleTheme = () => {
@@ -41,12 +70,65 @@ const AdminTopbar = () => {
           {isDark ? <Sun size={22} /> : <Moon size={22} />}
         </button>
 
-        <button className="bg-transparent border-none outline-none relative text-admin-text dark:text-admin-text-dark hover:text-admin-heading dark:hover:text-admin-heading-dark transition-colors">
-          <Bell size={22} />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-admin-accent text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-admin-card dark:border-admin-card-dark">
-            3
-          </span>
-        </button>
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+            className="bg-transparent border-none outline-none relative text-admin-text dark:text-admin-text-dark hover:text-admin-heading dark:hover:text-admin-heading-dark transition-colors"
+          >
+            <Bell size={22} />
+            {pendingOrders.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-admin-accent text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-admin-card dark:border-admin-card-dark">
+                {pendingOrders.length}
+              </span>
+            )}
+          </button>
+
+          {/* Notification Dropdown */}
+          {isNotificationOpen && (
+            <div className="absolute right-0 mt-3 w-80 bg-admin-card dark:bg-admin-card-dark border border-admin-border dark:border-admin-border-dark rounded-xl shadow-lg overflow-hidden font-rubik z-50">
+              <div className="p-4 border-b border-admin-border dark:border-admin-border-dark flex justify-between items-center bg-admin-bg/30 dark:bg-[#1A1A1A]/30">
+                <h3 className="font-semibold text-admin-heading dark:text-admin-heading-dark">Notifications</h3>
+                <span className="text-xs bg-admin-accent text-white px-2 py-0.5 rounded-full">{pendingOrders.length} New</span>
+              </div>
+              <div className="max-h-80 overflow-y-auto">
+                {pendingOrders.length === 0 ? (
+                  <div className="p-6 text-center text-admin-text dark:text-admin-text-dark text-sm">
+                    No new pending orders
+                  </div>
+                ) : (
+                  pendingOrders.map(order => (
+                    <Link 
+                      key={order._id} 
+                      to="/admin/orders" 
+                      onClick={() => setIsNotificationOpen(false)}
+                      className="block p-4 border-b border-admin-border dark:border-admin-border-dark hover:bg-admin-bg/50 dark:hover:bg-[#1A1A1A]/50 transition-colors"
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="font-semibold text-sm text-admin-heading dark:text-admin-heading-dark">New Order Received</span>
+                        <span className="text-xs text-admin-accent font-medium">₹{order.totalPrice?.toLocaleString('en-IN') || 0}</span>
+                      </div>
+                      <p className="text-xs text-admin-text dark:text-admin-text-dark">
+                        {order.shippingAddress?.fullName || 'Customer'} placed a new order.
+                      </p>
+                      <span className="text-[10px] text-admin-text/70 dark:text-admin-text-dark/70 mt-2 block">
+                        {new Date(order.createdAt).toLocaleString('en-IN')}
+                      </span>
+                    </Link>
+                  ))
+                )}
+              </div>
+              {pendingOrders.length > 0 && (
+                <Link 
+                  to="/admin/orders" 
+                  onClick={() => setIsNotificationOpen(false)}
+                  className="block w-full p-3 text-center text-sm text-admin-accent hover:bg-admin-bg/30 dark:hover:bg-[#1A1A1A]/30 font-medium transition-colors border-t border-admin-border dark:border-admin-border-dark"
+                >
+                  View all orders
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="h-8 w-px bg-admin-border dark:bg-admin-border-dark"></div>
 

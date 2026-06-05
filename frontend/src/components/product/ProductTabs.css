@@ -60,7 +60,7 @@
 
 /* --- Reviews Section --- */
 .reviews-section {
-  max-width: 800px;
+  width: 100%;
 }
 
 .reviews-list {

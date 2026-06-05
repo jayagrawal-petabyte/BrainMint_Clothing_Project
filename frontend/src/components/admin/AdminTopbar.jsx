@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Sun, Moon, User } from 'lucide-react';
+import { Search, Bell, Sun, Moon, User, Menu } from 'lucide-react';
 import { fetchAdminOrders } from '../../services/api';
 import { Link } from 'react-router-dom';
 
-const AdminTopbar = () => {
+const AdminTopbar = ({ toggleSidebar }) => {
   const [isDark, setIsDark] = useState(false);
   const [pendingOrders, setPendingOrders] = useState([]);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -46,18 +46,28 @@ const AdminTopbar = () => {
   };
 
   return (
-    <header className="h-20 bg-admin-card dark:bg-admin-card-dark border-b border-admin-border dark:border-admin-border-dark flex items-center justify-between px-8 sticky top-0 z-10 transition-colors duration-300">
+    <header className="h-20 bg-admin-card dark:bg-admin-card-dark border-b border-admin-border dark:border-admin-border-dark flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 transition-colors duration-300">
       
-      {/* Search Bar */}
-      <div className="relative w-96">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search size={18} className="text-admin-text dark:text-admin-text-dark" />
+      <div className="flex items-center gap-4 flex-1">
+        {/* Mobile Sidebar Toggle */}
+        <button 
+          onClick={toggleSidebar}
+          className="md:hidden p-2 rounded-lg text-admin-text dark:text-admin-text-dark hover:bg-admin-bg dark:hover:bg-[#222] transition-colors"
+        >
+          <Menu size={24} />
+        </button>
+
+        {/* Search Bar */}
+        <div className="relative w-full max-w-sm hidden sm:block">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search size={18} className="text-admin-text dark:text-admin-text-dark" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search products, orders..."
+            className="w-full pl-10 pr-4 py-2.5 bg-admin-bg dark:bg-[#222] border border-transparent focus:border-admin-border dark:focus:border-[#444] rounded-lg outline-none text-admin-heading dark:text-admin-heading-dark placeholder-admin-text dark:placeholder-admin-text-dark transition-all duration-200 font-rubik"
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Search products, orders..."
-          className="w-full pl-10 pr-4 py-2.5 bg-admin-bg dark:bg-[#222] border border-transparent focus:border-admin-border dark:focus:border-[#444] rounded-lg outline-none text-admin-heading dark:text-admin-heading-dark placeholder-admin-text dark:placeholder-admin-text-dark transition-all duration-200 font-rubik"
-        />
       </div>
 
       {/* Right Actions */}

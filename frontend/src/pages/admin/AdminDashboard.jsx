@@ -120,7 +120,7 @@ const AdminDashboard = () => {
         </div>
         
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-rubik">
+          <table className="w-full text-left font-rubik min-w-[800px]">
             <thead className="bg-admin-bg dark:bg-[#222] text-admin-text dark:text-admin-text-dark text-sm uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-4 font-medium">Order ID</th>
@@ -173,7 +173,7 @@ const AdminDashboard = () => {
           </Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-rubik">
+          <table className="w-full text-left font-rubik min-w-[800px]">
             <thead className="bg-admin-bg dark:bg-[#222] text-admin-text dark:text-admin-text-dark text-sm uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-4 font-medium">Product Name</th>

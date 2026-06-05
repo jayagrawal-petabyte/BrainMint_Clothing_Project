@@ -154,8 +154,8 @@ const CategoryManagement = () => {
               </div>
             </div>
 
-            <div className="flex-1 overflow-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="flex-1 overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
                 <thead className="bg-admin-bg/50 dark:bg-[#1A1A1A]/50 sticky top-0 z-10">
                   <tr>
                     <th className="px-6 py-4 text-xs font-semibold text-admin-text dark:text-admin-text-dark uppercase tracking-wider border-b border-admin-border dark:border-admin-border-dark">Category Name</th>

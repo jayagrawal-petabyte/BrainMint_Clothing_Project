@@ -107,7 +107,7 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
   return (
     <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl shadow-sm border border-admin-border dark:border-admin-border-dark overflow-hidden font-rubik">
       <div className="overflow-x-auto">
-        <table className="w-full text-left">
+        <table className="w-full text-left min-w-[1000px]">
           <thead className="bg-admin-bg dark:bg-[#222] text-admin-text dark:text-admin-text-dark text-sm uppercase tracking-wider">
             <tr>
               <th className="px-6 py-4 font-medium">Order ID</th>

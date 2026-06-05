@@ -11,10 +11,11 @@ import {
   LogOut,
   Settings,
   Folder,
-  Mail
+  Mail,
+  X
 } from 'lucide-react';
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
   
   const navItems = [
@@ -28,14 +29,22 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="w-64 bg-admin-card dark:bg-admin-card-dark border-r border-admin-border dark:border-admin-border-dark flex flex-col h-screen sticky top-0 transition-colors duration-300">
-      <div className="p-6 border-b border-admin-border dark:border-admin-border-dark">
-        <Link to="/" className="inline-block">
-          <h2 className="text-2xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark tracking-wide">
-            URBAN<span className="text-admin-accent">WEAR</span>
-          </h2>
-        </Link>
-        <p className="text-xs text-admin-text dark:text-admin-text-dark mt-1 font-rubik tracking-wider uppercase">Admin Panel</p>
+    <aside className={`w-64 bg-admin-card dark:bg-admin-card-dark border-r border-admin-border dark:border-admin-border-dark flex flex-col h-screen fixed md:sticky top-0 z-30 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      <div className="p-6 border-b border-admin-border dark:border-admin-border-dark flex items-center justify-between">
+        <div>
+          <Link to="/" className="inline-block" onClick={() => setIsOpen(false)}>
+            <h2 className="text-2xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark tracking-wide">
+              URBAN<span className="text-admin-accent">WEAR</span>
+            </h2>
+          </Link>
+          <p className="text-xs text-admin-text dark:text-admin-text-dark mt-1 font-rubik tracking-wider uppercase">Admin Panel</p>
+        </div>
+        <button 
+          onClick={() => setIsOpen(false)}
+          className="md:hidden text-admin-text dark:text-admin-text-dark hover:text-admin-accent"
+        >
+          <X size={24} />
+        </button>
       </div>
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">

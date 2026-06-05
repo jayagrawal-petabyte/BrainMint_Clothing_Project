@@ -66,8 +66,7 @@ const Account = () => {
               });
             }
           }
-        } catch (e) {
-          console.error("Failed to load account data", e);
+        } catch {
         } finally {
           setLoadingOrders(false);
           setLoadingProfile(false);

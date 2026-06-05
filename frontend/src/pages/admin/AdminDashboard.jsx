@@ -81,8 +81,7 @@ const AdminDashboard = () => {
         } else {
           setOrders([]);
         }
-      } catch (e) {
-        console.error("Failed to load dashboard data", e);
+      } catch {
         setOrders([]);
       } finally {
         setIsLoading(false);

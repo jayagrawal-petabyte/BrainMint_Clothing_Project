@@ -58,8 +58,7 @@ const ProductDetail = () => {
         const popular = await fetchPopularProducts();
         const filteredPopular = popular.filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
         setPopularProducts(filteredPopular);
-      } catch (error) {
-        console.error('Error fetching product:', error);
+      } catch {
       } finally {
         setLoading(false);
       }

@@ -11,7 +11,6 @@ export const fetchProducts = async (params = "") => {
     const data = await response.json();
     return data.data || { products: [], pagination: { total: 0, pages: 0, page: 1 } };
   } catch (error) {
-    console.error("Error fetching products:", error);
     return { products: [], pagination: { total: 0, pages: 0, page: 1 } };
   }
 };
@@ -22,7 +21,6 @@ export const fetchProductById = async (id) => {
     const data = await response.json();
     return data.data || null;
   } catch (error) {
-    console.error("Error fetching product:", error);
     return null;
   }
 };
@@ -33,7 +31,6 @@ export const fetchProductReviews = async (productId) => {
     const data = await response.json();
     return data.data?.reviews || [];
   } catch (error) {
-    console.error("Error fetching reviews:", error);
     return [];
   }
 };
@@ -62,7 +59,6 @@ export const submitProductReview = async (productId, reviewData, token) => {
     
     return data;
   } catch (error) {
-    console.error("Submit review error:", error);
     return { success: false, message: error.message };
   }
 };
@@ -73,7 +69,6 @@ export const fetchNewArrivals = async () => {
     const data = await response.json();
     return data.data?.products || [];
   } catch (error) {
-    console.error("Error fetching new arrivals:", error);
     return [];
   }
 };
@@ -84,7 +79,6 @@ export const fetchCategories = async () => {
     const data = await response.json();
     return data.data?.categories || [];
   } catch (error) {
-    console.error("Error fetching categories:", error);
     return [];
   }
 };
@@ -99,7 +93,6 @@ export const loginUser = async (phoneNumber, password) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Login error:", error);
     return null;
   }
 };
@@ -113,7 +106,6 @@ export const forgotPasswordUser = async (email) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Forgot password error:", error);
     return null;
   }
 };
@@ -127,7 +119,6 @@ export const resetPasswordUser = async (token, password) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Reset password error:", error);
     return null;
   }
 };
@@ -141,7 +132,6 @@ export const sendRegistrationOtp = async (userData) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Send OTP error:", error);
     return null;
   }
 };
@@ -155,7 +145,6 @@ export const verifyRegistrationOtp = async (email, otp) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Verify OTP error:", error);
     return null;
   }
 };
@@ -169,7 +158,6 @@ export const registerUser = async (name, email, phoneNumber, password) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Register error:", error);
     return null;
   }
 };
@@ -185,7 +173,6 @@ export const fetchCurrentUser = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch profile error:", error);
     return null;
   }
 };
@@ -201,7 +188,6 @@ export const fetchUserProfile = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch profile error:", error);
     return null;
   }
 };
@@ -218,7 +204,6 @@ export const updateUserProfile = async (profileData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Update profile error:", error);
     return { success: false, message: error.message };
   }
 };
@@ -241,7 +226,6 @@ export const updateUserPassword = async (currentPassword, newPassword, token) =>
       return { success: false, message: errorData.message || "Failed to update password" };
     }
   } catch (error) {
-    console.error("Update password error:", error);
     return { success: false, message: error.message };
   }
 };
@@ -255,7 +239,6 @@ export const submitContactForm = async (contactData) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Contact form error:", error);
     return null;
   }
 };
@@ -269,7 +252,6 @@ export const subscribeNewsletter = async (email) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Newsletter error:", error);
     return null;
   }
 };
@@ -299,7 +281,6 @@ export const adminCreateProduct = async (productData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Create product error:", error);
     return null;
   }
 };
@@ -316,7 +297,6 @@ export const adminUpdateProduct = async (id, productData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Update product error:", error);
     return null;
   }
 };
@@ -329,7 +309,6 @@ export const adminDeleteProduct = async (id, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Delete product error:", error);
     return null;
   }
 };
@@ -346,7 +325,6 @@ export const adminCreateCategory = async (categoryData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Create category error:", error);
     return null;
   }
 };
@@ -363,7 +341,6 @@ export const adminUpdateCategory = async (id, categoryData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Update category error:", error);
     return null;
   }
 };
@@ -376,7 +353,6 @@ export const adminDeleteCategory = async (id, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Delete category error:", error);
     return null;
   }
 };
@@ -389,7 +365,6 @@ export const fetchAdminCoupons = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch admin coupons error:", error);
     return null;
   }
 };
@@ -406,7 +381,6 @@ export const adminCreateCoupon = async (couponData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Create coupon error:", error);
     return null;
   }
 };
@@ -423,7 +397,6 @@ export const adminUpdateCoupon = async (id, couponData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Update coupon error:", error);
     return null;
   }
 };
@@ -436,7 +409,6 @@ export const adminDeleteCoupon = async (id, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Delete coupon error:", error);
     return null;
   }
 };
@@ -449,7 +421,6 @@ export const fetchSalesAnalytics = async (token) => {
       });
       return await response.json();
     } catch (error) {
-      console.error("Fetch analytics error:", error);
       return null;
     }
 };
@@ -463,7 +434,6 @@ export const fetchCart = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch cart error:", error);
     return null;
   }
 };
@@ -480,7 +450,6 @@ export const syncAddToCart = async (productId, quantity, size, color, token) => 
     });
     return await response.json();
   } catch (error) {
-    console.error("Add to cart error:", error);
     return null;
   }
 };
@@ -493,7 +462,6 @@ export const removeFromCartApi = async (productId, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Remove from cart error:", error);
     return null;
   }
 };
@@ -510,7 +478,6 @@ export const updateCartQuantityApi = async (productId, quantity, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Update cart error:", error);
     return null;
   }
 };
@@ -523,7 +490,6 @@ export const fetchWishlist = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch wishlist error:", error);
     return null;
   }
 };
@@ -536,7 +502,6 @@ export const addToWishlistApi = async (productId, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Add wishlist error:", error);
     return null;
   }
 };
@@ -549,7 +514,6 @@ export const removeFromWishlistApi = async (productId, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Remove wishlist error:", error);
     return null;
   }
 };
@@ -562,7 +526,6 @@ export const clearWishlistApi = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Clear wishlist error:", error);
     return null;
   }
 };
@@ -579,7 +542,6 @@ export const placeOrder = async (orderData, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Order error:", error);
     return null;
   }
 };
@@ -595,7 +557,6 @@ export const fetchMyOrders = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch orders error:", error);
     return null;
   }
 };
@@ -639,7 +600,6 @@ export const updateOrderStatus = async (orderId, status, token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Update order status error:", error);
     return null;
   }
 };
@@ -653,7 +613,6 @@ export const validateCoupon = async (code) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Validate coupon error:", error);
     return null;
   }
 };
@@ -763,7 +722,6 @@ export const fetchTrendingSearches = async () => {
       }
       return FALLBACK_TRENDING_SEARCHES;
     } catch (error) {
-      console.warn("Using fallback trending searches due to API fetch error:", error);
       return FALLBACK_TRENDING_SEARCHES;
     }
   })();
@@ -795,7 +753,6 @@ export const fetchPopularProducts = async () => {
       }
       return products;
     } catch (error) {
-      console.warn("Using fallback popular products due to API fetch error:", error);
       return FALLBACK_POPULAR_PRODUCTS;
     }
   })();
@@ -813,7 +770,6 @@ export const fetchContactMessages = async (token) => {
     });
     return await response.json();
   } catch (error) {
-    console.error("Fetch contact messages error:", error);
     return null;
   }
 };

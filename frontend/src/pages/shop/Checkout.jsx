@@ -86,7 +86,7 @@ const Checkout = () => {
             setFetchedProfile(res.profile || res.data || res.user);
           }
         })
-        .catch(err => console.error("Error loading user profile", err));
+        .catch(() => {});
     }
   }, [token]);
 

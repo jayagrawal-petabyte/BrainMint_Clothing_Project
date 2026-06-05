@@ -53,7 +53,6 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, error: response?.message || 'Invalid credentials' };
     } catch (error) {
-      console.error("Login failed:", error);
       return { success: false, error: 'Network error. Please try again later.' };
     } finally {
       setIsLoading(false);
@@ -78,7 +77,6 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, error: response?.message || 'Registration failed' };
     } catch (error) {
-      console.error("Registration failed:", error);
       return { success: false, error: 'Network error. Please try again later.' };
     } finally {
       setIsLoading(false);
@@ -94,7 +92,6 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, error: response?.message || 'Failed to send OTP' };
     } catch (error) {
-      console.error("Send OTP failed:", error);
       return { success: false, error: 'Network error. Please try again later.' };
     } finally {
       setIsLoading(false);
@@ -112,7 +109,6 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, error: response?.message || 'Failed to verify OTP' };
     } catch (error) {
-      console.error("Verify OTP failed:", error);
       return { success: false, error: 'Network error. Please try again later.' };
     } finally {
       setIsLoading(false);

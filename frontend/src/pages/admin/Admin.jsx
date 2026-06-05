@@ -34,8 +34,7 @@ const Admin = () => {
         status: o.status ? o.status.toLowerCase() : 'pending'
       }));
       setOrders([...normalizedLocal, ...recentOrders]);
-    } catch (e) {
-      console.error("Failed to load local orders in Admin dashboard", e);
+    } catch {
       setOrders(recentOrders);
     }
   }, []);

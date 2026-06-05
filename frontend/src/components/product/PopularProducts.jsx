@@ -24,8 +24,7 @@ const PopularProducts = () => {
         if (isMounted) {
           setProducts(data || []);
         }
-      } catch (err) {
-        console.error('Failed to load popular products', err);
+      } catch {
       } finally {
         if (isMounted) {
           setLoading(false);

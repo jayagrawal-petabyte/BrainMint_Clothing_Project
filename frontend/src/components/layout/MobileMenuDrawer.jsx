@@ -24,8 +24,7 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
         if (isMounted && searches) {
           setTrendingKeywords(searches.slice(0, 3));
         }
-      } catch (err) {
-        console.error("Error loading trending searches in mobile menu drawer", err);
+      } catch {
       }
     };
     loadTrending();

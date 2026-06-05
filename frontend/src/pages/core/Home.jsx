@@ -92,11 +92,7 @@ const Home = ({ onSplashActive }) => {
 
         // backend response safety
         setNewArrivals(products || []);
-      } catch (error) {
-        console.error(
-          'Failed to fetch new arrivals:',
-          error
-        );
+      } catch {
       } finally {
         setLoading(false);
       }

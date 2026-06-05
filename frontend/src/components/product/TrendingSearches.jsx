@@ -17,8 +17,7 @@ const TrendingSearches = ({ compact = false }) => {
         if (isMounted) {
           setSearches(data || []);
         }
-      } catch (err) {
-        console.error('Failed to load trending searches', err);
+      } catch {
       } finally {
         if (isMounted) {
           setLoading(false);

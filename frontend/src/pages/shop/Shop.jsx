@@ -77,9 +77,7 @@ const Shop = () => {
 
         setProducts(Array.isArray(data.products) ? data.products : []);
         setTotalProducts(data.pagination?.total || 0);
-      } catch (error) {
-        // Suppress console error in production but keep it for devs
-        // console.error('Failed to fetch products');
+      } catch {
       } finally {
         setLoading(false);
       }

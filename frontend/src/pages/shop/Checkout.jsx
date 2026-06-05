@@ -233,13 +233,22 @@ const Checkout = () => {
 
     // Format order payload
     const orderData = {
-      orderItems: cartItems.map(item => ({
-        product: getId(item),
-        name: item.name,
-        quantity: item.quantity,
-        price: getPrice(item),
-        image: getImage(item)
-      })),
+      orderItems: cartItems.map(item => {
+        const originalPrice = getPrice(item);
+        // If a coupon is applied, proportionally reduce the unit price sent to the backend
+        // so the backend's strict item-sum calculation matches the discounted total
+        const discountedPrice = couponApplied 
+          ? originalPrice - (originalPrice * (discountPercent / 100))
+          : originalPrice;
+
+        return {
+          product: getId(item),
+          name: item.name,
+          quantity: item.quantity,
+          price: Math.max(0, Math.round(discountedPrice)), // Ensure price doesn't go negative and is an integer
+          image: getImage(item)
+        };
+      }),
       shippingAddress: {
         name: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',
         fullName: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',

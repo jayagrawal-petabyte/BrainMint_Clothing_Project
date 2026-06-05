@@ -78,6 +78,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
       </nav>
 
       <div className="p-4 border-t border-admin-border dark:border-admin-border-dark space-y-1">
+        {/* Settings temporarily disabled until backend integration is ready
         <NavLink
           to="/admin/settings"
           onClick={() => setIsOpen(false)}
@@ -92,6 +93,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           <Settings size={20} />
           <span>Settings</span>
         </NavLink>
+        */}
         <button 
           onClick={() => {
             localStorage.removeItem('adminToken');

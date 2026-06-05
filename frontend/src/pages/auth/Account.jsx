@@ -266,6 +266,11 @@ const Account = () => {
                             <div className="order-details-col">
                               <p className="order-label">Total Amount</p>
                               <p className="order-value font-montserrat">₹{order.totalPrice?.toLocaleString('en-IN') || 0}</p>
+                              {(order.discountAmount > 0 || order.couponCode) && (
+                                <p style={{ fontSize: '11px', color: '#16a34a', marginTop: '2px', fontWeight: 500 }}>
+                                  {order.couponCode ? `Coupon: ${order.couponCode}` : 'Discount'} — saved ₹{(order.discountAmount || 0).toLocaleString('en-IN')}
+                                </p>
+                              )}
                             </div>
                             <div className="order-details-col">
                               <p className="order-label">Items</p>
@@ -320,6 +325,12 @@ const Account = () => {
                                     <p style={{ margin: 0 }}>{order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.pincode}</p>
                                     <p style={{ margin: 0, marginTop: '5px' }}>Phone: {order.shippingAddress?.phone}</p>
                                   </div>
+                                  {(order.discountAmount > 0 || order.couponCode) && (
+                                    <div style={{ marginTop: '16px', padding: '10px 14px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px', fontSize: '12.5px', color: '#15803d' }}>
+                                      {order.couponCode && <p style={{ margin: 0, fontWeight: 600 }}>Coupon Applied: {order.couponCode}</p>}
+                                      {order.discountAmount > 0 && <p style={{ margin: 0 }}>You saved ₹{order.discountAmount.toLocaleString('en-IN')} on this order</p>}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>

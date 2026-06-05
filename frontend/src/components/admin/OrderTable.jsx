@@ -90,6 +90,16 @@ const OrderDetailsModal = ({ order, onClose }) => {
             <span className="font-semibold text-admin-heading dark:text-admin-heading-dark">Total Amount</span>
             <span className="text-xl font-bold text-admin-accent">{order.amount}</span>
           </div>
+          {(original.discountAmount > 0 || original.couponCode) && (
+            <div className="mt-3 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-sm">
+              {original.couponCode && (
+                <p className="text-emerald-700 dark:text-emerald-400 font-semibold mb-1">Coupon Applied: {original.couponCode}</p>
+              )}
+              {original.discountAmount > 0 && (
+                <p className="text-emerald-600 dark:text-emerald-400">Customer saved ₹{original.discountAmount.toLocaleString('en-IN')} on this order</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -127,7 +137,14 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
                   <div className="text-xs text-admin-text dark:text-admin-text-dark">{order.email}</div>
                 </td>
                 <td className="px-6 py-4 text-admin-text dark:text-admin-text-dark">{order.date}</td>
-                <td className="px-6 py-4 font-semibold text-admin-heading dark:text-admin-heading-dark">{order.amount}</td>
+                <td className="px-6 py-4">
+                  <div className="font-semibold text-admin-heading dark:text-admin-heading-dark">{order.amount}</div>
+                  {order._original?.discountAmount > 0 && (
+                    <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-0.5">
+                      {order._original?.couponCode ? `${order._original.couponCode} — ` : ''}saved ₹{order._original.discountAmount.toLocaleString('en-IN')}
+                    </div>
+                  )}
+                </td>
                 <td className="px-6 py-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border
                     ${order.status === 'Delivered' ? 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-800' : ''}

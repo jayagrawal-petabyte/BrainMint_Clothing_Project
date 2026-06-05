@@ -811,12 +811,12 @@
 .co-success-card {
   width: 100%;
   max-width: 480px;
-  background: var(--section-bg-1);
+  background: var(--white-7);
   border: 1px solid var(--border-color-1);
   padding: 48px 36px;
   text-align: center;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
 }
 .co-success-icon-wrap {
   width: 80px;
@@ -895,10 +895,11 @@
 }
 .co-success-btn-primary {
   background: var(--ltn__heading-color);
-  color: #fff;
+  color: #fff !important;
 }
 .co-success-btn-primary:hover {
   background: var(--ltn__secondary-color);
+  color: #fff !important;
 }
 .co-success-btn-secondary {
   background: transparent;

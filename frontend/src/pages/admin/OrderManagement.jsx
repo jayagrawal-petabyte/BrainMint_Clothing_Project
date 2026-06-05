@@ -25,7 +25,7 @@ const OrderManagement = () => {
         amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
         status: o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending',
         date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        _original: o // keep original for updates
+        _original: { ...o, discountAmount: o.discountAmount || 0, couponCode: o.couponCode || '' }
       }));
       setOrders(mappedOrders);
     } else {

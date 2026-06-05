@@ -253,6 +253,8 @@ const Checkout = () => {
       paymentMethod: paymentMethod,
       taxPrice: 0,
       shippingPrice: shipping,
+      discountAmount: discount,
+      couponCode: couponApplied ? coupon.trim() : undefined,
       totalPrice: finalTotal
     };
 

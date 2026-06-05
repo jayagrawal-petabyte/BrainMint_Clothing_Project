@@ -30,40 +30,40 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
 
-  useEffect(() => {
-    const loadProduct = async () => {
-      try {
-        setLoading(true);
+  const loadProduct = async () => {
+    try {
+      setLoading(true);
 
-        const data = await fetchProductById(id);
+      const data = await fetchProductById(id);
 
-        if (!data) {
-          setProduct(null);
-          return;
-        }
-
-        setProduct(data);
-
-        setSelectedImage(
-          data.images?.[0]?.url ||
-            'https://placehold.co/600x800'
-        );
-
-        if (data.category) {
-          const similarRes = await fetchProducts(`?category=${data.category}`);
-          const filteredSimilar = (similarRes.products || []).filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
-          setSimilarProducts(filteredSimilar);
-        }
-
-        const popular = await fetchPopularProducts();
-        const filteredPopular = popular.filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
-        setPopularProducts(filteredPopular);
-      } catch {
-      } finally {
-        setLoading(false);
+      if (!data) {
+        setProduct(null);
+        return;
       }
-    };
 
+      setProduct(data);
+
+      setSelectedImage(
+        data.images?.[0]?.url ||
+          'https://placehold.co/600x800'
+      );
+
+      if (data.category) {
+        const similarRes = await fetchProducts(`?category=${data.category}`);
+        const filteredSimilar = (similarRes.products || []).filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
+        setSimilarProducts(filteredSimilar);
+      }
+
+      const popular = await fetchPopularProducts();
+      const filteredPopular = popular.filter(p => (p._id || p.id) !== data._id && (p._id || p.id) !== data.id);
+      setPopularProducts(filteredPopular);
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadProduct();
   }, [id]);
 
@@ -491,7 +491,10 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      <ProductTabs productId={product._id || product.id} />
+      <ProductTabs 
+        productId={product._id || product.id} 
+        onReviewAdded={() => loadProduct()} 
+      />
 
       {similarProducts.length > 0 && (
         <ProductSlider title="Similar Products" products={similarProducts} />

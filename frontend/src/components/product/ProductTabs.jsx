@@ -5,7 +5,7 @@ import './ProductTabs.css';
 
 const TABS = ['Description', 'Reviews', 'Shipping Policy'];
 
-const ProductTabs = ({ productId }) => {
+const ProductTabs = ({ productId, onReviewAdded }) => {
   const [activeTab, setActiveTab] = useState('Description');
   const [reviews, setReviews] = useState([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(false);
@@ -51,6 +51,7 @@ const ProductTabs = ({ productId }) => {
       setComment('');
       setRating(5);
       loadReviews(); // reload to show the new review
+      if (onReviewAdded) onReviewAdded(); // trigger parent refresh to update rating
     } else {
       setSubmitMessage(res?.message || 'Failed to submit review. You may have already reviewed this product.');
     }

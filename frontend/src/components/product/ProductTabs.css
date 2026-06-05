@@ -179,19 +179,22 @@
 
 .review-textarea {
   width: 100%;
+  min-height: 120px;
+  resize: vertical;
   border: 1px solid var(--border-color-11);
-  background-color: transparent;
+  background-color: var(--white-7);
   padding: 15px;
   border-radius: 8px;
   font-family: var(--ltn__body-font);
   font-size: 14px;
   color: var(--ltn__heading-color);
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .review-textarea:focus {
   border-color: var(--ltn__secondary-color);
+  box-shadow: 0 0 0 3px rgba(242, 76, 92, 0.1);
 }
 
 .submit-review-btn {

@@ -25,6 +25,7 @@ import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminSettings from './pages/admin/AdminSettings';
 import ProductManagement from './pages/admin/ProductManagement';
 import AddProduct from './pages/admin/AddProduct';
 import EditProduct from './pages/admin/EditProduct';
@@ -107,6 +108,7 @@ function App() {
                 <Route path="orders" element={<OrderManagement />} />
                 <Route path="discounts" element={<DiscountManagement />} />
                 <Route path="messages" element={<ContactMessages />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Route>
 

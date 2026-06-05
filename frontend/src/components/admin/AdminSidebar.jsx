@@ -78,10 +78,20 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
       </nav>
 
       <div className="p-4 border-t border-admin-border dark:border-admin-border-dark space-y-1">
-        <button className="bg-transparent border-none outline-none w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-admin-text dark:text-admin-text-dark hover:bg-admin-bg dark:hover:bg-[#222] hover:text-admin-heading dark:hover:text-admin-heading-dark transition-all duration-200 font-medium">
+        <NavLink
+          to="/admin/settings"
+          onClick={() => setIsOpen(false)}
+          className={({ isActive }) =>
+            `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 font-medium ${
+              isActive
+                ? 'bg-admin-bg dark:bg-[#222] text-admin-heading dark:text-admin-heading-dark font-semibold border-l-2 border-admin-accent'
+                : 'bg-transparent text-admin-text dark:text-admin-text-dark hover:bg-admin-bg dark:hover:bg-[#222] hover:text-admin-heading dark:hover:text-admin-heading-dark'
+            }`
+          }
+        >
           <Settings size={20} />
           <span>Settings</span>
-        </button>
+        </NavLink>
         <button 
           onClick={() => {
             localStorage.removeItem('adminToken');

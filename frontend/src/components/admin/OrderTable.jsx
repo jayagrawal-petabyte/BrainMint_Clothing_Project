@@ -172,11 +172,11 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
                         onChange={(e) => setEditStatus(e.target.value)}
                         className="text-xs bg-transparent outline-none text-admin-heading dark:text-admin-heading-dark"
                       >
-                        <option value="Pending">Pending</option>
-                        <option value="Confirmed">Confirmed</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="Pending" className="dark:bg-[#333]">Pending</option>
+                        <option value="Confirmed" className="dark:bg-[#333]">Confirmed</option>
+                        <option value="Shipped" className="dark:bg-[#333]">Shipped</option>
+                        <option value="Delivered" className="dark:bg-[#333]">Delivered</option>
+                        <option value="Cancelled" className="dark:bg-[#333]">Cancelled</option>
                       </select>
                       <button 
                         onClick={() => {

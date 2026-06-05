@@ -246,6 +246,7 @@
 
 .cart-shipping-btn:hover {
   background: var(--ltn__primary-color);
+  color: var(--white-7);
 }
 
 /* Cart Totals */
@@ -290,6 +291,7 @@
 
 .cart-checkout-btn:hover {
   background: var(--ltn__primary-color);
+  color: var(--white-7);
 }
 
 @media (max-width: 900px) {

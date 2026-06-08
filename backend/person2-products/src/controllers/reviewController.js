@@ -21,7 +21,10 @@ const recalculateProductRating = async (productId) => {
     ? { average: Math.round(summary[0].average * 10) / 10, count: summary[0].count }
     : { average: 0, count: 0 };
 
-  await Product.findByIdAndUpdate(productId, { ratings });
+  await Product.findByIdAndUpdate(productId, { 
+    rating: ratings.average,
+    reviewCount: ratings.count
+  });
 };
 
 const getProductReviews = asyncHandler(async (req, res) => {

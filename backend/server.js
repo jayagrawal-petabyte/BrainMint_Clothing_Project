@@ -12,6 +12,7 @@ const adminProductRoutes = require('./person2-products/src/routes/adminRoutes');
 const couponRoutes = require('./person2-products/src/routes/couponRoutes');
 const analyticsRoutes = require('./person2-products/src/routes/analyticsRoutes');
 const newsletterRoutes = require('./person2-products/src/routes/newsletterRoutes');
+const contactRoutes = require('./person1-auth/src/routes/contactRoutes');
 const cartRoutes = require('./person3-cart-orders/src/routes/cartRoutes');
 const wishlistRoutes = require('./person3-cart-orders/src/routes/wishlistRoutes');
 const orderRoutes = require('./person3-cart-orders/src/routes/orderRoutes');
@@ -20,6 +21,7 @@ const paymentRoutes = require('./person3-cart-orders/src/routes/paymentRoutes');
 
 // Import all models so mongoose registers them
 require('./person1-auth/src/models/User');
+require('./person1-auth/src/models/Contact');
 require('./person2-products/src/models/Product');
 require('./person2-products/src/models/Category');
 require('./person2-products/src/models/Coupon');
@@ -41,6 +43,7 @@ app.get('/health', (req, res) => {
 
 // Mount all routes
 app.use('/api/auth', authRoutes);
+app.use('/api/contact', contactRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/admin/products', adminProductRoutes);

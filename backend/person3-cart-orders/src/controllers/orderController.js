@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
+const Coupon = require('../models/Coupon');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -9,7 +10,7 @@ const asyncHandler = require('../utils/asyncHandler');
 // @route   POST /api/orders
 // @access  Private
 const createOrder = asyncHandler(async (req, res) => {
-  const { shippingAddress } = req.body;
+  const { shippingAddress, couponCode, discountAmount } = req.body;
 
   if (!shippingAddress) {
     throw new ApiError(400, 'Shipping address is required');
@@ -56,14 +57,31 @@ const createOrder = asyncHandler(async (req, res) => {
     0
   );
 
+  // Apply discountAmount from request (validated by frontend) to final price
+  const finalTotalPrice = Math.max(0, totalPrice - (discountAmount || 0));
+
   const order = await Order.create({
     user: req.user.id,
     items: orderItems,
     shippingAddress,
-    totalPrice,
+    couponCode: couponCode || null,
+    discountAmount: discountAmount || 0,
+    totalPrice: finalTotalPrice,
     status: 'pending',
     paymentStatus: 'unpaid'
   });
+
+  // Increment coupon usage count if applied
+  if (couponCode) {
+    try {
+      await Coupon.findOneAndUpdate(
+        { code: couponCode.trim().toUpperCase() },
+        { $inc: { usedCount: 1 } }
+      );
+    } catch (err) {
+      console.error('Failed to increment coupon usedCount:', err);
+    }
+  }
 
   // Clear cart after order creation
   cart.items = [];

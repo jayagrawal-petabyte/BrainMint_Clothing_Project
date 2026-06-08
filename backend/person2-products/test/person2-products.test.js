@@ -154,6 +154,42 @@ assert.deepStrictEqual(
   assert.strictEqual(productControllerPrivate.resolveSort('rating'), '-ratings.average', 'rating sort should map to ratings.average');
   assert.strictEqual(productControllerPrivate.resolveSort('unknown-field'), '-createdAt', 'unknown sort should fall back safely');
 
+  const imageUrlPayload = productControllerPrivate.normalizeProductImagesPayload({
+    name: 'URL Image Product',
+    imageUrl: 'https://cdn.example.com/products/url-image-shirt.jpg',
+    imageAlt: 'URL image shirt'
+  });
+  assert.deepStrictEqual(
+    imageUrlPayload.images,
+    [
+      {
+        url: 'https://cdn.example.com/products/url-image-shirt.jpg',
+        public_id: 'products/url-image-shirt',
+        alt: 'URL image shirt'
+      }
+    ],
+    'admin create/update should normalize imageUrl into product images'
+  );
+  assert.strictEqual(imageUrlPayload.imageUrl, undefined, 'normalized payload should remove imageUrl helper field');
+
+  const imageArrayPayload = productControllerPrivate.normalizeProductImagesPayload({
+    name: 'Multi URL Product',
+    images: ['https://cdn.example.com/one.png', { link: 'https://cdn.example.com/two.webp', title: 'Second image' }]
+  });
+  assert.strictEqual(imageArrayPayload.images.length, 2, 'image URL arrays should be accepted');
+  assert.strictEqual(imageArrayPayload.images[0].url, 'https://cdn.example.com/one.png', 'string image entries should map to url');
+  assert.strictEqual(imageArrayPayload.images[1].alt, 'Second image', 'object image link entries should preserve alt text');
+
+  let blockedInvalidImageUrl = false;
+  try {
+    productControllerPrivate.normalizeProductImagesPayload({
+      imageUrl: 'not-a-valid-image-url'
+    });
+  } catch (error) {
+    blockedInvalidImageUrl = error.statusCode === 400;
+  }
+  assert(blockedInvalidImageUrl, 'invalid image URL uploads should return a validation error');
+
   console.log('Person 2 product seed, admin route, and catalog query tests passed.');
 })().catch((error) => {
   console.error(error);

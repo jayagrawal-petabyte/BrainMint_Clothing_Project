@@ -11,6 +11,90 @@ const toArray = (value) => {
   return Array.isArray(value) ? value : String(value).split(',').map((item) => item.trim()).filter(Boolean);
 };
 
+const isHttpImageUrl = (value) => {
+  try {
+    const parsed = new URL(String(value).trim());
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch (error) {
+    return false;
+  }
+};
+
+const buildPublicIdFromUrl = (url) => {
+  try {
+    const parsed = new URL(url);
+    const pathName = parsed.pathname.split('/').filter(Boolean).pop() || parsed.hostname;
+    const slug = pathName
+      .replace(/\.[a-z0-9]+$/i, '')
+      .replace(/[^a-z0-9]+/gi, '-')
+      .replace(/^-|-$/g, '')
+      .toLowerCase();
+
+    return slug ? `products/${slug}` : undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+const normalizeImageInput = (image, fallbackAlt) => {
+  if (typeof image === 'string') {
+    const url = image.trim();
+    if (!isHttpImageUrl(url)) return undefined;
+    return {
+      url,
+      public_id: buildPublicIdFromUrl(url),
+      alt: fallbackAlt
+    };
+  }
+
+  if (!image || typeof image !== 'object') return undefined;
+
+  const url = firstDefined(image.url, image.imageUrl, image.imageURL, image.link, image.href);
+  if (!url || !isHttpImageUrl(url)) return undefined;
+
+  return {
+    url: String(url).trim(),
+    public_id: image.public_id || image.publicId || buildPublicIdFromUrl(url),
+    alt: firstDefined(image.alt, image.title, fallbackAlt)
+  };
+};
+
+const normalizeProductImagesPayload = (body) => {
+  const nextBody = { ...body };
+  const directImageUrls = [
+    ...toArray(firstDefined(body.imageUrl, body.imageURL, body.imageLink, body.image)),
+    ...toArray(firstDefined(body.imageUrls, body.imageURLs, body.imageLinks))
+  ];
+  const providedImages = Array.isArray(body.images) ? body.images : toArray(body.images);
+  const imageInputs = [...providedImages, ...directImageUrls];
+
+  if (imageInputs.length === 0) {
+    return nextBody;
+  }
+
+  const fallbackAlt = firstDefined(body.imageAlt, body.alt, body.name);
+  const normalizedImages = imageInputs
+    .map((image) => normalizeImageInput(image, fallbackAlt))
+    .filter(Boolean);
+
+  if (normalizedImages.length === 0) {
+    throw new ApiError(400, 'At least one valid http or https image URL is required');
+  }
+
+  nextBody.images = normalizedImages;
+  delete nextBody.imageUrl;
+  delete nextBody.imageURL;
+  delete nextBody.imageUrls;
+  delete nextBody.imageURLs;
+  delete nextBody.imageLink;
+  delete nextBody.imageLinks;
+  delete nextBody.image;
+  delete nextBody.imageAlt;
+  delete nextBody.alt;
+
+  return nextBody;
+};
+
 const toBoolean = (value) => {
   if (value === undefined || value === null || value === '') return undefined;
   if (typeof value === 'boolean') return value;
@@ -295,7 +379,7 @@ const getProductForCart = asyncHandler(async (req, res) => {
 });
 
 const createProduct = asyncHandler(async (req, res) => {
-  const product = await Product.create(req.body);
+  const product = await Product.create(normalizeProductImagesPayload(req.body));
 
   res.status(201).json({
     success: true,
@@ -305,7 +389,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+  const product = await Product.findByIdAndUpdate(req.params.id, normalizeProductImagesPayload(req.body), {
     new: true,
     runValidators: true
   });
@@ -446,6 +530,7 @@ module.exports = {
   _private: {
     buildProductQuery,
     resolveSort,
+    normalizeProductImagesPayload,
     toArray,
     toBoolean,
     toDiscountPercent,

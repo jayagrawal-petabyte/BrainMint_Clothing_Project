@@ -52,8 +52,11 @@ async (req, res) => {
 
     }
 
-    // Mock OTP for testing due to Render SMTP block
-    const otp = "123456";
+    const otp =
+      Math.floor(
+        100000 +
+        Math.random() * 900000
+      ).toString();
 
     const hashedPassword =
       await bcrypt.hash(password, 10);
@@ -79,14 +82,12 @@ async (req, res) => {
 
     );
 
-    /* 
     await sendEmail(
       email,
       "Email Verification OTP",
       `Your OTP is: ${otp}`
     );
-    */
-
+  
     res.status(200).json({
 
       success: true,
@@ -113,6 +114,12 @@ async (req, res) => {
   try {
 
     const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({
+      success: false,
+      message: "Email and OTP are required"
+    });
+  }
 
     const pendingUser =
       await PendingUser.findOne({
@@ -174,7 +181,14 @@ async (req, res) => {
         "Registration completed",
 
       data: {
-        user
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          role: user.role
+      
+        }
       }
 
     });

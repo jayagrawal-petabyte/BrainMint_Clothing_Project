@@ -45,7 +45,7 @@ export const submitProductReview = async (productId, reviewData, token) => {
       },
       body: JSON.stringify(reviewData),
     });
-    
+
     let data;
     try {
       data = await response.json();
@@ -56,7 +56,7 @@ export const submitProductReview = async (productId, reviewData, token) => {
     if (!response.ok) {
       return { success: false, message: data.message || `HTTP Error ${response.status}` };
     }
-    
+
     return data;
   } catch (error) {
     return { success: false, message: error.message };
@@ -373,9 +373,9 @@ export const adminCreateCoupon = async (couponData, token) => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/admin/coupons`, {
       method: "POST",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` 
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(couponData)
     });
@@ -389,9 +389,9 @@ export const adminUpdateCoupon = async (id, couponData, token) => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/admin/coupons/${id}`, {
       method: "PUT",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` 
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(couponData)
     });
@@ -414,15 +414,15 @@ export const adminDeleteCoupon = async (id, token) => {
 };
 
 export const fetchSalesAnalytics = async (token) => {
-    try {
-      const response = await fetch(`${PRODUCTS_URL}/admin/analytics/sales`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return await response.json();
-    } catch (error) {
-      return null;
-    }
+  try {
+    const response = await fetch(`${PRODUCTS_URL}/admin/analytics/sales`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await response.json();
+  } catch (error) {
+    return null;
+  }
 };
 
 // ─── Cart / Orders ─────────────────────────────────────────────────────────────

@@ -221,11 +221,9 @@ const ProductDetail = () => {
             }}
           >
             <Star size={16} fill="#f5a623" stroke="#f5a623" />
-            {product.rating
-              ?.average || 0}{' '}
+            {product.rating || 0}{' '}
             (
-            {product.rating
-              ?.count || 0}{' '}
+            {product.reviewCount || 0}{' '}
             reviews)
           </p>
 

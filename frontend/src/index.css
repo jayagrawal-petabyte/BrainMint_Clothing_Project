@@ -109,3 +109,13 @@ img {
   outline-offset: 2px;
   border-radius: 2px;
 }
+
+/* Fix for dropdown options rendering white-on-white */
+select option {
+  background-color: var(--white);
+  color: var(--ltn__heading-color);
+}
+[data-theme='dark'] select option {
+  background-color: var(--section-bg-1);
+  color: var(--ltn__heading-color);
+}

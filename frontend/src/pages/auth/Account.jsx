@@ -147,7 +147,7 @@ const Account = () => {
   const getStatusBadge = (status) => {
     if (!status) return <span className="acc-badge acc-badge--pending">Pending</span>;
     const s = status.toLowerCase();
-    if (s === 'delivered' || s === 'completed') return <span className="acc-badge acc-badge--success">{status}</span>;
+    if (s === 'delivered' || s === 'completed' || s === 'confirmed') return <span className="acc-badge acc-badge--success">{status}</span>;
     if (s === 'processing' || s === 'pending') return <span className="acc-badge acc-badge--warning">{status}</span>;
     if (s === 'cancelled' || s === 'failed') return <span className="acc-badge acc-badge--danger">{status}</span>;
     return <span className="acc-badge acc-badge--default">{status}</span>;

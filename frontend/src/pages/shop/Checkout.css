@@ -895,7 +895,7 @@
 }
 .co-success-btn-primary {
   background: var(--ltn__heading-color);
-  color: #fff !important;
+  color: var(--white-7) !important;
 }
 .co-success-btn-primary:hover {
   background: var(--ltn__secondary-color);

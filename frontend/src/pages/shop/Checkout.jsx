@@ -79,7 +79,7 @@ const Checkout = () => {
   const [couponError, setCouponError] = useState(false);
   const [discountPercent, setDiscountPercent] = useState(10);
   const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('COD');
+  const [paymentMethod, setPaymentMethod] = useState('Razorpay');
   const [fetchedProfile, setFetchedProfile] = useState(null);
   const [errors, setErrors] = useState({});
   const [placedOrderTotal, setPlacedOrderTotal] = useState(0);
@@ -681,15 +681,14 @@ const Checkout = () => {
 
               <p className="co__subhead">Select Payment Method</p>
               <div className="co__payment-options">
-                {/* Cash on Delivery */}
+                {/* Cash on Delivery (Disabled) */}
                 <div 
-                  className={`co__pay-option ${paymentMethod === 'COD' ? 'co__pay-option--active' : ''}`}
-                  onClick={() => setPaymentMethod('COD')}
+                  className="co__pay-option co__pay-option--disabled"
                 >
-                  <span className={`co__pay-radio ${paymentMethod === 'COD' ? 'co__pay-radio--active' : ''}`} />
+                  <span className="co__pay-radio" />
                   <div className="co__pay-details">
                     <span className="co__pay-name">Cash on Delivery (COD)</span>
-                    <span className="co__pay-desc">Pay with cash upon delivery. No extra fees.</span>
+                    <span className="co__pay-desc">Currently unavailable in your region.</span>
                   </div>
                 </div>
 

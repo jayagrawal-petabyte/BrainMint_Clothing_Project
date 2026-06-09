@@ -2,6 +2,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Payment = require('../models/Payment');
 const Order = require('../models/Order');
+const Product = require('../../person2-products/src/models/Product');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -95,6 +96,17 @@ const verifyPayment = asyncHandler(async (req, res) => {
   await payment.save();
 
   const order = await Order.findById(orderId);
+  
+  // Decrease stock now that Razorpay payment is successful
+  for (const item of order.items) {
+    // We already verified there was sufficient stock during createOrder,
+    // but another order could theoretically have taken it.
+    await Product.decreaseStockForOrder(
+      item.product || item.productId,
+      item.quantity
+    );
+  }
+
   order.paymentStatus = 'paid';
   order.paymentId = razorpayPaymentId;
   order.status = 'confirmed';

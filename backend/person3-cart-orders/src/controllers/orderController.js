@@ -28,16 +28,26 @@ const createOrder = asyncHandler(async (req, res) => {
   const orderItems = [];
 
   for (const item of cart.items) {
-    const updated = await Product.decreaseStockForOrder(
-      item.product._id,
-      item.quantity
-    );
-
-    if (!updated) {
-      throw new ApiError(
-        400,
-        `Product "${item.product.name}" is unavailable or has insufficient stock`
+    if (paymentMethod !== 'Razorpay') {
+      const updated = await Product.decreaseStockForOrder(
+        item.product._id,
+        item.quantity
       );
+
+      if (!updated) {
+        throw new ApiError(
+          400,
+          `Product "${item.product.name}" is unavailable or has insufficient stock`
+        );
+      }
+    } else {
+      // Just verify stock is sufficient without decreasing it
+      if (item.product.inventory.stock < item.quantity) {
+        throw new ApiError(
+          400,
+          `Product "${item.product.name}" has insufficient stock`
+        );
+      }
     }
 
     orderItems.push({

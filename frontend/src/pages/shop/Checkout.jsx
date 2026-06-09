@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, Chevr
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { placeOrder, fetchUserProfile, validateCoupon } from '../../services/api';
+import { placeOrder, fetchUserProfile, validateCoupon, createPaymentOrder, verifyPayment } from '../../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -18,6 +18,20 @@ const INDIAN_STATES = [
 ];
 
 const STEPS = ['Contact', 'Delivery', 'Payment'];
+
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 /* ── Floating label input — no placeholder collision ── */
 const FloatField = ({ id, name, label, type = 'text', value, onChange, optional, error }) => (
@@ -262,22 +276,8 @@ const Checkout = () => {
 
     const response = await placeOrder(orderData, token);
 
-    setIsSubmitting(false);
-
     if (response && response.success !== false) {
-      // Save order details to local storage so it shows up in the admin panel
-      const newOrder = {
-        id: response.data?.orderId || response.order?._id || response.data?._id || `#UW-${Math.floor(1000 + Math.random() * 9000)}`,
-        customer: `${form.firstName} ${form.lastName}`.trim() || user?.name || 'Customer',
-        email: form.email || user?.email || '',
-        product: cartItems.map(item => `${item.name} (x${item.quantity})`).join(', '),
-        amount: `₹${finalTotal.toLocaleString('en-IN')}`,
-        status: 'Pending',
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        paymentMethod: paymentMethod,
-        items: cartItems
-      };
-      // Backend order is placed successfully
+      const backendOrderId = response.data?.orderId || response.data?._id || response.order?._id;
 
       // Save address if user checked "Save this information for next time"
       if (form.saveInfo) {
@@ -303,11 +303,95 @@ const Checkout = () => {
         } catch (e) {}
       }
 
-      setPlacedOrderTotal(finalTotal);
-      setOrderStatus('success');
-      clearCart();
+      if (paymentMethod === 'Razorpay') {
+        try {
+          const res = await loadRazorpayScript();
+          if (!res) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            setIsSubmitting(false);
+            return;
+          }
+
+          const rzpOrderResponse = await createPaymentOrder(backendOrderId, token);
+          if (!rzpOrderResponse || rzpOrderResponse.success === false || !rzpOrderResponse.data) {
+            console.error("Failed to create Razorpay Order", rzpOrderResponse);
+            const errorMsg = rzpOrderResponse?.message || "Unknown error from server";
+            alert(`Error preparing payment order: ${errorMsg}`);
+            setOrderStatus('error');
+            setIsSubmitting(false);
+            return;
+          }
+
+          const { razorpayOrderId, amount, currency } = rzpOrderResponse.data;
+
+          const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_random', 
+            amount: amount,
+            currency: currency,
+            name: "BrainMint Clothing",
+            description: "Order Payment",
+            order_id: razorpayOrderId,
+            handler: async function (response) {
+              try {
+                const verifyRes = await verifyPayment({
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpaySignature: response.razorpay_signature,
+                  orderId: backendOrderId
+                }, token);
+
+                if (verifyRes && verifyRes.success !== false) {
+                  setPlacedOrderTotal(finalTotal);
+                  setOrderStatus('success');
+                  clearCart();
+                } else {
+                  console.error("Payment verification failed", verifyRes);
+                  setOrderStatus('error');
+                }
+              } catch (verifyErr) {
+                console.error("Verification Error", verifyErr);
+                setOrderStatus('error');
+              }
+            },
+            prefill: {
+              name: `${form.firstName} ${form.lastName}`.trim(),
+              email: form.email,
+              contact: form.phone
+            },
+            theme: {
+              color: "#111111"
+            },
+            modal: {
+              ondismiss: function() {
+                setIsSubmitting(false);
+              }
+            }
+          };
+
+          const paymentObject = new window.Razorpay(options);
+          paymentObject.on('payment.failed', function (response){
+            console.error("Payment failed", response.error);
+            alert("Payment failed or cancelled. Please try again.");
+            setIsSubmitting(false);
+          });
+          paymentObject.open();
+
+        } catch (err) {
+          console.error("Razorpay Flow Error:", err);
+          alert("An unexpected error occurred during payment setup. Please check the console.");
+          setOrderStatus('error');
+          setIsSubmitting(false);
+        }
+      } else {
+        // COD Flow
+        setPlacedOrderTotal(finalTotal);
+        setOrderStatus('success');
+        clearCart();
+        setIsSubmitting(false);
+      }
     } else {
       setOrderStatus('error');
+      setIsSubmitting(false);
     }
   };
 
@@ -609,12 +693,15 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                {/* Online Payment (Disabled / Coming Soon) */}
-                <div className="co__pay-option co__pay-option--disabled">
-                  <span className="co__pay-radio" />
+                {/* Online Payment (Razorpay) */}
+                <div 
+                  className={`co__pay-option ${paymentMethod === 'Razorpay' ? 'co__pay-option--active' : ''}`}
+                  onClick={() => setPaymentMethod('Razorpay')}
+                >
+                  <span className={`co__pay-radio ${paymentMethod === 'Razorpay' ? 'co__pay-radio--active' : ''}`} />
                   <div className="co__pay-details">
-                    <span className="co__pay-name">Credit/Debit Card</span>
-                    <span className="co__pay-desc">Pay securely with Visa, Mastercard, or RuPay. (Coming Soon)</span>
+                    <span className="co__pay-name">Online Payment (Razorpay)</span>
+                    <span className="co__pay-desc">Pay securely with Credit/Debit Card, UPI, or Netbanking.</span>
                   </div>
                 </div>
                 

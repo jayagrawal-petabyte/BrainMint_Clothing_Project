@@ -46,7 +46,12 @@ const Account = () => {
           ]);
           
           if (ordersRes && ordersRes.success !== false) {
-            setOrders(ordersRes.orders || ordersRes.data || []);
+            const fetchedOrders = ordersRes.orders || ordersRes.data || [];
+            const mappedOrders = fetchedOrders.map(o => {
+              const isAbandoned = o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending';
+              return isAbandoned ? { ...o, status: 'Abandoned' } : o;
+            });
+            setOrders(mappedOrders);
           }
           
           if (profileRes && profileRes.success !== false) {
@@ -149,7 +154,7 @@ const Account = () => {
     const s = status.toLowerCase();
     if (s === 'delivered' || s === 'completed' || s === 'confirmed') return <span className="acc-badge acc-badge--success">{status}</span>;
     if (s === 'processing' || s === 'pending') return <span className="acc-badge acc-badge--warning">{status}</span>;
-    if (s === 'cancelled' || s === 'failed') return <span className="acc-badge acc-badge--danger">{status}</span>;
+    if (s === 'cancelled' || s === 'failed' || s === 'abandoned') return <span className="acc-badge acc-badge--danger">{status}</span>;
     return <span className="acc-badge acc-badge--default">{status}</span>;
   };
 

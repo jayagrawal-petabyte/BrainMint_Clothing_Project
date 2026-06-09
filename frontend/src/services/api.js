@@ -1,8 +1,8 @@
 // ─── Backend Service URLs ────────────────────────────────────────────────────
-const AUTH_URL = "https://brainmint-clothing-project-final.onrender.com/api";
-const PRODUCTS_URL = "https://brainmint-clothing-project-person2.onrender.com/api";
-const CART_URL = "https://brainmint-clothing-project-1.onrender.com/api";
-const COMBINED_URL = "https://brainmint-clothing-project-final.onrender.com/api";
+const AUTH_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
+const PRODUCTS_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
+const CART_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
+const COMBINED_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 export const fetchProducts = async (params = "") => {
@@ -539,6 +539,38 @@ export const placeOrder = async (orderData, token) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(orderData),
+    });
+    return await response.json();
+  } catch (error) {
+    return null;
+  }
+};
+
+export const createPaymentOrder = async (orderId, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/payments/create-order`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ orderId }),
+    });
+    return await response.json();
+  } catch (error) {
+    return null;
+  }
+};
+
+export const verifyPayment = async (paymentData, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/payments/verify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(paymentData),
     });
     return await response.json();
   } catch (error) {

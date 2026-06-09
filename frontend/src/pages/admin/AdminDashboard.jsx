@@ -18,14 +18,42 @@ const AdminDashboard = () => {
       const token = localStorage.getItem('adminToken');
       
       try {
-        // Fetch real analytics
+        // Fetch real orders
+        const backendOrders = await fetchAdminOrders(token);
+        let validOrders = [];
+        let calculatedRevenue = 0;
+        let calculatedOrderCount = 0;
+
+        if (backendOrders && backendOrders.data && Array.isArray(backendOrders.data)) {
+          validOrders = backendOrders.data.filter(o => {
+            const isAbandoned = o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending';
+            return !isAbandoned;
+          });
+          
+          calculatedRevenue = validOrders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
+          calculatedOrderCount = validOrders.length;
+
+          const mappedOrders = validOrders.slice(0, 5).map(o => ({
+            id: o._id,
+            customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
+            product: o.items?.length > 0 ? o.items[0].product?.name || 'Item' : 'Various Items',
+            amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
+            status: o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending',
+            date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          }));
+          setOrders(mappedOrders);
+        } else {
+          setOrders([]);
+        }
+
+        // Fetch real analytics (mostly for chart data and total products)
         const analytics = await fetchSalesAnalytics(token);
         if (analytics && analytics.data) {
           // Format the stats for DashboardCards
           const newStats = [
             {
               title: 'Gross Revenue',
-              value: `₹${(analytics.data?.stats?.totalRevenue || 0).toLocaleString('en-IN')}`,
+              value: `₹${calculatedRevenue.toLocaleString('en-IN')}`,
               change: '+10%', // Backend doesn't have history yet
               isPositive: true,
               icon: <ArrowRight size={24} className="text-white" />,
@@ -33,7 +61,7 @@ const AdminDashboard = () => {
             },
             {
               title: 'Total Orders',
-              value: `${analytics.data?.stats?.totalOrders || 0}`,
+              value: `${calculatedOrderCount}`,
               change: '+5%',
               isPositive: true,
               icon: <ArrowRight size={24} className="text-white" />,
@@ -64,22 +92,6 @@ const AdminDashboard = () => {
           if (analytics.data?.topSellingProducts) {
             setTopProducts(analytics.data.topSellingProducts);
           }
-        }
-
-        // Fetch real orders
-        const backendOrders = await fetchAdminOrders(token);
-        if (backendOrders && backendOrders.data && Array.isArray(backendOrders.data)) {
-          const mappedOrders = backendOrders.data.slice(0, 5).map(o => ({
-            id: o._id,
-            customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
-            product: o.items?.length > 0 ? o.items[0].product?.name || 'Item' : 'Various Items',
-            amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
-            status: o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending',
-            date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          }));
-          setOrders(mappedOrders);
-        } else {
-          setOrders([]);
         }
       } catch {
         setOrders([]);

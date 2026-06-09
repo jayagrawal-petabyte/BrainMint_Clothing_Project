@@ -7,7 +7,7 @@ const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const tabs = ['All', 'Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
+  const tabs = ['All', 'Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Abandoned'];
 
   const loadOrders = async () => {
     setIsLoading(true);
@@ -18,15 +18,22 @@ const OrderManagement = () => {
     
     if (backendOrders && backendOrders.data && Array.isArray(backendOrders.data)) {
       // Map backend orders to frontend format
-      const mappedOrders = backendOrders.data.map(o => ({
-        id: o._id,
-        customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
-        email: o.user?.email || 'N/A',
-        amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
-        status: o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending',
-        date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        _original: { ...o, discountAmount: o.discountAmount || 0, couponCode: o.couponCode || '' }
-      }));
+      const mappedOrders = backendOrders.data.map(o => {
+        let displayStatus = o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending';
+        if (o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending') {
+          displayStatus = 'Abandoned';
+        }
+        
+        return {
+          id: o._id,
+          customer: o.shippingAddress?.fullName || o.shippingAddress?.name || o.user?.name || 'Customer',
+          email: o.user?.email || 'N/A',
+          amount: `₹${o.totalPrice?.toLocaleString('en-IN') || 0}`,
+          status: displayStatus,
+          date: new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          _original: { ...o, discountAmount: o.discountAmount || 0, couponCode: o.couponCode || '' }
+        };
+      });
       setOrders(mappedOrders);
     } else {
       setOrders([]);

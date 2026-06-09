@@ -73,6 +73,11 @@ const orderSchema = new mongoose.Schema(
     paymentId: {
       type: String,
       default: null
+    },
+    paymentMethod: {
+      type: String,
+      enum: ['Razorpay', 'COD', 'Stripe'],
+      default: 'COD'
     }
   },
   { timestamps: true }

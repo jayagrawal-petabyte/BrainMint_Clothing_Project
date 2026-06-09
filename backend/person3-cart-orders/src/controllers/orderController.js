@@ -10,7 +10,7 @@ const asyncHandler = require('../utils/asyncHandler');
 // @route   POST /api/orders
 // @access  Private
 const createOrder = asyncHandler(async (req, res) => {
-  const { shippingAddress, couponCode, discountAmount } = req.body;
+  const { shippingAddress, couponCode, discountAmount, paymentMethod } = req.body;
 
   if (!shippingAddress) {
     throw new ApiError(400, 'Shipping address is required');
@@ -68,7 +68,8 @@ const createOrder = asyncHandler(async (req, res) => {
     discountAmount: discountAmount || 0,
     totalPrice: finalTotalPrice,
     status: 'pending',
-    paymentStatus: 'unpaid'
+    paymentStatus: 'unpaid',
+    paymentMethod: paymentMethod || 'COD'
   });
 
   // Increment coupon usage count if applied

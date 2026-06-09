@@ -61,26 +61,18 @@ async (req, res) => {
     const hashedPassword =
       await bcrypt.hash(password, 10);
 
-    await PendingUser.findOneAndUpdate(
+    await PendingUser.deleteMany({
+      $or: [{ email }, { phoneNumber }]
+    });
 
-      { email },
-
-      {
-        name,
-        email,
-        phoneNumber,
-        password: hashedPassword,
-        otp,
-        otpExpire:
-          Date.now() + 10 * 60 * 1000
-      },
-
-      {
-        upsert: true,
-        new: true
-      }
-
-    );
+    await PendingUser.create({
+      name,
+      email,
+      phoneNumber,
+      password: hashedPassword,
+      otp,
+      otpExpire: Date.now() + 10 * 60 * 1000
+    });
 
     await sendEmail(
       email,

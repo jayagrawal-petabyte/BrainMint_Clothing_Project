@@ -422,7 +422,10 @@ exports.forgotPassword = async (req, res) => {
       Date.now() + 10 * 60 * 1000;
 
     await user.save();
-    const clientUrl = process.env.CLIENT_URL || "https://clothing-project-ten.vercel.app";
+    let clientUrl = process.env.CLIENT_URL || "https://clothing-project-ten.vercel.app";
+    if (clientUrl.includes('localhost')) {
+      clientUrl = "https://clothing-project-ten.vercel.app";
+    }
     const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
 
   await sendEmail(

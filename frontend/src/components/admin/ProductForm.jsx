@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Upload, X, Plus } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Upload, X, Plus, ChevronLeft, ChevronRight, RefreshCw, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getColorName } from '../../utils/helpers';
 
@@ -24,8 +24,213 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
     status: 'Active',
     sizes: [],
     colors: [],
-    images: [''] // start with 1 empty input
+    images: []
   });
+
+  const [uploadedImages, setUploadedImages] = useState(() => {
+    if (initialData && initialData.images && initialData.images.length > 0) {
+      return initialData.images
+        .filter(url => typeof url === 'string' && url.trim() !== '')
+        .map((url, index) => ({
+          id: `existing-${index}-${Date.now()}`,
+          url: url,
+          file: null,
+          isLocal: false,
+          name: url.substring(url.lastIndexOf('/') + 1) || `image-${index + 1}`,
+          size: null,
+          status: 'Saved'
+        }));
+    }
+    return [];
+  });
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [validationError, setValidationError] = useState(null);
+  const [replaceIndex, setReplaceIndex] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const replaceFileInputRef = useRef(null);
+  const createdBlobUrls = useRef(new Set());
+
+  useEffect(() => {
+    if (initialData && initialData.images) {
+      const initialImages = initialData.images
+        .filter(url => typeof url === 'string' && url.trim() !== '')
+        .map((url, index) => ({
+          id: `existing-${index}-${Date.now()}`,
+          url: url,
+          file: null,
+          isLocal: false,
+          name: url.substring(url.lastIndexOf('/') + 1) || `Image ${index + 1}`,
+          size: null,
+          status: 'Saved'
+        }));
+      setUploadedImages(initialImages);
+    }
+  }, [initialData]);
+
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      images: uploadedImages.map(img => img.url)
+    }));
+  }, [uploadedImages]);
+
+  useEffect(() => {
+    return () => {
+      createdBlobUrls.current.forEach(url => {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, []);
+
+  const validateFile = (file) => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (!validTypes.includes(file.type)) {
+      return { isValid: false, message: `File "${file.name}" is not a valid format. Only JPG, PNG, and WEBP are supported.` };
+    }
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      return { isValid: false, message: `File "${file.name}" exceeds the 5MB size limit.` };
+    }
+    return { isValid: true };
+  };
+
+  const handleFilesAdded = (filesList) => {
+    setValidationError(null);
+    const validFiles = [];
+    let errors = [];
+
+    const currentCount = uploadedImages.length;
+    const remainingSlots = 4 - currentCount;
+
+    if (filesList.length > remainingSlots) {
+      errors.push(`You can only upload up to 4 images. ${remainingSlots} slot(s) remaining.`);
+    }
+
+    const filesToProcess = Array.from(filesList).slice(0, remainingSlots);
+
+    filesToProcess.forEach(file => {
+      const validation = validateFile(file);
+      if (validation.isValid) {
+        const url = URL.createObjectURL(file);
+        createdBlobUrls.current.add(url);
+        validFiles.push({
+          id: `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          url: url,
+          file: file,
+          isLocal: true,
+          name: file.name,
+          size: file.size,
+          status: 'Ready'
+        });
+      } else {
+        errors.push(validation.message);
+      }
+    });
+
+    if (errors.length > 0) {
+      setValidationError(errors.join(' '));
+    }
+
+    if (validFiles.length > 0) {
+      setUploadedImages(prev => [...prev, ...validFiles]);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFilesAdded(e.dataTransfer.files);
+    }
+  };
+
+  const triggerReplace = (index) => {
+    setReplaceIndex(index);
+    if (replaceFileInputRef.current) {
+      replaceFileInputRef.current.click();
+    }
+  };
+
+  const handleFileReplaced = (e) => {
+    if (e.target.files && e.target.files.length > 0 && replaceIndex !== null) {
+      const file = e.target.files[0];
+      const validation = validateFile(file);
+      
+      if (validation.isValid) {
+        setValidationError(null);
+        
+        const oldImage = uploadedImages[replaceIndex];
+        if (oldImage && oldImage.isLocal && oldImage.url) {
+          URL.revokeObjectURL(oldImage.url);
+          createdBlobUrls.current.delete(oldImage.url);
+        }
+
+        const url = URL.createObjectURL(file);
+        createdBlobUrls.current.add(url);
+
+        const newImage = {
+          id: `local-replaced-${Date.now()}`,
+          url: url,
+          file: file,
+          isLocal: true,
+          name: file.name,
+          size: file.size,
+          status: 'Ready'
+        };
+
+        setUploadedImages(prev => {
+          const updated = [...prev];
+          updated[replaceIndex] = newImage;
+          return updated;
+        });
+      } else {
+        setValidationError(validation.message);
+      }
+      setReplaceIndex(null);
+    }
+  };
+
+  const removeImage = (index) => {
+    const imageToRemove = uploadedImages[index];
+    if (imageToRemove && imageToRemove.isLocal && imageToRemove.url) {
+      URL.revokeObjectURL(imageToRemove.url);
+      createdBlobUrls.current.delete(imageToRemove.url);
+    }
+    setUploadedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const moveImage = (index, direction) => {
+    if (direction === 'left' && index > 0) {
+      setUploadedImages(prev => {
+        const updated = [...prev];
+        const temp = updated[index];
+        updated[index] = updated[index - 1];
+        updated[index - 1] = temp;
+        return updated;
+      });
+    } else if (direction === 'right' && index < uploadedImages.length - 1) {
+      setUploadedImages(prev => {
+        const updated = [...prev];
+        const temp = updated[index];
+        updated[index] = updated[index + 1];
+        updated[index + 1] = temp;
+        return updated;
+      });
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,23 +248,6 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
     });
   };
 
-  const handleImageChange = (index, value) => {
-    const newImages = [...formData.images];
-    newImages[index] = value;
-    setFormData(prev => ({ ...prev, images: newImages }));
-  };
-
-  const addImageField = () => {
-    if (formData.images.length < 4) {
-      setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
-    }
-  };
-
-  const removeImageField = (index) => {
-    const newImages = formData.images.filter((_, i) => i !== index);
-    if (newImages.length === 0) newImages.push(''); // ensure at least 1 input
-    setFormData(prev => ({ ...prev, images: newImages }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -240,49 +428,193 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
 
         {/* Right Column - Media & Status */}
         <div className="space-y-6">
-          <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark">Product Images</h3>
-              {formData.images.length < 4 && (
-                <button type="button" onClick={addImageField} className="text-xs flex items-center gap-1 text-admin-accent hover:text-admin-accent/80 font-medium">
-                  <Plus size={14} /> Add Image
-                </button>
-              )}
+          <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark backdrop-blur-md bg-white/95 dark:bg-admin-card-dark/95">
+            <div className="flex justify-between items-end mb-4">
+              <div>
+                <h3 className="text-lg font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark">Product Images</h3>
+                <p className="text-xs text-admin-text dark:text-admin-text-dark mt-0.5">
+                  Set the primary image and add gallery files.
+                </p>
+              </div>
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-admin-bg dark:bg-[#222] text-admin-heading dark:text-admin-heading-dark border border-admin-border dark:border-admin-border-dark">
+                {uploadedImages.length} / 4 Images
+              </span>
             </div>
-            
-            <div className="space-y-4">
-              {formData.images.map((url, index) => (
-                <div key={index} className="space-y-3 p-4 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-[#444] rounded-xl relative">
-                  {formData.images.length > 1 && (
-                    <button 
-                      type="button" 
-                      onClick={() => removeImageField(index)}
-                      className="absolute top-2 right-2 text-red-500 hover:text-red-600 bg-white/80 dark:bg-black/50 rounded-full p-1"
-                    >
-                      <X size={14} />
-                    </button>
-                  )}
-                  <label className="block text-xs font-medium text-admin-heading dark:text-admin-heading-dark">Image URL {index + 1}</label>
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => handleImageChange(index, e.target.value)}
-                    placeholder="https://images.unsplash.com/..."
-                    className="w-full px-3 py-2 bg-white dark:bg-[#222] border border-admin-border dark:border-admin-border-dark rounded-lg focus:ring-1 focus:ring-admin-accent outline-none text-sm text-admin-heading dark:text-admin-heading-dark transition-all"
-                  />
-                  
-                  {url ? (
-                    <div className="rounded-lg overflow-hidden border border-admin-border dark:border-admin-border-dark aspect-[4/3] relative">
-                      <img src={url} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center w-full aspect-[4/3] border border-dashed border-admin-border dark:border-[#555] rounded-lg bg-white/50 dark:bg-[#222]/50">
-                      <p className="text-xs text-admin-text dark:text-admin-text-dark font-medium">Image preview</p>
-                    </div>
-                  )}
+
+            {/* Validation Error Message */}
+            {validationError && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 flex items-start gap-2 text-xs font-medium animate-in fade-in slide-in-from-top-2 duration-300">
+                <AlertCircle size={16} className="shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <span>{validationError}</span>
                 </div>
-              ))}
-            </div>
+                <button type="button" onClick={() => setValidationError(null)} className="hover:text-red-800 dark:hover:text-red-300 font-bold ml-1">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+
+            {/* Drag and Drop Zone */}
+            {uploadedImages.length < 4 && (
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 group relative overflow-hidden ${
+                  isDragging
+                    ? 'border-admin-accent bg-admin-accent/5 dark:bg-admin-accent/10 shadow-[0_0_15px_rgba(242,76,92,0.15)] scale-[0.99]'
+                    : 'border-admin-border dark:border-admin-border-dark bg-admin-bg/50 dark:bg-[#1A1A1A]/30 hover:border-admin-accent/50 hover:bg-admin-accent/5 hover:shadow-sm'
+                }`}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      handleFilesAdded(e.target.files);
+                    }
+                  }}
+                  multiple
+                  accept="image/png, image/jpeg, image/jpg, image/webp"
+                  className="hidden"
+                />
+                
+                {/* Visual Glow */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-admin-accent/0 to-admin-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                <div className={`p-4 rounded-full bg-white dark:bg-[#222] border border-admin-border dark:border-admin-border-dark shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ${
+                  isDragging ? 'border-admin-accent text-admin-accent scale-110' : 'text-admin-text dark:text-admin-text-dark'
+                }`}>
+                  <Upload size={24} className={isDragging ? 'animate-bounce' : ''} />
+                </div>
+                
+                <h4 className="mt-4 font-semibold text-sm text-admin-heading dark:text-admin-heading-dark">
+                  Drag & Drop Images Here
+                </h4>
+                <p className="mt-1 text-xs text-admin-text dark:text-admin-text-dark">
+                  or <span className="text-admin-accent font-semibold group-hover:underline">Browse Files</span>
+                </p>
+                <p className="mt-3 text-[10px] text-admin-text/70 dark:text-admin-text-dark/50">
+                  Supports PNG, JPG, WEBP (Max 5MB each)
+                </p>
+              </div>
+            )}
+
+            {/* Hidden Input for Replace Action */}
+            <input
+              type="file"
+              ref={replaceFileInputRef}
+              onChange={handleFileReplaced}
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              className="hidden"
+            />
+
+            {/* Previews Grid */}
+            {uploadedImages.length > 0 && (
+              <div className="grid grid-cols-2 gap-4 mt-6">
+                {uploadedImages.map((img, index) => {
+                  const fileSizeFormatted = img.size ? `${(img.size / (1024 * 1024)).toFixed(2)} MB` : '';
+                  return (
+                    <div
+                      key={img.id}
+                      className="group relative rounded-xl overflow-hidden border border-admin-border dark:border-admin-border-dark aspect-[3/4] bg-admin-bg dark:bg-[#1A1A1A] shadow-sm hover:shadow-md hover:border-admin-accent/40 transition-all duration-300"
+                    >
+                      {/* Image Preview */}
+                      <img
+                        src={img.url}
+                        alt={img.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+
+                      {/* Top Overlay Badges */}
+                      <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start pointer-events-none z-10">
+                        {/* Primary Badge or Index */}
+                        {index === 0 ? (
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase bg-admin-accent text-white shadow-sm border border-admin-accent/20">
+                            Primary
+                          </span>
+                        ) : (
+                          <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold bg-white/95 dark:bg-black/80 text-admin-heading dark:text-admin-heading-dark border border-admin-border dark:border-admin-border-dark/50 shadow-sm">
+                            {index + 1}
+                          </span>
+                        )}
+
+                        {/* Status Label (Glassmorphic) */}
+                        <span className={`px-2 py-0.5 rounded-md text-[9px] font-semibold tracking-wide border backdrop-blur-md pointer-events-auto shadow-sm ${
+                          img.status === 'Saved'
+                            ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+                            : 'bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/30'
+                        }`}>
+                          {img.status}
+                        </span>
+                      </div>
+
+                      {/* Info Bar at bottom (Fades on hover) */}
+                      <div className="absolute bottom-0 left-0 right-0 p-2.5 bg-gradient-to-t from-black/80 via-black/45 to-transparent text-white opacity-100 group-hover:opacity-0 transition-opacity duration-300 flex flex-col justify-end min-h-[45px] pointer-events-none">
+                        <p className="text-[10px] font-medium truncate w-full shadow-sm pr-1">{img.name}</p>
+                        {fileSizeFormatted && <p className="text-[8px] text-gray-300 font-light mt-0.5">{fileSizeFormatted}</p>}
+                      </div>
+
+                      {/* Glassmorphic Interaction Overlay (Appears on Hover) */}
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 z-20">
+                        
+                        {/* Delete Action (Top right) */}
+                        <div className="flex justify-end w-full">
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            title="Remove Image"
+                            className="p-1.5 rounded-lg bg-red-600/90 hover:bg-red-600 text-white shadow-md hover:scale-110 active:scale-95 transition-all duration-200"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+
+                        {/* Middle Action: Reorder / Swap */}
+                        <div className="flex justify-center items-center gap-3">
+                          {index > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => moveImage(index, 'left')}
+                              title="Move Left (Make Primary)"
+                              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:scale-110 active:scale-95 transition-all duration-200"
+                            >
+                              <ChevronLeft size={16} />
+                            </button>
+                          )}
+                          
+                          <button
+                            type="button"
+                            onClick={() => triggerReplace(index)}
+                            title="Replace Image"
+                            className="p-2.5 rounded-full bg-admin-accent hover:bg-red-600 text-white shadow-lg hover:scale-115 active:scale-95 transition-all duration-200 flex items-center justify-center"
+                          >
+                            <RefreshCw size={14} />
+                          </button>
+
+                          {index < uploadedImages.length - 1 && (
+                            <button
+                              type="button"
+                              onClick={() => moveImage(index, 'right')}
+                              title="Move Right"
+                              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:scale-110 active:scale-95 transition-all duration-200"
+                            >
+                              <ChevronRight size={16} />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Info details */}
+                        <div className="text-center w-full text-[9px] text-gray-300 font-light truncate">
+                          {img.name}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl p-6 shadow-sm border border-admin-border dark:border-admin-border-dark">

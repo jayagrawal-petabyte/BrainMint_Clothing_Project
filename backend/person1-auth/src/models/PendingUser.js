@@ -37,7 +37,7 @@ const pendingUserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports =
-mongoose.model(
+mongoose.models.PendingUser || mongoose.model(
   "PendingUser",
   pendingUserSchema
 );

@@ -82,4 +82,4 @@ isEmailVerified: {
 }, { timestamps: true });
 
 module.exports =
-mongoose.model("User", userSchema);
+mongoose.models.User || mongoose.model("User", userSchema);

@@ -1,76 +1,34 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
-
-// Import all routes
-const authRoutes = require('./person1-auth/src/routes/authRoutes');
-const productRoutes = require('./person2-products/src/routes/productRoutes');
-const categoryRoutes = require('./person2-products/src/routes/categoryRoutes');
-const adminProductRoutes = require('./person2-products/src/routes/adminRoutes');
-const couponRoutes = require('./person2-products/src/routes/couponRoutes');
-const analyticsRoutes = require('./person2-products/src/routes/analyticsRoutes');
-const newsletterRoutes = require('./person2-products/src/routes/newsletterRoutes');
-const contactRoutes = require('./person1-auth/src/routes/contactRoutes');
-const cartRoutes = require('./person3-cart-orders/src/routes/cartRoutes');
-const wishlistRoutes = require('./person3-cart-orders/src/routes/wishlistRoutes');
-const orderRoutes = require('./person3-cart-orders/src/routes/orderRoutes');
-const checkoutRoutes = require('./person3-cart-orders/src/routes/checkoutRoutes');
-const paymentRoutes = require('./person3-cart-orders/src/routes/paymentRoutes');
-
-// Import all models so mongoose registers them
-require('./person1-auth/src/models/User');
-require('./person1-auth/src/models/Contact');
-require('./person2-products/src/models/Product');
-require('./person2-products/src/models/Category');
-require('./person2-products/src/models/Coupon');
-require('./person2-products/src/models/Review');
-require('./person2-products/src/models/NewsletterSubscriber');
-
-const { errorHandler } = require('./person3-cart-orders/src/middleware/errorMiddleware');
-
-const app = express();
-
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
-
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ success: true, message: 'BrainMint backend is running' });
-});
-
-// Mount all routes
-app.use('/api/auth', authRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/admin/products', adminProductRoutes);
-app.use('/api/admin/coupons', couponRoutes);
-app.use('/api/coupons', couponRoutes);
-app.use('/api/discounts', couponRoutes);
-app.use('/api/admin/analytics', analyticsRoutes);
-app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/wishlist', wishlistRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/checkout', checkoutRoutes);
-app.use('/api/payments', paymentRoutes);
-
-app.use(errorHandler);
+const app = require('./app');
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('MongoDB connected');
-    console.log('Server ReadyState:', mongoose.connection.readyState);
-    app.listen(PORT, () => {
-      console.log(`BrainMint backend running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
+const connectDatabase = async () => {
+  const mongoUri = process.env.MONGO_URI;
+
+  if (!mongoUri) {
+    throw new Error('MONGO_URI is missing from environment variables');
+  }
+
+  await mongoose.connect(mongoUri);
+  console.log('MongoDB connected');
+  console.log('Server ReadyState:', mongoose.connection.readyState);
+};
+
+const startServer = async () => {
+  await connectDatabase();
+
+  return app.listen(PORT, () => {
+    console.log(`BrainMint backend running on port ${PORT}`);
+  });
+};
+
+if (require.main === module) {
+  startServer().catch((err) => {
     console.error('Database connection failed:', err.message);
     process.exit(1);
   });
+}
+
+module.exports = { app, connectDatabase, startServer };

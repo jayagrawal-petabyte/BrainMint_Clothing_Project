@@ -78,7 +78,7 @@ const SalesCharts = ({ data }) => {
                 cursor={{ fill: isDark ? '#333' : '#F5F5F5' }}
                 contentStyle={{ backgroundColor: tooltipBg, borderColor: gridColor, borderRadius: '8px', color: isDark ? '#fff' : '#000' }}
               />
-              <Bar dataKey="orders" fill={isDark ? '#F5F5F5' : '#111111'} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="orders" fill={isDark ? '#F5F5F5' : '#111111'} radius={[4, 4, 0, 0]} maxBarSize={40} />
             </BarChart>
           </ResponsiveContainer>
         </div>

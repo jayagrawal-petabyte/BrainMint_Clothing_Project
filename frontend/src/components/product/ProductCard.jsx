@@ -90,9 +90,10 @@ const ProductCard = ({ product, badgeText }) => {
   useEffect(() => {
     let interval;
     if (isHovered && product?.images?.length > 1) {
+      setCurrentImageIndex(1);
       interval = setInterval(() => {
         setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-      }, 1200);
+      }, 2500);
     } else {
       setCurrentImageIndex(0);
     }
@@ -153,11 +154,14 @@ const ProductCard = ({ product, badgeText }) => {
         <Link
           to={`/product/${productId}`}
         >
-          <img
+          <motion.img
+            key={currentImageIndex}
             src={product?.images?.[currentImageIndex]?.url || productImage}
             alt={productName}
             loading="lazy"
-            style={{ transition: 'none' }}
+            initial={{ opacity: 0.7 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           />
         </Link>
 
@@ -298,7 +302,7 @@ const ProductCard = ({ product, badgeText }) => {
         </h2>
 
         {product?.sizes?.length > 0 && (
-          <div className="product-card-default-size" style={{ fontSize: '13px', color: 'var(--ltn__paragraph-color)', textAlign: 'left', paddingLeft: '15px' }}>
+          <div className="product-card-default-size" style={{ fontSize: '13px', color: 'var(--ltn__paragraph-color)', textAlign: 'center' }}>
             Sizes: <span style={{ fontWeight: 500, color: 'var(--ltn__heading-color)' }}>{product.sizes[0]}</span>
           </div>
         )}

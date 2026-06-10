@@ -47,6 +47,7 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
   const [isDragging, setIsDragging] = useState(false);
   const [validationError, setValidationError] = useState(null);
   const [replaceIndex, setReplaceIndex] = useState(null);
+  const [imageUrlInput, setImageUrlInput] = useState('');
 
   const fileInputRef = useRef(null);
   const replaceFileInputRef = useRef(null);
@@ -137,6 +138,36 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
 
     if (validFiles.length > 0) {
       setUploadedImages(prev => [...prev, ...validFiles]);
+    }
+  };
+
+  const handleAddImageUrl = (e) => {
+    e.preventDefault();
+    if (!imageUrlInput.trim()) return;
+    
+    setValidationError(null);
+    if (uploadedImages.length >= 4) {
+      setValidationError("You can only add up to 4 images.");
+      return;
+    }
+
+    try {
+      new URL(imageUrlInput); // Basic validation
+      setUploadedImages(prev => [
+        ...prev, 
+        {
+          id: `url-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          url: imageUrlInput.trim(),
+          file: null,
+          isLocal: false,
+          name: imageUrlInput.substring(imageUrlInput.lastIndexOf('/') + 1) || 'Linked Image',
+          size: null,
+          status: 'Ready'
+        }
+      ]);
+      setImageUrlInput('');
+    } catch (err) {
+      setValidationError("Please enter a valid HTTP or HTTPS URL.");
     }
   };
 
@@ -254,13 +285,43 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
     setError(null);
     setIsSubmitting(true);
     
-    // Filter out empty images
-    const cleanedFormData = {
-      ...formData,
-      images: formData.images.filter(url => url.trim() !== '')
-    };
-    
     try {
+      const finalImages = [];
+      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+      const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+      for (let i = 0; i < uploadedImages.length; i++) {
+        const img = uploadedImages[i];
+        if (img.isLocal && img.file) {
+          if (!cloudName || !uploadPreset) {
+            throw new Error('Cloudinary credentials are not configured in .env');
+          }
+          
+          const formDataObj = new FormData();
+          formDataObj.append('file', img.file);
+          formDataObj.append('upload_preset', uploadPreset);
+          
+          const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            method: 'POST',
+            body: formDataObj
+          });
+          
+          if (!uploadRes.ok) {
+            throw new Error(`Failed to upload image ${img.name}`);
+          }
+          
+          const uploadData = await uploadRes.json();
+          finalImages.push(uploadData.secure_url);
+        } else {
+          finalImages.push(img.url);
+        }
+      }
+
+      const cleanedFormData = {
+        ...formData,
+        images: finalImages.filter(url => url && url.trim() !== '' && !url.startsWith('blob:'))
+      };
+    
       if (onSubmit) {
         const res = await onSubmit(cleanedFormData);
         if (res && res.success === false) {
@@ -274,7 +335,7 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
         navigate('/admin/products');
       }
     } catch (err) {
-      setError('An unexpected error occurred.');
+      setError(err.message || 'An unexpected error occurred.');
     } finally {
       setIsSubmitting(false);
     }
@@ -509,6 +570,27 @@ const ProductForm = ({ initialData, isEditing = false, onSubmit, categories = []
               accept="image/png, image/jpeg, image/jpg, image/webp"
               className="hidden"
             />
+
+            {/* URL Input Zone */}
+            {uploadedImages.length < 4 && (
+              <div className="mt-4 flex gap-2">
+                <input
+                  type="url"
+                  value={imageUrlInput}
+                  onChange={(e) => setImageUrlInput(e.target.value)}
+                  placeholder="Or paste image URL (https://...)"
+                  className="flex-1 px-4 py-2 bg-admin-bg dark:bg-[#1A1A1A] border border-admin-border dark:border-admin-border-dark rounded-xl focus:ring-2 focus:ring-admin-accent focus:border-transparent outline-none text-sm text-admin-heading dark:text-admin-heading-dark transition-all"
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddImageUrl(e)}
+                />
+                <button
+                  type="button"
+                  onClick={handleAddImageUrl}
+                  className="px-4 py-2 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-admin-border-dark hover:border-admin-accent/50 hover:bg-admin-accent/10 rounded-xl text-sm font-semibold text-admin-heading dark:text-admin-heading-dark transition-all"
+                >
+                  Add URL
+                </button>
+              </div>
+            )}
 
             {/* Previews Grid */}
             {uploadedImages.length > 0 && (

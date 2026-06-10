@@ -11,6 +11,7 @@ const newsletterRoutes = require('../src/routes/newsletterRoutes');
 const productRoutes = require('../src/routes/productRoutes');
 const { _private: productControllerPrivate } = require('../src/controllers/productController');
 const { protect } = require('../src/middleware/authMiddleware');
+const imageUploadMiddleware = require('../src/middleware/productImageUpload');
 
 const flattenRoutes = (router, prefix = '') => {
   const routes = [];
@@ -180,6 +181,16 @@ assert.deepStrictEqual(
   assert.strictEqual(imageArrayPayload.images[0].url, 'https://cdn.example.com/one.png', 'string image entries should map to url');
   assert.strictEqual(imageArrayPayload.images[1].alt, 'Second image', 'object image link entries should preserve alt text');
 
+  const multipartJsonImagesPayload = productControllerPrivate.normalizeProductImagesPayload({
+    name: 'Multipart URL Product',
+    images: JSON.stringify([{ url: 'https://cdn.example.com/form-data.jpg', alt: 'Form data image' }])
+  });
+  assert.strictEqual(
+    multipartJsonImagesPayload.images[0].url,
+    'https://cdn.example.com/form-data.jpg',
+    'multipart JSON image fields should be parsed and normalized'
+  );
+
   let blockedInvalidImageUrl = false;
   try {
     productControllerPrivate.normalizeProductImagesPayload({
@@ -189,6 +200,8 @@ assert.deepStrictEqual(
     blockedInvalidImageUrl = error.statusCode === 400;
   }
   assert(blockedInvalidImageUrl, 'invalid image URL uploads should return a validation error');
+  assert.strictEqual(typeof imageUploadMiddleware.uploadProductImages, 'function', 'product routes should support multipart image upload');
+  assert.strictEqual(typeof imageUploadMiddleware.attachCloudinaryImages, 'function', 'product routes should attach Cloudinary image URLs');
 
   console.log('Person 2 product seed, admin route, and catalog query tests passed.');
 })().catch((error) => {

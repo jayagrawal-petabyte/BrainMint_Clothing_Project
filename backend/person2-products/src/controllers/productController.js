@@ -11,6 +11,29 @@ const toArray = (value) => {
   return Array.isArray(value) ? value : String(value).split(',').map((item) => item.trim()).filter(Boolean);
 };
 
+const parseJsonValue = (value) => {
+  if (typeof value !== 'string') return value;
+
+  const trimmed = value.trim();
+  if (!trimmed || !['[', '{'].includes(trimmed[0])) return value;
+
+  try {
+    return JSON.parse(trimmed);
+  } catch (error) {
+    return value;
+  }
+};
+
+const toImageInputs = (value) => {
+  const parsed = parseJsonValue(value);
+
+  if (!parsed) return [];
+  if (Array.isArray(parsed)) return parsed;
+  if (typeof parsed === 'object') return [parsed];
+
+  return toArray(parsed);
+};
+
 const isHttpImageUrl = (value) => {
   try {
     const parsed = new URL(String(value).trim());
@@ -65,7 +88,7 @@ const normalizeProductImagesPayload = (body) => {
     ...toArray(firstDefined(body.imageUrl, body.imageURL, body.imageLink, body.image)),
     ...toArray(firstDefined(body.imageUrls, body.imageURLs, body.imageLinks))
   ];
-  const providedImages = Array.isArray(body.images) ? body.images : toArray(body.images);
+  const providedImages = toImageInputs(body.images);
   const imageInputs = [...providedImages, ...directImageUrls];
 
   if (imageInputs.length === 0) {
@@ -531,6 +554,7 @@ module.exports = {
     buildProductQuery,
     resolveSort,
     normalizeProductImagesPayload,
+    toImageInputs,
     toArray,
     toBoolean,
     toDiscountPercent,

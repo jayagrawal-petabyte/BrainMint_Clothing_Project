@@ -26,8 +26,7 @@ const AdminDashboard = () => {
 
         if (backendOrders && backendOrders.data && Array.isArray(backendOrders.data)) {
           validOrders = backendOrders.data.filter(o => {
-            const isAbandoned = o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending';
-            return !isAbandoned;
+            return o.status !== 'cancelled' && o.status !== 'Cancelled';
           });
           
           calculatedRevenue = validOrders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);

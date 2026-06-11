@@ -48,8 +48,8 @@ const Account = () => {
           if (ordersRes && ordersRes.success !== false) {
             const fetchedOrders = ordersRes.orders || ordersRes.data || [];
             const mappedOrders = fetchedOrders.map(o => {
-              const isAbandoned = o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending';
-              return isAbandoned ? { ...o, status: 'Abandoned' } : o;
+              const isFailedPayment = o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending';
+              return isFailedPayment ? { ...o, status: 'Cancelled' } : o;
             });
             setOrders(mappedOrders);
           }
@@ -154,7 +154,7 @@ const Account = () => {
     const s = status.toLowerCase();
     if (s === 'delivered' || s === 'completed' || s === 'confirmed') return <span className="acc-badge acc-badge--success">{status}</span>;
     if (s === 'processing' || s === 'pending') return <span className="acc-badge acc-badge--warning">{status}</span>;
-    if (s === 'cancelled' || s === 'failed' || s === 'abandoned') return <span className="acc-badge acc-badge--danger">{status}</span>;
+    if (s === 'cancelled' || s === 'failed') return <span className="acc-badge acc-badge--danger">{status}</span>;
     return <span className="acc-badge acc-badge--default">{status}</span>;
   };
 
@@ -281,6 +281,11 @@ const Account = () => {
                               <p className="order-label">Items</p>
                               <p className="order-value">{order.orderItems?.length || 1} item(s)</p>
                             </div>
+                            {order.status === 'Cancelled' && order.paymentMethod === 'Razorpay' && order.paymentStatus === 'unpaid' && (
+                              <div style={{ padding: '8px', gridColumn: '1 / -1', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', marginTop: '10px' }}>
+                                <p style={{ color: '#ef4444', fontSize: '13px', fontWeight: 600, margin: 0 }}>Your order was cancelled due to failed payment.</p>
+                              </div>
+                            )}
                             <div className="order-actions">
                               <button 
                                 className="order-action-btn"

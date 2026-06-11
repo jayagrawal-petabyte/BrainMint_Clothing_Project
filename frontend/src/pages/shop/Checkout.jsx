@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, Chevr
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { placeOrder, fetchUserProfile, validateCoupon, createPaymentOrder, verifyPayment } from '../../services/api';
+import { placeOrder, fetchUserProfile, validateCoupon, createPaymentOrder, verifyPayment, cancelUserOrder } from '../../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -315,6 +315,9 @@ const Checkout = () => {
           const rzpOrderResponse = await createPaymentOrder(backendOrderId, token);
           if (!rzpOrderResponse || rzpOrderResponse.success === false || !rzpOrderResponse.data) {
             console.error("Failed to create Razorpay Order", rzpOrderResponse);
+            // Cancel the backend order since we can't proceed to payment
+            await cancelUserOrder(backendOrderId, token);
+            
             const errorMsg = rzpOrderResponse?.message || "Unknown error from server";
             alert(`Error preparing payment order: ${errorMsg}`);
             setOrderStatus('error');
@@ -362,15 +365,19 @@ const Checkout = () => {
               color: "#111111"
             },
             modal: {
-              ondismiss: function() {
+              ondismiss: async function() {
+                // If user closes modal, explicitly cancel the order via user cancel endpoint
+                await cancelUserOrder(backendOrderId, token);
                 setIsSubmitting(false);
               }
             }
           };
 
           const paymentObject = new window.Razorpay(options);
-          paymentObject.on('payment.failed', function (response){
+          paymentObject.on('payment.failed', async function (response){
             console.error("Payment failed", response.error);
+            // Explicitly cancel the order via user cancel endpoint
+            await cancelUserOrder(backendOrderId, token);
             alert("Payment failed or cancelled. Please try again.");
             setIsSubmitting(false);
           });

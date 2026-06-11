@@ -100,6 +100,12 @@ const OrderDetailsModal = ({ order, onClose }) => {
               )}
             </div>
           )}
+
+          {order.status === 'Cancelled' && original.paymentMethod === 'Razorpay' && original.paymentStatus === 'unpaid' && (
+            <div className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm">
+              <p className="text-red-500 font-bold">Your order was cancelled due to failed payment.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -152,7 +158,6 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
                     ${order.status === 'Shipped' ? 'bg-purple-50 text-purple-600 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800' : ''}
                     ${order.status === 'Pending' ? 'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800' : ''}
                     ${order.status === 'Cancelled' ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:border-red-800' : ''}
-                    ${order.status === 'Abandoned' ? 'bg-gray-100 text-gray-500 border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700' : ''}
                   `}>
                     {order.status}
                   </span>
@@ -178,7 +183,6 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
                         <option value="Shipped" className="dark:bg-[#333]">Shipped</option>
                         <option value="Delivered" className="dark:bg-[#333]">Delivered</option>
                         <option value="Cancelled" className="dark:bg-[#333]">Cancelled</option>
-                        <option value="Abandoned" className="dark:bg-[#333]">Abandoned</option>
                       </select>
                       <button 
                         onClick={() => {

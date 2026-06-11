@@ -636,6 +636,21 @@ export const updateOrderStatus = async (orderId, status, token) => {
   }
 };
 
+export const cancelUserOrder = async (orderId, token) => {
+  try {
+    const response = await fetch(`${CART_URL}/orders/${orderId}/cancel`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return await response.json();
+  } catch (error) {
+    return null;
+  }
+};
+
 export const validateCoupon = async (code) => {
   try {
     const response = await fetch(`${PRODUCTS_URL}/coupons/validate`, {

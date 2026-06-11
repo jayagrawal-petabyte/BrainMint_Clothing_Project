@@ -7,7 +7,7 @@ const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const tabs = ['All', 'Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Abandoned'];
+  const tabs = ['All', 'Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
 
   const loadOrders = async () => {
     setIsLoading(true);
@@ -21,7 +21,7 @@ const OrderManagement = () => {
       const mappedOrders = backendOrders.data.map(o => {
         let displayStatus = o.status ? (o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase()) : 'Pending';
         if (o.paymentMethod === 'Razorpay' && o.paymentStatus === 'unpaid' && o.status === 'pending') {
-          displayStatus = 'Abandoned';
+          displayStatus = 'Cancelled';
         }
         
         return {

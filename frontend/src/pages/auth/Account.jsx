@@ -281,7 +281,7 @@ const Account = () => {
                               <p className="order-label">Items</p>
                               <p className="order-value">{order.orderItems?.length || 1} item(s)</p>
                             </div>
-                            {order.status?.toLowerCase() === 'cancelled' && order.paymentMethod === 'Razorpay' && order.paymentStatus === 'unpaid' && (
+                            {order.status?.toLowerCase() === 'cancelled' && (
                               <div style={{ padding: '8px', gridColumn: '1 / -1', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', marginTop: '10px' }}>
                                 <p style={{ color: '#ef4444', fontSize: '13px', fontWeight: 600, margin: 0 }}>Your order was cancelled due to an incomplete or failed payment. If you believe this is an error, please contact our support team.</p>
                               </div>

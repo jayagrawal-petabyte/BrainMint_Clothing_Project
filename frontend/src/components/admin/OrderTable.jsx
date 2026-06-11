@@ -103,7 +103,7 @@ const OrderDetailsModal = ({ order, onClose }) => {
 
           {order.status === 'Cancelled' && original.paymentMethod === 'Razorpay' && original.paymentStatus === 'unpaid' && (
             <div className="mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-sm">
-              <p className="text-red-500 font-bold">Your order was cancelled due to failed payment.</p>
+              <p className="text-red-500 font-bold">Your order was cancelled due to an incomplete or failed payment. If you believe this is an error, please contact our support team.</p>
             </div>
           )}
         </div>

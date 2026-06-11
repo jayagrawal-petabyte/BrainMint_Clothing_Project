@@ -200,8 +200,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     'confirmed',
     'shipped',
     'delivered',
-    'cancelled',
-    'abandoned'
+    'cancelled'
   ];
 
   if (!allowedStatuses.includes(status)) {

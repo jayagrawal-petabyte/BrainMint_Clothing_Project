@@ -214,7 +214,7 @@ const Checkout = () => {
   const getPrice = (item) => item?.discountPrice || item?.price || 0;
   const getId   = (item) => item?._id || item?.id;
 
-  const shipping    = cartTotal > 999 ? 0 : 99;
+  const shipping    = cartTotal > 2499 ? 0 : 99;
   const discount    = couponApplied ? Math.round(cartTotal * (discountPercent / 100)) : 0;
   const finalTotal  = cartTotal + shipping - discount;
 
@@ -653,7 +653,7 @@ const Checkout = () => {
                   <span className="co__ship-radio" />
                   <div>
                     <p className="co__ship-name">Standard Delivery</p>
-                    <p className="co__ship-eta">5–7 business days</p>
+                    <p className="co__ship-eta">5–7 business days (Free above ₹2,500)</p>
                   </div>
                   <span className="co__ship-price">{shipping === 0 ? <em className="co__free">Free</em> : `₹${shipping}`}</span>
                 </div>

@@ -58,10 +58,7 @@ const ProductManagement = () => {
           />
         </div>
         
-        <button className="flex items-center space-x-2 px-4 py-2.5 border border-admin-border dark:border-admin-border-dark rounded-xl text-admin-heading dark:text-admin-heading-dark hover:bg-admin-bg dark:hover:bg-[#1A1A1A] transition-colors w-full sm:w-auto justify-center">
-          <Filter size={18} />
-          <span>Filters</span>
-        </button>
+        {/* Filters button removed for now */}
       </div>
 
       <ProductTable products={products} searchQuery={searchQuery} onDelete={handleDelete} isLoading={isLoading} />

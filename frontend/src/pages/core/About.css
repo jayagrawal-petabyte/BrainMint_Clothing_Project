@@ -42,7 +42,7 @@
 /* Extra hover state for the buttons themselves */
 .testimonials-swiper .swiper-button-next:hover,
 .testimonials-swiper .swiper-button-prev:hover {
-  background: #111;
+  background: #f24c5c;
   color: #fff;
   transform: scale(1.05);
 }

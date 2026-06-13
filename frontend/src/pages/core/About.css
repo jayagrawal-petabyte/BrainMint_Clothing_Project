@@ -26,10 +26,10 @@
 
 /* Move arrows slightly outward */
 .testimonials-swiper .swiper-button-prev {
-  left: 0px;
+  left: 15px;
 }
 .testimonials-swiper .swiper-button-next {
-  right: 0px;
+  right: 15px;
 }
 
 /* Show arrows on hover of the swiper container */

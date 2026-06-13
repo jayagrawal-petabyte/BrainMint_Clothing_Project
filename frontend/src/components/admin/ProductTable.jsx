@@ -2,12 +2,14 @@ import React from 'react';
 import { Edit2, Trash2, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const ProductTable = ({ products, searchQuery, onDelete, isLoading }) => {
-  const filteredProducts = products.filter(product => 
-    product.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    (typeof product.category === 'string' && product.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (product.category?.name && product.category.name.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+const ProductTable = ({ products, searchQuery, categoryFilter, onDelete, isLoading }) => {
+  const filteredProducts = products.filter(product => {
+    const categoryName = typeof product.category === 'string' ? product.category : product.category?.name;
+    const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          categoryName?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = categoryFilter === 'All' || categoryName === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="bg-admin-card dark:bg-admin-card-dark rounded-2xl shadow-sm border border-admin-border dark:border-admin-border-dark overflow-hidden font-rubik">

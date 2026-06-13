@@ -6,6 +6,7 @@ import { fetchProducts, adminDeleteProduct } from '../../services/api';
 
 const ProductManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -58,10 +59,28 @@ const ProductManagement = () => {
           />
         </div>
         
-        {/* Filters button removed for now */}
+        <div className="relative w-full sm:w-auto">
+          <select 
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="appearance-none flex items-center space-x-2 px-4 py-2.5 pr-10 border border-admin-border dark:border-admin-border-dark rounded-xl text-admin-heading dark:text-admin-heading-dark bg-transparent hover:bg-admin-bg dark:hover:bg-[#1A1A1A] transition-colors w-full sm:w-auto outline-none cursor-pointer"
+          >
+            <option value="All">All Categories</option>
+            {[...new Set(products.map(p => typeof p.category === 'string' ? p.category : p.category?.name).filter(Boolean))].map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+          <Filter size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-admin-text dark:text-admin-text-dark pointer-events-none" />
+        </div>
       </div>
 
-      <ProductTable products={products} searchQuery={searchQuery} onDelete={handleDelete} isLoading={isLoading} />
+      <ProductTable 
+        products={products} 
+        searchQuery={searchQuery} 
+        categoryFilter={categoryFilter}
+        onDelete={handleDelete} 
+        isLoading={isLoading} 
+      />
     </div>
   );
 };

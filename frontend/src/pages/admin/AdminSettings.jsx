@@ -95,7 +95,7 @@ const AdminSettings = () => {
         <button 
           onClick={handleSave}
           disabled={isSaving}
-          className="bg-admin-heading dark:bg-admin-heading-dark text-white dark:text-admin-bg px-6 py-2.5 rounded-lg font-medium hover:bg-admin-accent hover:text-white transition-colors flex items-center justify-center gap-2 min-w-[140px]"
+          className="bg-admin-heading dark:bg-admin-heading-dark text-white dark:text-admin-bg-dark px-6 py-2.5 rounded-lg font-medium hover:bg-admin-accent hover:text-white transition-colors flex items-center justify-center gap-2 min-w-[140px]"
         >
           {isSaving ? (
             <><Loader2 size={18} className="animate-spin" /> Saving...</>

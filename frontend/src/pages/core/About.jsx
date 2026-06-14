@@ -23,7 +23,7 @@ const features = [
   {
     icon: <FaTruck />,
     title: "Free Shipping",
-    text: "On all orders over ₹1,999",
+    text: "On all orders over ₹2,500",
   },
   {
     icon: <FaStar />,

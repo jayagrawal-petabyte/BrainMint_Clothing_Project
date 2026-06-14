@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import OrderTable from '../../components/admin/OrderTable';
-import { fetchAdminOrders, updateOrderStatus } from '../../services/api';
+import { fetchAdminOrders, updateOrderStatus, adminBulkDeleteOrders } from '../../services/api';
 import { Loader2 } from 'lucide-react';
 
 const OrderManagement = () => {
@@ -74,8 +74,6 @@ const OrderManagement = () => {
 
     setIsDeleting(true);
     const token = localStorage.getItem('adminToken');
-    // Import adminBulkDeleteOrders dynamically or make sure it's imported at the top
-    const { adminBulkDeleteOrders } = require('../../services/api');
     
     const res = await adminBulkDeleteOrders(selectedOrderIds, token);
     if (res && res.success) {

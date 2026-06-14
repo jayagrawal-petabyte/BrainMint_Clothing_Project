@@ -182,7 +182,7 @@ const { theme } = useTheme();
             display: "grid",
             gridTemplateColumns: "1.1fr 1fr",
             gap: "55px",
-            alignItems: "center",
+            alignItems: "stretch",
           }}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -220,19 +220,24 @@ const { theme } = useTheme();
               </span>
             </div>
 
-            <h1
-              style={{
-                fontFamily: "var(--ltn__heading-font)",
-                fontSize: "48px",
-                fontWeight: "600",
-                lineHeight: "1.2",
-                color: "var(--ltn__heading-color)",
-                marginBottom: "30px",
-                letterSpacing: "-1px",
-              }}
-            >
-              From Vellore To Global 🌍
-            </h1>
+            <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "30px", flexWrap: "wrap" }}>
+              <h1
+                style={{
+                  fontFamily: "var(--ltn__heading-font)",
+                  fontSize: "48px",
+                  fontWeight: "600",
+                  lineHeight: "1.2",
+                  color: "var(--ltn__heading-color)",
+                  letterSpacing: "-1px",
+                  margin: 0
+                }}
+              >
+                From Vellore To Global
+              </h1>
+              <div style={{ color: "var(--ltn__secondary-color)", display: "flex", alignItems: "center" }}>
+                <Globe size={42} strokeWidth={1.5} />
+              </div>
+            </div>
 
             <h3
               style={{
@@ -380,20 +385,27 @@ const { theme } = useTheme();
           <div
             style={{
               position: "relative",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center"
             }}
           >
             <div
               style={{
                 overflow: "hidden",
                 background: "var(--border-color-11)",
+                height: "100%",
+                minHeight: "750px",
+                borderRadius: "12px"
               }}
             >
               <img
                 src="/cloth1.jpg"
-                alt="UrbanWear Fashion"
+                alt="Princess Size Plus Collection"
                 style={{
                   width: "100%",
-                  height: "580px",
+                  height: "100%",
                   objectFit: "cover",
                   transition: "transform 0.8s ease",
                 }}

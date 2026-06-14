@@ -156,7 +156,10 @@ const FilterSidebar = ({
     return p.category;
   }).filter(Boolean))];
 
-  const colors = [...new Set(products.flatMap(p => p.colors || []).filter(Boolean))].map(hex => ({
+  const colors = [
+    '#000000', '#FFFFFF', '#FF0000', '#0000FF', '#008000', 
+    '#FFFF00', '#808080', '#000080', '#FFC0CB', '#800080', '#FFA500', '#A52A2A'
+  ].map(hex => ({
     name: getColorName(hex) || hex,
     hex
   }));

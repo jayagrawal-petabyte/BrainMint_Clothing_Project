@@ -1,13 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Minus, Plus, X, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { fetchSettings } from '../../services/api';
 import { getColorName } from '../../utils/helpers';
 import './Cart.css';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, cartTotal } = useCart();
   const [pincode, setPincode] = useState('');
+  const [shippingEstimate, setShippingEstimate] = useState(null);
+  const [storeSettings, setStoreSettings] = useState({ shippingCost: 99, freeShippingThreshold: 2500 });
+
+  useEffect(() => {
+    fetchSettings().then(res => {
+      if (res && res.success && res.data) {
+        setStoreSettings({
+          shippingCost: res.data.shippingCost ?? 99,
+          freeShippingThreshold: res.data.freeShippingThreshold ?? 2500
+        });
+      }
+    });
+  }, []);
+
+  const handleCalculateShipping = () => {
+    if (!/^\d{6}$/.test(pincode)) {
+      setShippingEstimate({ type: 'error', message: 'Please enter a valid 6-digit PIN code.' });
+      return;
+    }
+    const cost = cartTotal >= storeSettings.freeShippingThreshold ? 0 : storeSettings.shippingCost;
+    setShippingEstimate({ 
+      type: 'success', 
+      message: cost === 0 ? 'Eligible for Free Shipping!' : `Estimated Shipping: ₹${cost}` 
+    });
+  };
 
   const getImage = (item) =>
     item?.images?.[0]?.url || item?.images?.[0] || 'https://placehold.co/120x150?text=Item';
@@ -102,10 +128,18 @@ const Cart = () => {
               type="text"
               placeholder="Zip / Postal Code"
               value={pincode}
-              onChange={e => setPincode(e.target.value)}
+              onChange={e => {
+                setPincode(e.target.value);
+                setShippingEstimate(null);
+              }}
               className="cart-shipping-input"
             />
-            <button className="cart-shipping-btn">Calculate shipping</button>
+            <button className="cart-shipping-btn" onClick={handleCalculateShipping}>Calculate shipping</button>
+            {shippingEstimate && (
+              <p style={{ marginTop: '10px', fontSize: '14px', color: shippingEstimate.type === 'error' ? 'red' : 'green' }}>
+                {shippingEstimate.message}
+              </p>
+            )}
           </div>
 
           {/* Cart Totals */}

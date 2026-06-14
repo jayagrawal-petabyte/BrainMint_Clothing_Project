@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getColorName } from '../../utils/helpers';
+import { fetchCategories } from '../../services/api';
 import './FilterSidebar.css';
 
 const FilterSection = ({
@@ -111,6 +112,17 @@ const FilterSidebar = ({
       filters.maxPrice || ''
   };
 
+  const [dbCategories, setDbCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories().then(data => {
+      // API might return strings or objects depending on implementation
+      if (data && Array.isArray(data)) {
+        setDbCategories(data.map(cat => typeof cat === 'object' ? cat.name : cat));
+      }
+    });
+  }, []);
+
   const toggleArrayFilter = (
     type,
     value
@@ -150,11 +162,6 @@ const FilterSidebar = ({
       maxPrice: ''
     });
   };
-
-  const categories = [...new Set(products.map(p => {
-    if (typeof p.category === 'object' && p.category) return p.category.name;
-    return p.category;
-  }).filter(Boolean))];
 
   const colors = [
     '#000000', '#FFFFFF', '#FF0000', '#0000FF', '#008000', 
@@ -301,7 +308,7 @@ const FilterSidebar = ({
         }
       >
         <ul className="menu-list">
-          {categories.map(cat => {
+          {dbCategories.map(cat => {
             const count =
               products.filter(
                 p => {

@@ -10,6 +10,7 @@ import {
   FaQuoteLeft,
   FaStar,
 } from "react-icons/fa";
+import { Sparkles, Maximize, Globe, Heart, ShoppingBag } from 'lucide-react';
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -306,15 +307,45 @@ const { theme } = useTheme();
               </p>
             </div>
 
-            <div style={{ marginBottom: "40px" }}>
-              <h3 style={{ fontSize: "22px", marginBottom: "15px", fontFamily: "var(--ltn__heading-font)", color: "var(--ltn__heading-color)" }}>Why Shop With Us</h3>
-              <ul style={{ listStyle: "none", padding: 0, fontSize: "16px", color: "var(--ltn__paragraph-color)", lineHeight: "2" }}>
-                <li>✨ Women's Fashion for Every Occasion</li>
-                <li>🌸 Sizes Available from S to 12XL</li>
-                <li>🌍 Worldwide Shipping Available</li>
-                <li>💖 Inclusive Styles for Every Body Type</li>
-                <li>🛍️ Trendy, Comfortable & Affordable Collections</li>
-              </ul>
+            <div style={{ marginBottom: "50px", marginTop: "30px", width: "100%" }}>
+              <h3 style={{ fontSize: "22px", marginBottom: "25px", fontFamily: "var(--ltn__heading-font)", color: "var(--ltn__heading-color)", fontWeight: "600" }}>Why Shop With Us</h3>
+              
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px", maxWidth: "550px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                    <Sparkles size={20} strokeWidth={1.5} />
+                  </div>
+                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Women's Fashion for Every Occasion</span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                    <Maximize size={20} strokeWidth={1.5} />
+                  </div>
+                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Sizes Available from S to 12XL</span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                    <Globe size={20} strokeWidth={1.5} />
+                  </div>
+                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Worldwide Shipping Available</span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                    <Heart size={20} strokeWidth={1.5} />
+                  </div>
+                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Inclusive Styles for Every Body Type</span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                    <ShoppingBag size={20} strokeWidth={1.5} />
+                  </div>
+                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Trendy, Comfortable & Affordable</span>
+                </div>
+              </div>
             </div>
 
             <Link

@@ -14,7 +14,7 @@ import TrustBadges from '../../components/ui/TrustBadges';
 import TrendingSearches from '../../components/product/TrendingSearches';
 import PopularProducts from '../../components/product/PopularProducts';
 import { fetchNewArrivals } from '../../services/api';
-import { ShoppingBag, Shirt, Sparkles } from 'lucide-react';
+import { ShoppingBag, Shirt, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Home.css';
 
 const Home = ({ onSplashActive }) => {
@@ -449,6 +449,15 @@ const Home = ({ onSplashActive }) => {
             New Arrivals
           </h2>
 
+          <div className="popular-nav-actions" style={{ marginLeft: 'auto', marginRight: '20px' }}>
+            <button className="popular-nav-btn new-arrivals-prev-btn" aria-label="Previous Slide">
+              <ChevronLeft size={18} />
+            </button>
+            <button className="popular-nav-btn new-arrivals-next-btn" aria-label="Next Slide">
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
           <Link to="/shop" className="view-all-link">
             View All
           </Link>
@@ -458,17 +467,46 @@ const Home = ({ onSplashActive }) => {
           <p style={{ textAlign: 'center', padding: '40px' }}>Loading products...</p>
         ) : (
           <motion.div 
-            className="new-arrivals-row"
-            variants={gridVariants}
+            className="popular-carousel-wrapper"
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
           >
-            {newArrivals.map((product) => (
-              <motion.div key={product._id} variants={itemVariants}>
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation={{
+                prevEl: '.new-arrivals-prev-btn',
+                nextEl: '.new-arrivals-next-btn',
+              }}
+              pagination={{ clickable: true }}
+              spaceBetween={30}
+              slidesPerView={4}
+              breakpoints={{
+                320: {
+                  slidesPerView: 1.3,
+                  spaceBetween: 15
+                },
+                480: {
+                  slidesPerView: 2,
+                  spaceBetween: 15
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 30
+                }
+              }}
+              className="popular-swiper"
+            >
+              {newArrivals.slice(0, 8).map((product) => (
+                <SwiperSlide key={product._id || product.id}>
+                  <ProductCard product={product} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </motion.div>
         )}
       </section>

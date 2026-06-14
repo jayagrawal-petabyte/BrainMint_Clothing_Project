@@ -1,7 +1,7 @@
 
 import {
   FaTruck,
-  FaMoneyBillWave,
+  FaStar,
   FaCreditCard,
   FaGift,
 } from "react-icons/fa";
@@ -15,14 +15,14 @@ const TrustBadges = () => {
       text: "On all orders over ₹49.00",
     },
     {
-      icon: <FaMoneyBillWave />,
-      title: "15 days returns",
-      text: "Moneyback guarantee",
+      icon: <FaStar />,
+      title: "Premium Quality",
+      text: "Handpicked fabrics",
     },
     {
       icon: <FaCreditCard />,
       title: "Secure checkout",
-      text: "Protected by Paypal",
+      text: "Protected by RazorPay",
     },
     {
       icon: <FaGift />,

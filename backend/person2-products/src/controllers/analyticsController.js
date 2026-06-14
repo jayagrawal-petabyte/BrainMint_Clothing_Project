@@ -43,7 +43,6 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
         }
       },
       { $sort: { quantitySold: -1, revenue: -1 } },
-      { $limit: Number(req.query.topLimit) || 10 },
       {
         $lookup: {
           from: 'products',
@@ -61,7 +60,8 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
           quantitySold: 1,
           revenue: 1
         }
-      }
+      },
+      { $limit: Number(req.query.topLimit) || 10 }
     ]),
     Product.countDocuments(),
     Order.aggregate([

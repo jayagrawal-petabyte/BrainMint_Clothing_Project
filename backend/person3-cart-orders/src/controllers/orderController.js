@@ -62,13 +62,20 @@ const createOrder = asyncHandler(async (req, res) => {
     });
   }
 
-  const totalPrice = orderItems.reduce(
+  const itemTotal = orderItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
+  const Settings = require('../models/Settings');
+  const settings = await Settings.findOne();
+  const shippingCost = settings?.shippingCost ?? 99;
+  const freeShippingThreshold = settings?.freeShippingThreshold ?? 2500;
+  
+  const shippingFee = itemTotal >= freeShippingThreshold ? 0 : shippingCost;
+
   // Apply discountAmount from request (validated by frontend) to final price
-  const finalTotalPrice = Math.max(0, totalPrice - (discountAmount || 0));
+  const finalTotalPrice = Math.max(0, itemTotal + shippingFee - (discountAmount || 0));
 
   const order = await Order.create({
     user: req.user.id,

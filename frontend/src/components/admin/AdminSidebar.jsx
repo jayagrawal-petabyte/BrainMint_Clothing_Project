@@ -34,7 +34,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
         <div>
           <Link to="/" className="inline-block" onClick={() => setIsOpen(false)}>
             <h2 className="text-2xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark tracking-wide">
-              URBAN<span className="text-admin-accent">WEAR</span>
+              PRINCESS<span className="text-admin-accent">SIZE</span>
             </h2>
           </Link>
           <p className="text-xs text-admin-text dark:text-admin-text-dark mt-1 font-rubik tracking-wider uppercase">Admin Panel</p>

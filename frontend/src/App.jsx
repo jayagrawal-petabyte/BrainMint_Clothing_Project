@@ -14,7 +14,9 @@ import ResetPassword from './pages/auth/ResetPassword';
 import Account from './pages/auth/Account';
 import About from './pages/core/About';
 import Returns from './pages/info/Returns';
-import Terms from './pages/info/Terms';
+import Privacy from './pages/info/Privacy';
+import CustomerCare from './pages/info/CustomerCare';
+import FAQ from './pages/info/FAQ';
 import NotFound from './pages/core/NotFound';
 import Navbar from './components/layout/Navbar';
 import AnnouncementBar from './components/layout/AnnouncementBar';
@@ -173,7 +175,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     {/* <Route path="/returns" element={<Returns />} /> */}
-                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/customer-care" element={<CustomerCare />} />
 
                     <Route path="*" element={<NotFound />} />
                   </Routes>

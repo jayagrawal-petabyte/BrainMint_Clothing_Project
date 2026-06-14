@@ -222,17 +222,29 @@ const { theme } = useTheme();
             <h1
               style={{
                 fontFamily: "var(--ltn__heading-font)",
-                fontSize: "62px",
-                fontWeight: "400",
-                lineHeight: "1.1",
+                fontSize: "48px",
+                fontWeight: "600",
+                lineHeight: "1.2",
                 color: "var(--ltn__heading-color)",
                 marginBottom: "30px",
                 letterSpacing: "-1px",
               }}
             >
-              Style That <br />
-              Speaks Quietly.
+              From Vellore To Global 🌍
             </h1>
+
+            <h3
+              style={{
+                fontFamily: "var(--ltn__heading-font)",
+                fontSize: "24px",
+                fontWeight: "500",
+                lineHeight: "1.3",
+                color: "var(--ltn__heading-color)",
+                marginBottom: "20px",
+              }}
+            >
+              Designed For Every Curve, Inspired By Every Woman.
+            </h3>
 
             <p
               style={{
@@ -241,13 +253,23 @@ const { theme } = useTheme();
                 lineHeight: "1.9",
                 fontWeight: "300",
                 marginBottom: "20px",
-                maxWidth: "520px",
+                maxWidth: "550px",
               }}
             >
-              At UrbanWear, we believe fashion should feel effortless,
-              timeless, and personal. Our collections are thoughtfully
-              curated to bring together comfort, elegance, and modern
-              silhouettes for individuals who value understated style.
+              We believe every woman deserves to feel confident, beautiful, and comfortable in what she wears. Starting from Vellore and reaching customers across the world, our mission is to bring fashionable women's clothing in sizes ranging from S to 12XL.
+            </p>
+
+            <p
+              style={{
+                fontSize: "16px",
+                color: "var(--ltn__paragraph-color)",
+                lineHeight: "1.9",
+                fontWeight: "300",
+                marginBottom: "20px",
+                maxWidth: "550px",
+              }}
+            >
+              Our collections are carefully chosen to celebrate women of all shapes and sizes, offering styles that blend comfort, elegance, and everyday confidence. Whether you're looking for effortless daily wear or statement pieces, we bring you fashion that fits both your style and your personality.
             </p>
 
             <p
@@ -257,14 +279,10 @@ const { theme } = useTheme();
                 lineHeight: "1.9",
                 fontWeight: "300",
                 marginBottom: "28px",
-                maxWidth: "520px",
+                maxWidth: "550px",
               }}
             >
-              Every piece is designed with intention from carefully
-              selected fabrics to refined detailing helping you build a
-              wardrobe that feels as confident as it looks. UrbanWear is
-              more than fashion; it’s about creating everyday moments of
-              confidence through elevated essentials.
+              At the heart of our brand is inclusivity—because style has no size limit. From Vellore to Global, we're proud to help women everywhere express themselves through fashion.
             </p>
 
             <div
@@ -277,16 +295,26 @@ const { theme } = useTheme();
               <p
                 style={{
                   fontSize: "20px",
-                  fontWeight: "300",
+                  fontWeight: "400",
                   lineHeight: "1.8",
                   color: "var(--ltn__heading-color)",
                   fontStyle: "italic",
                   maxWidth: "500px",
                 }}
               >
-                “We design timeless essentials that feel effortless,
-                refined, and beautifully lived in.”
+                "Every woman deserves fashion that fits, flatters, and inspires confidence."
               </p>
+            </div>
+
+            <div style={{ marginBottom: "40px" }}>
+              <h3 style={{ fontSize: "22px", marginBottom: "15px", fontFamily: "var(--ltn__heading-font)", color: "var(--ltn__heading-color)" }}>Why Shop With Us</h3>
+              <ul style={{ listStyle: "none", padding: 0, fontSize: "16px", color: "var(--ltn__paragraph-color)", lineHeight: "2" }}>
+                <li>✨ Women's Fashion for Every Occasion</li>
+                <li>🌸 Sizes Available from S to 12XL</li>
+                <li>🌍 Worldwide Shipping Available</li>
+                <li>💖 Inclusive Styles for Every Body Type</li>
+                <li>🛍️ Trendy, Comfortable & Affordable Collections</li>
+              </ul>
             </div>
 
             <Link

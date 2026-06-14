@@ -31,7 +31,7 @@ const ProductTabs = ({ productId, onReviewAdded }) => {
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('urbanwear_token');
+    const token = localStorage.getItem('princess_token');
     if (!token) {
       setSubmitMessage('Please log in to submit a review.');
       return;

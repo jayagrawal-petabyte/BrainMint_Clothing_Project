@@ -17,7 +17,7 @@ const Returns = () => {
       <div className="static-content">
         <h2>1. General Return Policy</h2>
         <p>
-          At UrbanWear, we strive to ensure that you are completely satisfied with your purchase. However, if you are not entirely happy, we grant a period of <strong>15 days from the date of delivery</strong> to return or exchange products. This applies to most items, with certain exceptions detailed in Section 3 below. In case you return the goods within the said period, you will be reimbursed with the amount paid for the products, subject to our quality inspection.
+          At Princess Size Plus Collection, we strive to ensure that you are completely satisfied with your purchase. However, if you are not entirely happy, we grant a period of <strong>15 days from the date of delivery</strong> to return or exchange products. This applies to most items, with certain exceptions detailed in Section 3 below. In case you return the goods within the said period, you will be reimbursed with the amount paid for the products, subject to our quality inspection.
         </p>
         <p>
           We request you to please retain the original packaging and the invoice to ensure a smooth return process. Returns initiated after 15 days from delivery will not be accepted under any circumstances.
@@ -48,7 +48,7 @@ const Returns = () => {
         <h2>4. How to Initiate a Return</h2>
         <p>Initiating a return is simple and can be done in two ways:</p>
         <ul>
-          <li><strong>Online Return:</strong> Log into your UrbanWear account, navigate to "My Orders", select the item you wish to return, and click "Initiate Return". Our courier partner will pick up the package from your delivery address within 2-3 business days.</li>
+          <li><strong>Online Return:</strong> Log into your Princess Size Plus Collection account, navigate to "My Orders", select the item you wish to return, and click "Initiate Return". Our courier partner will pick up the package from your delivery address within 2-3 business days.</li>
           <li><strong>Guest Checkout Return:</strong> If you checked out as a guest, please visit our <Link to="/contact">Contact Page</Link> and submit a return request with your Order ID and email address. Our support team will generate a return pickup for you.</li>
         </ul>
 
@@ -69,7 +69,7 @@ const Returns = () => {
 
         <h2>6. In-Store Exchanges</h2>
         <p>
-          For a faster resolution, you can exchange items purchased online at any of our physical UrbanWear retail stores across the country. Please bring the item in its original condition along with the digital or printed invoice within 15 days of delivery. Note that refunds cannot be processed in-store; physical stores can only offer size/color exchanges or issue a store credit voucher.
+          For a faster resolution, you can exchange items purchased online at any of our physical Princess Size Plus Collection retail stores across the country. Please bring the item in its original condition along with the digital or printed invoice within 15 days of delivery. Note that refunds cannot be processed in-store; physical stores can only offer size/color exchanges or issue a store credit voucher.
         </p>
 
         <h2>7. Damaged or Defective Items</h2>

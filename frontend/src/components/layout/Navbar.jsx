@@ -80,7 +80,8 @@ const Navbar = () => {
                 </button>
                 <div className="site-logo">
                   <Link to="/" className="theme-logo">
-                    <span className="logo-text">UrbanWear<span className="logo-dot">.</span></span>
+                    <span className="logo-text d-none-lg">Princess Size Plus Collection<span className="logo-dot">.</span></span>
+                    <img src="/src/assets/logo.png" alt="Princess Size Plus Collection" className="logo-img d-lg-none" style={{ height: '40px', display: 'block' }} />
                   </Link>
                 </div>
               </div>

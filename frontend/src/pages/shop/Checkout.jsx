@@ -566,7 +566,7 @@ const Checkout = () => {
 
         {/* ══ LEFT ══ */}
         <div className="co__left">
-          <Link to="/" className="co__brand">UrbanWear</Link>
+          <Link to="/" className="co__brand">Princess Size Plus Collection</Link>
 
           {/* Breadcrumb */}
           <nav className="co__crumb">
@@ -749,7 +749,7 @@ const Checkout = () => {
             </div>
           )}
 
-          <p className="co__footer">© {new Date().getFullYear()} UrbanWear. All rights reserved.</p>
+          <p className="co__footer">© {new Date().getFullYear()} Princess Size Plus Collection. All rights reserved.</p>
         </div>
 
         {/* ══ RIGHT ══ */}

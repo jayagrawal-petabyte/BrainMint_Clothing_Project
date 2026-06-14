@@ -230,7 +230,7 @@ const Home = ({ onSplashActive }) => {
                 zIndex: 2
               }}
             >
-              UrbanWear<span style={{ color: "var(--ltn__secondary-color, #f24c5c)" }}>.</span>
+              Princess Size Plus Collection<span style={{ color: "var(--ltn__secondary-color, #f24c5c)" }}>.</span>
             </motion.div>
             
             {/* Elegant loader line */}

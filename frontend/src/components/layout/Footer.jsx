@@ -96,7 +96,7 @@ const Footer = () => {
               <h4 className="footer-title">Customer Care</h4>
               <ul className="footer-links">
                 {/* <li><Link to="/returns">Returns Policy</Link></li> */}
-                <li><Link to="/terms">Terms & Conditions</Link></li>
+                <li><Link to="/customer-care">Customer Care</Link></li>
                 <li><Link to="/wishlist">Wishlist</Link></li>
                 <li><Link to="/cart">Order Tracking</Link></li>
               </ul>
@@ -137,7 +137,7 @@ const Footer = () => {
         <div className="container">
           <div className="footer-bottom-inner">
             <p className="copyright-text">
-              &copy; {new Date().getFullYear()} UrbanWear. All Rights Reserved.
+              &copy; {new Date().getFullYear()} Princess Size Plus Collection. All Rights Reserved.
             </p>
             <div className="payment-methods">
               {/* Placeholders for payment icons */}

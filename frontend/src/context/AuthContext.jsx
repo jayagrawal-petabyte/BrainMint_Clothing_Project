@@ -7,7 +7,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem('urbanwear_token'));
+  const [token, setToken] = useState(() => localStorage.getItem('princess_token'));
   const [isLoading, setIsLoading] = useState(false);
 
   const isLoggedIn = !!token;
@@ -15,18 +15,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const hydrateSession = async () => {
       if (token) {
-        localStorage.setItem('urbanwear_token', token);
+        localStorage.setItem('princess_token', token);
         const profile = await fetchCurrentUser(token);
         if (profile && profile.success !== false) {
           setUser(profile.data?.user || profile.user || profile.data || profile);
         } else {
           // Token might be expired
-          localStorage.removeItem('urbanwear_token');
+          localStorage.removeItem('princess_token');
           setToken(null);
           setUser(null);
         }
       } else {
-        localStorage.removeItem('urbanwear_token');
+        localStorage.removeItem('princess_token');
         setUser(null);
       }
     };
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('urbanwear_token');
+    localStorage.removeItem('princess_token');
   };
 
   const updateUser = (userData) => {

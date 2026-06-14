@@ -27,7 +27,7 @@ const Admin = () => {
 
   useEffect(() => {
     try {
-      const localOrders = JSON.parse(localStorage.getItem('urbanwear_placed_orders') || '[]');
+      const localOrders = JSON.parse(localStorage.getItem('princess_placed_orders') || '[]');
       // Normalize statuses from local orders (lowercase to match CSS mapping in Admin.css)
       const normalizedLocal = localOrders.map(o => ({
         ...o,

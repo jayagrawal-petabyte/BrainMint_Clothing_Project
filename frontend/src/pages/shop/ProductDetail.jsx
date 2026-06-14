@@ -298,7 +298,7 @@ const ProductDetail = () => {
 
                 <td className="meta-value">
                   {product.brand ||
-                    'UrbanWear'}
+                    'Princess Size Plus Collection'}
                 </td>
               </tr>
             </tbody>
@@ -521,7 +521,7 @@ const ProductDetail = () => {
           <span>
             {selectedSize && `${selectedSize} / `}
             {selectedColor && `${selectedColor} / `}
-            {product.brand || 'UrbanWear'} - ₹{currentPrice.toLocaleString('en-IN')}
+            {product.brand || 'Princess Size Plus Collection'} - ₹{currentPrice.toLocaleString('en-IN')}
           </span>
         </div>
         <div className="sticky-atc-actions">

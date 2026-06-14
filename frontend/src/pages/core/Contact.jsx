@@ -155,7 +155,7 @@ const Contact = () => {
             {
               icon: <FaEnvelope />,
               title: "Email Address",
-              value: "support@urbanwear.com",
+              value: "support@Princess Size Plus Collection.com",
             },
             {
               icon: <FaMapMarkerAlt />,

@@ -2,25 +2,25 @@
 import { Link } from 'react-router-dom';
 import './Returns.css'; // Reusing static page CSS
 
-const Terms = () => {
+const CustomerCare = () => {
   return (
     <div className="static-page">
       <div className="static-header">
-        <h1>Terms & Conditions</h1>
+        <h1>Customer Care</h1>
         <div className="breadcrumb">
           <Link to="/">Home</Link>
           <span className="separator">{'>'}</span>
-          <span className="current">Terms & Conditions</span>
+          <span className="current">Customer Care</span>
         </div>
       </div>
 
       <div className="static-content">
         <h2>1. Introduction</h2>
         <p>
-          Welcome to UrbanWear. These Terms & Conditions ("Terms") govern your access to and use of our website, mobile application, and the services provided by UrbanWear (collectively, the "Platform"). By accessing, browsing, or placing an order on the Platform, you acknowledge that you have read, understood, and agree to be bound by these Terms. 
+          Welcome to Princess Size Plus Collection. These Customer Care ("CustomerCare") govern your access to and use of our website, mobile application, and the services provided by Princess Size Plus Collection (collectively, the "Platform"). By accessing, browsing, or placing an order on the Platform, you acknowledge that you have read, understood, and agree to be bound by these CustomerCare. 
         </p>
         <p>
-          If you do not agree with any part of these Terms, you must immediately cease all use of our Platform. UrbanWear reserves the right to update, modify, or replace any part of these Terms at our sole discretion by posting updates to our website. It is your responsibility to check this page periodically for changes.
+          If you do not agree with any part of these CustomerCare, you must immediately cease all use of our Platform. Princess Size Plus Collection reserves the right to update, modify, or replace any part of these CustomerCare at our sole discretion by posting updates to our website. It is your responsibility to check this page periodically for changes.
         </p>
 
         <h2>2. User Accounts and Security</h2>
@@ -28,15 +28,15 @@ const Terms = () => {
           While you may browse our Platform as a guest, placing an order may require you to register and create an account. You agree to provide accurate, current, and complete information during the registration process. 
         </p>
         <p>
-          You are solely responsible for safeguarding the password that you use to access your account and for any activities or actions under your password. UrbanWear will not be liable for any loss or damage arising from your failure to comply with this security obligation. We reserve the right to suspend or terminate accounts, refuse service, or cancel orders at our sole discretion if we suspect fraudulent or malicious activity.
+          You are solely responsible for safeguarding the password that you use to access your account and for any activities or actions under your password. Princess Size Plus Collection will not be liable for any loss or damage arising from your failure to comply with this security obligation. We reserve the right to suspend or terminate accounts, refuse service, or cancel orders at our sole discretion if we suspect fraudulent or malicious activity.
         </p>
 
         <h2>3. Intellectual Property Rights</h2>
         <p>
-          All content included on the Platform, such as text, graphics, logos, images, audio clips, digital downloads, data compilations, and software, is the property of UrbanWear or its content suppliers and is protected by international copyright, trademark, and intellectual property laws.
+          All content included on the Platform, such as text, graphics, logos, images, audio clips, digital downloads, data compilations, and software, is the property of Princess Size Plus Collection or its content suppliers and is protected by international copyright, trademark, and intellectual property laws.
         </p>
         <p>
-          You may view, download for caching purposes only, and print pages from the website for your own personal, non-commercial use, subject to the restrictions set out below and elsewhere in these Terms. You must not:
+          You may view, download for caching purposes only, and print pages from the website for your own personal, non-commercial use, subject to the restrictions set out below and elsewhere in these CustomerCare. You must not:
         </p>
         <ul>
           <li>Republish material from this website (including republication on another website).</li>
@@ -60,7 +60,7 @@ const Terms = () => {
 
         <h2>6. Prohibited Uses</h2>
         <p>
-          In addition to other prohibitions as set forth in the Terms, you are prohibited from using the site or its content: 
+          In addition to other prohibitions as set forth in the CustomerCare, you are prohibited from using the site or its content: 
           (a) for any unlawful purpose; 
           (b) to solicit others to perform or participate in any unlawful acts; 
           (c) to violate any international, federal, provincial or state regulations, rules, laws, or local ordinances; 
@@ -70,16 +70,16 @@ const Terms = () => {
 
         <h2>7. Limitation of Liability</h2>
         <p>
-          In no case shall UrbanWear, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service.
+          In no case shall Princess Size Plus Collection, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service.
         </p>
 
         <h2>8. Governing Law and Jurisdiction</h2>
         <p>
-          These Terms & Conditions and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes relating to these terms and conditions will be subject to the exclusive jurisdiction of the courts of Mumbai, Maharashtra.
+          These Customer Care and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes relating to these CustomerCare and conditions will be subject to the exclusive jurisdiction of the courts of Mumbai, Maharashtra.
         </p>
       </div>
     </div>
   );
 };
 
-export default Terms;
+export default CustomerCare;

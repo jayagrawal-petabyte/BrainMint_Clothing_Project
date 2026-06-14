@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { placeOrder, fetchUserProfile, validateCoupon, createPaymentOrder, verifyPayment, cancelUserOrder, fetchSettings } from '../../services/api';
+import logoUrl from '../../assets/logo.png';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -567,7 +568,7 @@ const Checkout = () => {
         {/* ══ LEFT ══ */}
         <div className="co__left">
           <Link to="/" className="co__brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <img src="/src/assets/logo.png" alt="Princess Size+ Collection" style={{ height: '42px', width: 'auto', display: 'block' }} />
+            <img src={logoUrl} alt="Princess Size+ Collection" style={{ height: '42px', width: 'auto', display: 'block' }} />
             <span>Princess Size+ Collection</span>
           </Link>
 

@@ -8,6 +8,7 @@ import MobileMenuDrawer from "./MobileMenuDrawer";
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { fetchTrendingSearches } from '../../services/api';
+import logoUrl from '../../assets/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -80,7 +81,7 @@ const Navbar = () => {
                   </button>
                   <div className="site-logo">
                     <Link to="/" className="theme-logo brand-logo-link">
-                      <img src="/src/assets/logo.png" alt="Princess Size+ Collection" className="brand-logo-img" />
+                      <img src={logoUrl} alt="Princess Size+ Collection" className="brand-logo-img" />
                       <div className="brand-logo-text">
                         <span className="brand-logo-line1">Princess Size+</span>
                         <span className="brand-logo-line2">Collection</span>

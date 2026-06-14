@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import { fetchTrendingSearches } from '../../services/api';
+import logoUrl from '../../assets/logo.png';
 import './MobileMenuDrawer.css';
 
 const MobileMenuDrawer = ({ isOpen, onClose }) => {
@@ -64,7 +65,7 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
             <div className="mobile-menu-header">
               <div className="site-logo">
                 <Link to="/" className="theme-logo brand-logo-link" onClick={onClose}>
-                  <img src="/src/assets/logo.png" alt="Princess Size+ Collection" className="brand-logo-img" />
+                  <img src={logoUrl} alt="Princess Size+ Collection" className="brand-logo-img" />
                   <div className="brand-logo-text">
                     <span className="brand-logo-line1">Princess Size+</span>
                     <span className="brand-logo-line2">Collection</span>

@@ -119,6 +119,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('princess_token');
+    localStorage.removeItem('adminToken'); // Ensure complete logout from admin as well
   };
 
   const updateUser = (userData) => {

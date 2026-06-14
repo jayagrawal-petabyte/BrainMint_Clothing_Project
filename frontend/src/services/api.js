@@ -1,8 +1,8 @@
 // ─── Backend Service URLs ────────────────────────────────────────────────────
-const AUTH_URL = "http://localhost:5000/api";
-const PRODUCTS_URL = "http://localhost:5000/api";
-const CART_URL = "http://localhost:5000/api";
-const COMBINED_URL = "http://localhost:5000/api";
+const AUTH_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
+const PRODUCTS_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
+const CART_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
+const COMBINED_URL = "https://brainmint-clothing-project-combined.onrender.com/api";
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 export const fetchProducts = async (params = "") => {

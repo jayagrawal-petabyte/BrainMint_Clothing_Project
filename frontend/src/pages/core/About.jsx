@@ -233,7 +233,7 @@ const About = () => {
                   From Vellore To Global
                 </h1>
                 <div style={{ color: "var(--ltn__secondary-color)", display: "flex", alignItems: "center" }}>
-                  <Globe size={42} strokeWidth={1.5} />
+                  <Globe size={38} strokeWidth={1.5} />
                 </div>
               </div>
 

@@ -69,7 +69,7 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="product-not-found">
+      <div style={{ textAlign: 'center', margin: '100px 0' }}>
         <h2>Loading product...</h2>
       </div>
     );

@@ -112,7 +112,7 @@ const OrderDetailsModal = ({ order, onClose }) => {
   );
 };
 
-const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
+const OrderTable = ({ orders, statusFilter, onUpdateStatus, isBulkDeleteMode, selectedOrderIds = [], toggleOrderSelection }) => {
   const [editingId, setEditingId] = useState(null);
   const [editStatus, setEditStatus] = useState('');
   const [viewOrderId, setViewOrderId] = useState(null);
@@ -126,6 +126,7 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
         <table className="w-full text-left min-w-[1000px]">
           <thead className="bg-admin-bg dark:bg-[#222] text-admin-text dark:text-admin-text-dark text-sm uppercase tracking-wider">
             <tr>
+              {isBulkDeleteMode && <th className="px-6 py-4 font-medium w-12">Select</th>}
               <th className="px-6 py-4 font-medium">Order ID</th>
               <th className="px-6 py-4 font-medium">Customer</th>
               <th className="px-6 py-4 font-medium">Date</th>
@@ -135,8 +136,21 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-admin-border dark:divide-admin-border-dark">
-            {filteredOrders.map((order) => (
+            {filteredOrders.map((order) => {
+              const isSelectable = order.status === 'Pending' || order.status === 'Cancelled';
+              return (
               <tr key={order.id} className="hover:bg-admin-bg/50 dark:hover:bg-[#222]/50 transition-colors">
+                {isBulkDeleteMode && (
+                  <td className="px-6 py-4">
+                    <input 
+                      type="checkbox" 
+                      disabled={!isSelectable}
+                      checked={selectedOrderIds.includes(order.id)}
+                      onChange={() => isSelectable && toggleOrderSelection(order.id)}
+                      className="w-4 h-4 text-admin-accent rounded border-admin-border dark:border-[#444] bg-admin-bg dark:bg-[#222] focus:ring-admin-accent focus:ring-2 disabled:opacity-50 cursor-pointer"
+                    />
+                  </td>
+                )}
                 <td className="px-6 py-4 font-semibold text-admin-heading dark:text-admin-heading-dark">{order.id}</td>
                 <td className="px-6 py-4">
                   <div className="font-medium text-admin-heading dark:text-admin-heading-dark">{order.customer}</div>
@@ -216,7 +230,7 @@ const OrderTable = ({ orders, statusFilter, onUpdateStatus }) => {
                   )}
                 </td>
               </tr>
-            ))}
+            )})}
             
             {filteredOrders.length === 0 && (
               <tr>

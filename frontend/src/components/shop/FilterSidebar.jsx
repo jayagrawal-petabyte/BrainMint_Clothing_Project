@@ -1,6 +1,7 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getColorName } from '../../utils/helpers';
 import './FilterSidebar.css';
 
 const FilterSection = ({
@@ -150,46 +151,15 @@ const FilterSidebar = ({
     });
   };
 
-  const categories = [
-    'Dress',
-    'Top',
-    'Blouse',
-    'Skirt',
-    'Trouser',
-    'Coat',
-    'Blazer'
-  ];
+  const categories = [...new Set(products.map(p => {
+    if (typeof p.category === 'object' && p.category) return p.category.name;
+    return p.category;
+  }).filter(Boolean))];
 
-  const colors = [
-    {
-      name: 'Black',
-      hex: '#000000'
-    },
-    {
-      name: 'White',
-      hex: '#FFFFFF'
-    },
-    {
-      name: 'Pink',
-      hex: '#FFB6C1'
-    },
-    {
-      name: 'Beige',
-      hex: '#F5F5DC'
-    },
-    {
-      name: 'Blue',
-      hex: '#1e73be'
-    },
-    {
-      name: 'Red',
-      hex: '#c8232c'
-    },
-    {
-      name: 'Grey',
-      hex: '#808080'
-    }
-  ];
+  const colors = [...new Set(products.flatMap(p => p.colors || []).filter(Boolean))].map(hex => ({
+    name: getColorName(hex) || hex,
+    hex
+  }));
 
   const getActiveFilters =
     () => {
@@ -198,9 +168,8 @@ const FilterSidebar = ({
       safeFilters.categories?.forEach(
         c => {
           active.push({
-            label: `${c}s`,
-            type:
-              'categories',
+            label: c,
+            type: 'categories',
             value: c
           });
         }
@@ -332,12 +301,10 @@ const FilterSidebar = ({
           {categories.map(cat => {
             const count =
               products.filter(
-                p =>
-                  p?.name
-                    ?.toLowerCase()
-                    .includes(
-                      cat.toLowerCase()
-                    )
+                p => {
+                  const catName = typeof p.category === 'object' && p.category ? p.category.name : p.category;
+                  return catName === cat;
+                }
               ).length;
 
             return (
@@ -357,7 +324,7 @@ const FilterSidebar = ({
                   />
 
                   <span className="filter-name">
-                    {cat}s
+                    {cat}
                   </span>
 
                   <span className="filter-count">
@@ -377,7 +344,7 @@ const FilterSidebar = ({
         onReset={() => onFilterChange({ ...safeFilters, sizes: [] })}
       >
         <ul className="menu-list size-list">
-          {['S', 'M', 'L', 'XL', '30', '32', '34', '36'].map(size => (
+          {['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL', '10XL', '11XL', '12XL'].map(size => (
             <li key={size}>
               <button
                 type="button"

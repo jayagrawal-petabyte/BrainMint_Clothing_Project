@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Store, Link as LinkIcon, Megaphone, Loader2, Check } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Save, Truck, Link as LinkIcon, Megaphone, Loader2, Check } from 'lucide-react';
+import { fetchSettings, updateSettings } from '../../services/api';
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState({
-    storeName: 'UrbanWear',
-    supportEmail: 'support@urbanwear.com',
-    supportPhone: '+91 9876543210',
-    instagramUrl: 'https://instagram.com/urbanwear',
-    facebookUrl: 'https://facebook.com/urbanwear',
-    twitterUrl: 'https://twitter.com/urbanwear',
+    shippingCost: 99,
+    freeShippingThreshold: 2500,
+    socialLinks: {
+      instagram: 'https://instagram.com/',
+      facebook: 'https://facebook.com/',
+      twitter: 'https://twitter.com/'
+    },
     enableAnnouncement: true,
     announcementText: 'Free shipping on all orders over ₹999!'
   });
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // 'success' or null
 
   useEffect(() => {
-    const saved = localStorage.getItem('admin_store_settings');
-    if (saved) {
-      try {
-        setSettings(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse saved settings", e);
+    const loadSettings = async () => {
+      const data = await fetchSettings();
+      if (data && data.success && data.data) {
+        setSettings({
+          shippingCost: data.data.shippingCost || 99,
+          freeShippingThreshold: data.data.freeShippingThreshold || 2500,
+          socialLinks: data.data.socialLinks || { instagram: '', facebook: '', twitter: '' },
+          enableAnnouncement: data.data.enableAnnouncement ?? true,
+          announcementText: data.data.announcementText || ''
+        });
       }
-    }
+      setIsLoading(false);
+    };
+    loadSettings();
   }, []);
 
   const handleChange = (e) => {
@@ -37,23 +45,44 @@ const AdminSettings = () => {
     setSaveStatus(null);
   };
 
-  const handleSave = (e) => {
+  const handleSocialChange = (e) => {
+    const { name, value } = e.target;
+    setSettings(prev => ({
+      ...prev,
+      socialLinks: {
+        ...prev.socialLinks,
+        [name]: value
+      }
+    }));
+    setSaveStatus(null);
+  };
+
+  const handleSave = async (e) => {
     e.preventDefault();
     setIsSaving(true);
     setSaveStatus(null);
     
-    // Simulate API delay
-    setTimeout(() => {
-      localStorage.setItem('admin_store_settings', JSON.stringify(settings));
-      
-      // Dispatch a custom event so other components (like Navbar/Footer) could potentially listen
-      window.dispatchEvent(new CustomEvent('storeSettingsUpdated', { detail: settings }));
-      
-      setIsSaving(false);
+    const token = localStorage.getItem('adminToken');
+    const res = await updateSettings(settings, token);
+    
+    if (res && res.success) {
       setSaveStatus('success');
+      window.dispatchEvent(new CustomEvent('storeSettingsUpdated', { detail: settings }));
       setTimeout(() => setSaveStatus(null), 3000);
-    }, 600);
+    } else {
+      alert(res?.message || 'Failed to save settings');
+    }
+    
+    setIsSaving(false);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 size={32} className="animate-spin text-admin-accent" />
+      </div>
+    );
+  }
 
   return (
     <div className="animate-in fade-in duration-500 font-rubik pb-12">
@@ -81,46 +110,36 @@ const AdminSettings = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           
-          {/* General Details Section */}
+          {/* Shipping Configuration Section */}
           <section className="bg-admin-card dark:bg-admin-card-dark rounded-2xl shadow-sm border border-admin-border dark:border-admin-border-dark overflow-hidden">
             <div className="p-6 border-b border-admin-border dark:border-admin-border-dark bg-admin-bg/30 dark:bg-[#111]/30 flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500 flex items-center justify-center">
-                <Store size={20} />
+                <Truck size={20} />
               </div>
               <div>
-                <h2 className="font-semibold text-lg text-admin-heading dark:text-admin-heading-dark font-montserrat">Store Details</h2>
-                <p className="text-sm text-admin-text dark:text-admin-text-dark">Used in footers, invoices, and contact pages</p>
+                <h2 className="font-semibold text-lg text-admin-heading dark:text-admin-heading-dark font-montserrat">Shipping Configuration</h2>
+                <p className="text-sm text-admin-text dark:text-admin-text-dark">Manage delivery charges and free shipping thresholds</p>
               </div>
             </div>
             
             <div className="p-6 space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Store Name</label>
-                <input 
-                  type="text" 
-                  name="storeName"
-                  value={settings.storeName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-[#444] focus:border-admin-heading dark:focus:border-admin-heading-dark rounded-lg outline-none text-admin-heading dark:text-admin-heading-dark transition-colors"
-                />
-              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Support Email</label>
+                  <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Standard Delivery Charge (₹)</label>
                   <input 
-                    type="email" 
-                    name="supportEmail"
-                    value={settings.supportEmail}
+                    type="number" 
+                    name="shippingCost"
+                    value={settings.shippingCost}
                     onChange={handleChange}
                     className="w-full px-4 py-2.5 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-[#444] focus:border-admin-heading dark:focus:border-admin-heading-dark rounded-lg outline-none text-admin-heading dark:text-admin-heading-dark transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Support Phone</label>
+                  <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Free Delivery Threshold (₹)</label>
                   <input 
-                    type="text" 
-                    name="supportPhone"
-                    value={settings.supportPhone}
+                    type="number" 
+                    name="freeShippingThreshold"
+                    value={settings.freeShippingThreshold}
                     onChange={handleChange}
                     className="w-full px-4 py-2.5 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-[#444] focus:border-admin-heading dark:focus:border-admin-heading-dark rounded-lg outline-none text-admin-heading dark:text-admin-heading-dark transition-colors"
                   />
@@ -196,9 +215,9 @@ const AdminSettings = () => {
                 <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Instagram URL</label>
                 <input 
                   type="url" 
-                  name="instagramUrl"
-                  value={settings.instagramUrl}
-                  onChange={handleChange}
+                  name="instagram"
+                  value={settings.socialLinks.instagram}
+                  onChange={handleSocialChange}
                   className="w-full px-4 py-2 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-[#444] focus:border-admin-heading dark:focus:border-admin-heading-dark rounded-lg outline-none text-sm text-admin-heading dark:text-admin-heading-dark transition-colors"
                 />
               </div>
@@ -206,9 +225,9 @@ const AdminSettings = () => {
                 <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Facebook URL</label>
                 <input 
                   type="url" 
-                  name="facebookUrl"
-                  value={settings.facebookUrl}
-                  onChange={handleChange}
+                  name="facebook"
+                  value={settings.socialLinks.facebook}
+                  onChange={handleSocialChange}
                   className="w-full px-4 py-2 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-[#444] focus:border-admin-heading dark:focus:border-admin-heading-dark rounded-lg outline-none text-sm text-admin-heading dark:text-admin-heading-dark transition-colors"
                 />
               </div>
@@ -216,22 +235,14 @@ const AdminSettings = () => {
                 <label className="block text-sm font-medium text-admin-heading dark:text-admin-heading-dark mb-1.5">Twitter/X URL</label>
                 <input 
                   type="url" 
-                  name="twitterUrl"
-                  value={settings.twitterUrl}
-                  onChange={handleChange}
+                  name="twitter"
+                  value={settings.socialLinks.twitter}
+                  onChange={handleSocialChange}
                   className="w-full px-4 py-2 bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-[#444] focus:border-admin-heading dark:focus:border-admin-heading-dark rounded-lg outline-none text-sm text-admin-heading dark:text-admin-heading-dark transition-colors"
                 />
               </div>
             </div>
           </section>
-
-          {/* Quick Info Box */}
-          <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800/30 rounded-2xl p-6">
-            <h3 className="text-emerald-800 dark:text-emerald-400 font-semibold mb-2">Note on Settings</h3>
-            <p className="text-sm text-emerald-700 dark:text-emerald-500 leading-relaxed">
-              These settings are currently stored in your browser's local storage. In a full production environment, this form would send data to a backend configuration endpoint to sync across all devices.
-            </p>
-          </div>
 
         </div>
       </div>

@@ -822,3 +822,46 @@ export const fetchContactMessages = async (token) => {
 };
 
 
+// ─── Settings ────────────────────────────────────────────────────────────────
+export const fetchSettings = async () => {
+  try {
+    const response = await fetch(`${COMBINED_URL}/settings`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
+export const updateSettings = async (settingsData, token) => {
+  try {
+    const response = await fetch(`${COMBINED_URL}/settings`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(settingsData)
+    });
+    return await response.json();
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
+// ─── Bulk Delete Orders ──────────────────────────────────────────────────────
+export const adminBulkDeleteOrders = async (orderIds, token) => {
+  try {
+    const response = await fetch(`${COMBINED_URL}/orders/bulk`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ orderIds })
+    });
+    return await response.json();
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};

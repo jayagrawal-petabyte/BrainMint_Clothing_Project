@@ -3,7 +3,7 @@ import { Upload, X, Plus, ChevronLeft, ChevronRight, RefreshCw, AlertCircle } fr
 import { useNavigate } from 'react-router-dom';
 import { getColorName } from '../../utils/helpers';
 
-const AVAILABLE_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL', '10XL', '11XL', '12XL'];
 const AVAILABLE_COLORS = [
   '#000000', '#FFFFFF', '#FF0000', '#0000FF', '#008000', 
   '#FFFF00', '#808080', '#000080', '#FFC0CB', '#800080', '#FFA500', '#A52A2A'

@@ -7,6 +7,9 @@ const OrderManagement = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isBulkDeleteMode, setIsBulkDeleteMode] = useState(false);
+  const [selectedOrderIds, setSelectedOrderIds] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   const tabs = ['All', 'Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
 
   const loadOrders = async () => {
@@ -57,11 +60,67 @@ const OrderManagement = () => {
     }
   };
 
+  const toggleOrderSelection = (orderId) => {
+    setSelectedOrderIds(prev => 
+      prev.includes(orderId) 
+        ? prev.filter(id => id !== orderId)
+        : [...prev, orderId]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedOrderIds.length === 0) return;
+    if (!window.confirm(`Are you sure you want to permanently delete ${selectedOrderIds.length} orders? This cannot be undone.`)) return;
+
+    setIsDeleting(true);
+    const token = localStorage.getItem('adminToken');
+    // Import adminBulkDeleteOrders dynamically or make sure it's imported at the top
+    const { adminBulkDeleteOrders } = require('../../services/api');
+    
+    const res = await adminBulkDeleteOrders(selectedOrderIds, token);
+    if (res && res.success) {
+      setOrders(prev => prev.filter(o => !selectedOrderIds.includes(o.id)));
+      setSelectedOrderIds([]);
+      setIsBulkDeleteMode(false);
+    } else {
+      alert(res?.message || 'Failed to delete orders');
+    }
+    setIsDeleting(false);
+  };
+
   return (
     <div className="animate-in fade-in duration-500 font-rubik">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark">Order Management</h1>
-        <p className="text-admin-text dark:text-admin-text-dark mt-1">View and manage customer orders</p>
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold font-montserrat text-admin-heading dark:text-admin-heading-dark">Order Management</h1>
+          <p className="text-admin-text dark:text-admin-text-dark mt-1">View and manage customer orders</p>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          {isBulkDeleteMode && (
+            <button 
+              onClick={handleBulkDelete}
+              disabled={isDeleting || selectedOrderIds.length === 0}
+              className="bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              {isDeleting ? <Loader2 size={16} className="animate-spin" /> : null}
+              Delete Selected ({selectedOrderIds.length})
+            </button>
+          )}
+          <button 
+            onClick={() => {
+              setIsBulkDeleteMode(!isBulkDeleteMode);
+              setSelectedOrderIds([]); // Clear selection when toggling
+            }}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors border ${
+              isBulkDeleteMode 
+                ? 'bg-admin-bg dark:bg-[#222] border-admin-border dark:border-admin-border-dark text-admin-heading dark:text-admin-heading-dark' 
+                : 'bg-transparent border-admin-border dark:border-admin-border-dark text-admin-text dark:text-admin-text-dark hover:bg-admin-bg dark:hover:bg-[#222]'
+            }`}
+          >
+            {isBulkDeleteMode ? 'Cancel Selection' : 'Enable Bulk Delete'}
+          </button>
+        </div>
       </div>
 
       <div className="flex space-x-1 mb-6 bg-admin-card dark:bg-admin-card-dark p-1 rounded-xl border border-admin-border dark:border-admin-border-dark w-fit overflow-x-auto">
@@ -85,7 +144,14 @@ const OrderManagement = () => {
           <Loader2 className="animate-spin text-admin-accent h-8 w-8" />
         </div>
       ) : (
-        <OrderTable orders={orders} statusFilter={activeTab} onUpdateStatus={handleUpdateStatus} />
+        <OrderTable 
+          orders={orders} 
+          statusFilter={activeTab} 
+          onUpdateStatus={handleUpdateStatus} 
+          isBulkDeleteMode={isBulkDeleteMode}
+          selectedOrderIds={selectedOrderIds}
+          toggleOrderSelection={toggleOrderSelection}
+        />
       )}
     </div>
   );

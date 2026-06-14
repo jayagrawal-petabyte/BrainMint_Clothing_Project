@@ -4,7 +4,7 @@ import { ShieldCheck, Lock, Truck, RotateCcw, Tag, ChevronDown, ChevronUp, Chevr
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import { placeOrder, fetchUserProfile, validateCoupon, createPaymentOrder, verifyPayment, cancelUserOrder } from '../../services/api';
+import { placeOrder, fetchUserProfile, validateCoupon, createPaymentOrder, verifyPayment, cancelUserOrder, fetchSettings } from '../../services/api';
 import './Checkout.css';
 
 const INDIAN_STATES = [
@@ -83,6 +83,7 @@ const Checkout = () => {
   const [fetchedProfile, setFetchedProfile] = useState(null);
   const [errors, setErrors] = useState({});
   const [placedOrderTotal, setPlacedOrderTotal] = useState(0);
+  const [storeSettings, setStoreSettings] = useState({ shippingCost: 99, freeShippingThreshold: 2500 });
 
   const [form, setForm] = useState({
     email: '', phone: '', newsletter: false,
@@ -102,6 +103,15 @@ const Checkout = () => {
         })
         .catch(() => {});
     }
+
+    fetchSettings().then(res => {
+      if (res && res.success && res.data) {
+        setStoreSettings({
+          shippingCost: res.data.shippingCost ?? 99,
+          freeShippingThreshold: res.data.freeShippingThreshold ?? 2500
+        });
+      }
+    });
   }, [token]);
 
   useEffect(() => {
@@ -214,7 +224,7 @@ const Checkout = () => {
   const getPrice = (item) => item?.discountPrice || item?.price || 0;
   const getId   = (item) => item?._id || item?.id;
 
-  const shipping    = cartTotal > 2499 ? 0 : 99;
+  const shipping    = cartTotal >= storeSettings.freeShippingThreshold ? 0 : storeSettings.shippingCost;
   const discount    = couponApplied ? Math.round(cartTotal * (discountPercent / 100)) : 0;
   const finalTotal  = cartTotal + shipping - discount;
 

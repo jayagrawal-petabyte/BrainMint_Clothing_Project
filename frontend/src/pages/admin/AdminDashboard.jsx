@@ -200,7 +200,7 @@ const AdminDashboard = () => {
                   </td>
                 </tr>
               ) : (
-                topProducts.map((product, index) => (
+                topProducts.filter(p => p.name).map((product, index) => (
                   <tr key={index} className="hover:bg-admin-bg/50 dark:hover:bg-[#222]/50 transition-colors">
                     <td className="px-6 py-4 font-semibold text-admin-heading dark:text-admin-heading-dark">{product.name}</td>
                     <td className="px-6 py-4 text-admin-text dark:text-admin-text-dark">{product.category || 'N/A'}</td>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Shop from './pages/shop/Shop';
@@ -6,12 +6,12 @@ import Home from './pages/core/Home';
 import ProductDetail from './pages/shop/ProductDetail';
 import Cart from './pages/shop/Cart';
 import Wishlist from './pages/shop/Wishlist';
-import Checkout from './pages/shop/Checkout';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import ResetPassword from './pages/auth/ResetPassword';
-import Account from './pages/auth/Account';
+const Checkout = lazy(() => import('./pages/shop/Checkout'));
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
+const Account = lazy(() => import('./pages/auth/Account'));
 import About from './pages/core/About';
 import Returns from './pages/info/Returns';
 import Terms from './pages/info/Terms';
@@ -22,20 +22,27 @@ import AnnouncementBar from './components/layout/AnnouncementBar';
 import Footer from './components/layout/Footer';
 import BottomMobileNav from './components/layout/BottomMobileNav';
 
-import AdminLayout from './components/admin/AdminLayout';
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
 import ProtectedRoute from './components/admin/ProtectedRoute';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminSettings from './pages/admin/AdminSettings';
-import ProductManagement from './pages/admin/ProductManagement';
-import AddProduct from './pages/admin/AddProduct';
-import EditProduct from './pages/admin/EditProduct';
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+const ProductManagement = lazy(() => import('./pages/admin/ProductManagement'));
+const AddProduct = lazy(() => import('./pages/admin/AddProduct'));
+const EditProduct = lazy(() => import('./pages/admin/EditProduct'));
 
-import CategoryManagement from './pages/admin/CategoryManagement';
-import InventoryManagement from './pages/admin/InventoryManagement';
-import OrderManagement from './pages/admin/OrderManagement';
-import DiscountManagement from './pages/admin/DiscountManagement';
-import ContactMessages from './pages/admin/ContactMessages';
+const CategoryManagement = lazy(() => import('./pages/admin/CategoryManagement'));
+const InventoryManagement = lazy(() => import('./pages/admin/InventoryManagement'));
+const OrderManagement = lazy(() => import('./pages/admin/OrderManagement'));
+const DiscountManagement = lazy(() => import('./pages/admin/DiscountManagement'));
+const ContactMessages = lazy(() => import('./pages/admin/ContactMessages'));
+
+// Simple loading spinner for suspense fallback
+const PageLoader = () => (
+  <div className="min-h-[60vh] flex justify-center items-center">
+    <div className="w-8 h-8 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
+  </div>
+);
 
 import ScrollToTop from './components/ui/ScrollToTop';
 import ScrollToTopRoute from './components/ui/ScrollToTopRoute';
@@ -91,14 +98,16 @@ function App() {
             <Routes>
               {/* Secure checkout — no Navbar or Footer */}
               <Route path="/checkout" element={
-                <PageTransition>
-                  <Checkout />
-                </PageTransition>
+                <Suspense fallback={<PageLoader />}>
+                  <PageTransition>
+                    <Checkout />
+                  </PageTransition>
+                </Suspense>
               } />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<ProtectedRoute />}>
-              <Route element={<AdminLayout />}>
+              <Route element={<Suspense fallback={<PageLoader />}><AdminLayout /></Suspense>}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="products" element={<ProductManagement />} />
@@ -163,13 +172,13 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/wishlist" element={<Wishlist />} />
 
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/reset-password/:token" element={<ResetPassword />} />
-                    <Route path="/account" element={<Account />} />
+                    <Route path="/login" element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
+                    <Route path="/register" element={<Suspense fallback={<PageLoader />}><Register /></Suspense>} />
+                    <Route path="/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPassword /></Suspense>} />
+                    <Route path="/reset-password/:token" element={<Suspense fallback={<PageLoader />}><ResetPassword /></Suspense>} />
+                    <Route path="/account" element={<Suspense fallback={<PageLoader />}><Account /></Suspense>} />
                     
-                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/admin/login" element={<Suspense fallback={<PageLoader />}><AdminLogin /></Suspense>} />
 
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />

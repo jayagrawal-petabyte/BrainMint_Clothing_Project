@@ -63,8 +63,12 @@ const MobileMenuDrawer = ({ isOpen, onClose }) => {
           >
             <div className="mobile-menu-header">
               <div className="site-logo">
-                <Link to="/" className="theme-logo" onClick={onClose}>
-                  <img src="/src/assets/logo.png" alt="Princess Size Plus Collection" style={{ height: '40px', display: 'block' }} />
+                <Link to="/" className="theme-logo brand-logo-link" onClick={onClose}>
+                  <img src="/src/assets/logo.png" alt="Princess Size+ Collection" className="brand-logo-img" />
+                  <div className="brand-logo-text">
+                    <span className="brand-logo-line1">Princess Size+</span>
+                    <span className="brand-logo-line2">Collection</span>
+                  </div>
                 </Link>
               </div>
               <button className="mobile-menu-close" onClick={onClose}>

@@ -47,7 +47,7 @@ const testimonials = [
     name: "Aarav Sharma",
     role: "Fashion Enthusiast",
     feedback:
-      "UrbanWear completely changed how I shop for everyday fashion. Premium quality and the fit is absolutely perfect.",
+      "Princess Size+ Collection completely changed how I shop for everyday fashion. Premium quality and the fit is perfect.",
   },
   {
     name: "Priya Mehta",
@@ -65,7 +65,7 @@ const testimonials = [
     name: "Sneha Kapoor",
     role: "Content Creator",
     feedback:
-      "UrbanWear outfits instantly became my go-to styling pieces. Super versatile and aesthetic.",
+      "Princess Size+ Collection outfits instantly became my go-to styling pieces. Super versatile and aesthetic.",
   },
   {
     name: "Aditya Singh",
@@ -83,7 +83,7 @@ const testimonials = [
 
 const About = () => {
   const swiperRef = useRef(null);
-const { theme } = useTheme();
+  const { theme } = useTheme();
 
   const isDark =
     theme === "dark";
@@ -188,195 +188,195 @@ const { theme } = useTheme();
         >
           <div style={{ display: "flex", justifyContent: "flex-end", padding: "0 5% 40px 5%" }}>
             <div style={{ maxWidth: "650px", width: "100%", paddingRight: "4vw" }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "14px",
-                marginBottom: "28px",
-              }}
-            >
               <div
                 style={{
-                  width: "42px",
-                  height: "1px",
-                  background: "var(--ltn__secondary-color)",
-                }}
-              />
-
-              <span
-                style={{
-                  fontSize: "15px",
-                  fontWeight: "400",
-                  letterSpacing: "2px",
-                  textTransform: "uppercase",
-                  color: "var(--ltn__heading-color)",
-                  fontFamily: "var(--ltn__heading-font)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  marginBottom: "28px",
                 }}
               >
-                About Us
-              </span>
-            </div>
+                <div
+                  style={{
+                    width: "42px",
+                    height: "1px",
+                    background: "var(--ltn__secondary-color)",
+                  }}
+                />
 
-            <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "30px", flexWrap: "wrap" }}>
-              <h1
-                style={{
-                  fontFamily: "var(--ltn__heading-font)",
-                  fontSize: "48px",
-                  fontWeight: "600",
-                  lineHeight: "1.2",
-                  color: "var(--ltn__heading-color)",
-                  letterSpacing: "-1px",
-                  margin: 0
-                }}
-              >
-                From Vellore To Global
-              </h1>
-              <div style={{ color: "var(--ltn__secondary-color)", display: "flex", alignItems: "center" }}>
-                <Globe size={42} strokeWidth={1.5} />
+                <span
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "400",
+                    letterSpacing: "2px",
+                    textTransform: "uppercase",
+                    color: "var(--ltn__heading-color)",
+                    fontFamily: "var(--ltn__heading-font)",
+                  }}
+                >
+                  About Us
+                </span>
               </div>
-            </div>
 
-            <h3
-              style={{
-                fontFamily: "var(--ltn__heading-font)",
-                fontSize: "24px",
-                fontWeight: "500",
-                lineHeight: "1.3",
-                color: "var(--ltn__heading-color)",
-                marginBottom: "20px",
-              }}
-            >
-              Designed For Every Curve, Inspired By Every Woman.
-            </h3>
+              <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "30px", flexWrap: "wrap" }}>
+                <h1
+                  style={{
+                    fontFamily: "var(--ltn__heading-font)",
+                    fontSize: "48px",
+                    fontWeight: "600",
+                    lineHeight: "1.2",
+                    color: "var(--ltn__heading-color)",
+                    letterSpacing: "-1px",
+                    margin: 0
+                  }}
+                >
+                  From Vellore To Global
+                </h1>
+                <div style={{ color: "var(--ltn__secondary-color)", display: "flex", alignItems: "center" }}>
+                  <Globe size={42} strokeWidth={1.5} />
+                </div>
+              </div>
 
-            <p
-              style={{
-                fontSize: "16px",
-                color: "var(--ltn__paragraph-color)",
-                lineHeight: "1.9",
-                fontWeight: "300",
-                marginBottom: "20px",
-                maxWidth: "550px",
-              }}
-            >
-              We believe every woman deserves to feel confident, beautiful, and comfortable in what she wears. Starting from Vellore and reaching customers across the world, our mission is to bring fashionable women's clothing in sizes ranging from S to 12XL.
-            </p>
+              <h3
+                style={{
+                  fontFamily: "var(--ltn__heading-font)",
+                  fontSize: "24px",
+                  fontWeight: "500",
+                  lineHeight: "1.3",
+                  color: "var(--ltn__heading-color)",
+                  marginBottom: "20px",
+                }}
+              >
+                Designed For Every Curve, Inspired By Every Woman.
+              </h3>
 
-            <p
-              style={{
-                fontSize: "16px",
-                color: "var(--ltn__paragraph-color)",
-                lineHeight: "1.9",
-                fontWeight: "300",
-                marginBottom: "20px",
-                maxWidth: "550px",
-              }}
-            >
-              Our collections are carefully chosen to celebrate women of all shapes and sizes, offering styles that blend comfort, elegance, and everyday confidence. Whether you're looking for effortless daily wear or statement pieces, we bring you fashion that fits both your style and your personality.
-            </p>
-
-            <p
-              style={{
-                fontSize: "16px",
-                color: "var(--ltn__paragraph-color)",
-                lineHeight: "1.9",
-                fontWeight: "300",
-                marginBottom: "28px",
-                maxWidth: "550px",
-              }}
-            >
-              At the heart of our brand is inclusivity—because style has no size limit. From Vellore to Global, we're proud to help women everywhere express themselves through fashion.
-            </p>
-
-            <div
-              style={{
-                borderLeft: "2px solid var(--ltn__secondary-color)",
-                paddingLeft: "24px",
-                marginBottom: "45px",
-              }}
-            >
               <p
                 style={{
-                  fontSize: "20px",
-                  fontWeight: "400",
-                  lineHeight: "1.8",
-                  color: "var(--ltn__heading-color)",
-                  fontStyle: "italic",
-                  maxWidth: "500px",
+                  fontSize: "16px",
+                  color: "var(--ltn__paragraph-color)",
+                  lineHeight: "1.9",
+                  fontWeight: "300",
+                  marginBottom: "20px",
+                  maxWidth: "550px",
                 }}
               >
-                "Every woman deserves fashion that fits, flatters, and inspires confidence."
+                We believe every woman deserves to feel confident, beautiful, and comfortable in what she wears. Starting from Vellore and reaching customers across the world, our mission is to bring fashionable women's clothing in sizes ranging from S to 12XL.
               </p>
-            </div>
 
-            <div style={{ marginBottom: "50px", marginTop: "30px", width: "100%" }}>
-              <h3 style={{ fontSize: "22px", marginBottom: "25px", fontFamily: "var(--ltn__heading-font)", color: "var(--ltn__heading-color)", fontWeight: "600" }}>Why Shop With Us</h3>
-              
-              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px", maxWidth: "550px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                    <Sparkles size={20} strokeWidth={1.5} />
-                  </div>
-                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Women's Fashion for Every Occasion</span>
-                </div>
+              <p
+                style={{
+                  fontSize: "16px",
+                  color: "var(--ltn__paragraph-color)",
+                  lineHeight: "1.9",
+                  fontWeight: "300",
+                  marginBottom: "20px",
+                  maxWidth: "550px",
+                }}
+              >
+                Our collections are carefully chosen to celebrate women of all shapes and sizes, offering styles that blend comfort, elegance, and everyday confidence. Whether you're looking for effortless daily wear or statement pieces, we bring you fashion that fits both your style and your personality.
+              </p>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                    <Maximize size={20} strokeWidth={1.5} />
-                  </div>
-                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Sizes Available from S to 12XL</span>
-                </div>
+              <p
+                style={{
+                  fontSize: "16px",
+                  color: "var(--ltn__paragraph-color)",
+                  lineHeight: "1.9",
+                  fontWeight: "300",
+                  marginBottom: "28px",
+                  maxWidth: "550px",
+                }}
+              >
+                At the heart of our brand is inclusivity—because style has no size limit. From Vellore to Global, we're proud to help women everywhere express themselves through fashion.
+              </p>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                    <Globe size={20} strokeWidth={1.5} />
-                  </div>
-                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Worldwide Shipping Available</span>
-                </div>
+              <div
+                style={{
+                  borderLeft: "2px solid var(--ltn__secondary-color)",
+                  paddingLeft: "24px",
+                  marginBottom: "45px",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "400",
+                    lineHeight: "1.8",
+                    color: "var(--ltn__heading-color)",
+                    fontStyle: "italic",
+                    maxWidth: "500px",
+                  }}
+                >
+                  "Every woman deserves fashion that fits, flatters, and inspires confidence."
+                </p>
+              </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                    <Heart size={20} strokeWidth={1.5} />
-                  </div>
-                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Inclusive Styles for Every Body Type</span>
-                </div>
+              <div style={{ marginBottom: "50px", marginTop: "30px", width: "100%" }}>
+                <h3 style={{ fontSize: "22px", marginBottom: "25px", fontFamily: "var(--ltn__heading-font)", color: "var(--ltn__heading-color)", fontWeight: "600" }}>Why Shop With Us</h3>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                    <ShoppingBag size={20} strokeWidth={1.5} />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px", maxWidth: "550px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                      <Sparkles size={20} strokeWidth={1.5} />
+                    </div>
+                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Women's Fashion for Every Occasion</span>
                   </div>
-                  <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Trendy, Comfortable & Affordable</span>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                      <Maximize size={20} strokeWidth={1.5} />
+                    </div>
+                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Sizes Available from S to 12XL</span>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                      <Globe size={20} strokeWidth={1.5} />
+                    </div>
+                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Worldwide Shipping Available</span>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                      <Heart size={20} strokeWidth={1.5} />
+                    </div>
+                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Inclusive Styles for Every Body Type</span>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                      <ShoppingBag size={20} strokeWidth={1.5} />
+                    </div>
+                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Trendy, Comfortable & Affordable</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <Link
-              to="/shop"
-              style={{
-                background: "var(--ltn__primary-color)",
-                color: "var(--white-7)",
-                border: "1px solid var(--ltn__primary-color)",
-                padding: "16px 36px",
-                fontSize: "14px",
-                fontWeight: "500",
-                transition: "all 0.4s ease",
-                textDecoration: "none",
-                display: "inline-block",
-                letterSpacing: "1px",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "transparent";
-                e.target.style.color = "var(--ltn__heading-color)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "var(--ltn__primary-color)";
-                e.target.style.color = "var(--white-7)";
-              }}
-            >
-              Explore Collection
-            </Link>
+              <Link
+                to="/shop"
+                style={{
+                  background: "var(--ltn__primary-color)",
+                  color: "var(--white-7)",
+                  border: "1px solid var(--ltn__primary-color)",
+                  padding: "16px 36px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  transition: "all 0.4s ease",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  letterSpacing: "1px",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "transparent";
+                  e.target.style.color = "var(--ltn__heading-color)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "var(--ltn__primary-color)";
+                  e.target.style.color = "var(--white-7)";
+                }}
+              >
+                Explore Collection
+              </Link>
             </div>
           </div>
 

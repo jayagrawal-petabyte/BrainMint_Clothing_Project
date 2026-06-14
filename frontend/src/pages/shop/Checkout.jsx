@@ -341,7 +341,7 @@ const Checkout = () => {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_random', 
             amount: amount,
             currency: currency,
-            name: "BrainMint Clothing",
+            name: "Princess Size+ Collection",
             description: "Order Payment",
             order_id: razorpayOrderId,
             handler: async function (response) {
@@ -566,7 +566,10 @@ const Checkout = () => {
 
         {/* ══ LEFT ══ */}
         <div className="co__left">
-          <Link to="/" className="co__brand">Princess Size Plus Collection</Link>
+          <Link to="/" className="co__brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <img src="/src/assets/logo.png" alt="Princess Size+ Collection" style={{ height: '42px', width: 'auto', display: 'block' }} />
+            <span>Princess Size+ Collection</span>
+          </Link>
 
           {/* Breadcrumb */}
           <nav className="co__crumb">

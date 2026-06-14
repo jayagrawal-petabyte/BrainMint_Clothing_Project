@@ -3,8 +3,11 @@ import { motion } from 'framer-motion';
 import { submitContactForm } from '../../services/api';
 import {
   FaPhoneAlt,
-  FaEnvelope,
-  FaMapMarkerAlt,
+  FaGlobe,
+  FaRulerCombined,
+  FaCreditCard,
+  FaTimesCircle,
+  FaExchangeAlt,
 } from "react-icons/fa";
 import '../auth/Login.css';
 import './Contact.css';
@@ -21,7 +24,6 @@ const Contact = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    // Map ids to state keys
     const key = id.replace('contact', '').toLowerCase();
     setFormData(prev => ({ ...prev, [key]: value }));
   };
@@ -29,11 +31,9 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ loading: true, success: false, error: '' });
-    
-    // The backend expects name, email, subject, message
-    // We'll append phone to the message
-    const finalMessage = formData.phone 
-      ? `Phone: ${formData.phone}\n\n${formData.message}` 
+
+    const finalMessage = formData.phone
+      ? `Phone: ${formData.phone}\n\n${formData.message}`
       : formData.message;
 
     const result = await submitContactForm({
@@ -52,166 +52,126 @@ const Contact = () => {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "var(--section-bg-1)",
-        minHeight: "100vh",
-        padding: "50px 20px 80px",
-      }}
-    >
-      {/* Contact Info Section */}
-      <section
-        style={{
-          maxWidth: "1250px",
-          margin: "0 auto",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "14px",
-            marginBottom: "24px",
-          }}
-        >
-          <div
-            style={{
-              width: "42px",
-              height: "1px",
-              background:
-                "var(--ltn__secondary-color)",
-            }}
-          />
+    <div className="contact-page">
 
-          <span
-            style={{
-              fontSize: "15px",
-              fontWeight: "400",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              color:
-                "var(--ltn__heading-color)",
-              fontFamily:
-                "var(--ltn__heading-font)",
-            }}
+      {/* ── Hero Section ── */}
+      <section className="contact-hero">
+        <div className="contact-hero-inner">
+          <motion.div
+            className="contact-hero-content"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            Contact Us
-          </span>
+            <div className="contact-hero-label">
+              <div className="contact-hero-line" />
+              <span>Customer Care</span>
+            </div>
+            <h1 className="contact-hero-title">We're Here To Help.</h1>
+            <p className="contact-hero-desc">
+              At Princess Size Plus Collection, your satisfaction is important to us. Whether you have questions about sizing, orders, shipping, or product details, our support team is ready to assist you.
+            </p>
+            <p className="contact-hero-desc">
+              We strive to provide a smooth and enjoyable shopping experience for every customer, from Vellore to destinations around the world.
+            </p>
+          </motion.div>
         </div>
-
-        <h1
-          style={{
-            fontFamily:
-              "var(--ltn__heading-font)",
-            fontSize: "58px",
-            fontWeight: "400",
-            color:
-              "var(--ltn__heading-color)",
-            marginBottom: "18px",
-          }}
-        >
-          We'd Love To Hear <br />
-          From You.
-        </h1>
-
-        <p
-          style={{
-            maxWidth: "600px",
-            fontSize: "16px",
-            color:
-              "var(--ltn__paragraph-color)",
-            lineHeight: "1.9",
-            fontWeight: "300",
-            marginBottom: "60px",
-          }}
-        >
-          Have questions about products,
-          orders, or collaborations? Reach
-          out to us and our team will get
-          back to you as soon as possible.
-        </p>
-
-        <motion.div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "30px",
-          }}
-          variants={{
-            hidden: { opacity: 0 },
-            show: { opacity: 1, transition: { staggerChildren: 0.08 } }
-          }}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-        >
-          {[
-            {
-              icon: <FaPhoneAlt />,
-              title: "Phone Number",
-              value: "+91 9876543210",
-            },
-            {
-              icon: <FaEnvelope />,
-              title: "Email Address",
-              value: "support@Princess Size Plus Collection.com",
-            },
-            {
-              icon: <FaMapMarkerAlt />,
-              title: "Office Address",
-              value:
-                "Bhubaneswar, Odisha, India",
-            },
-          ].map((item, index) => (
-            <motion.div
-              key={index}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
-              }}
-              style={{
-                background: "var(--white-7)",
-                padding: "40px",
-                boxShadow: "0 15px 35px rgba(0,0,0,0.05)",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "30px",
-                  color:
-                    "var(--ltn__secondary-color)",
-                  marginBottom: "22px",
-                }}
-              >
-                {item.icon}
-              </div>
-
-              <h3
-                style={{
-                  fontSize: "22px",
-                  fontWeight: "500",
-                  marginBottom: "12px",
-                }}
-              >
-                {item.title}
-              </h3>
-
-              <p
-                style={{
-                  color:
-                    "var(--ltn__paragraph-color)",
-                  fontSize: "15px",
-                }}
-              >
-                {item.value}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
       </section>
 
-      {/* Contact Form */}
+      {/* ── Contact Details + Support Hours ── */}
+      <section className="contact-details-section">
+        <div className="contact-details-inner">
+
+          <motion.div
+            className="contact-detail-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h3 className="contact-detail-heading">Contact Us</h3>
+            <div className="contact-phone-row">
+              <FaPhoneAlt className="contact-phone-icon" />
+              <a href="tel:+917200219272" className="contact-phone-link">+91 72002 19272</a>
+            </div>
+            <div className="contact-phone-row">
+              <FaPhoneAlt className="contact-phone-icon" />
+              <a href="tel:+918637660372" className="contact-phone-link">+91 86376 60372</a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="contact-detail-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h3 className="contact-detail-heading">Customer Support Hours</h3>
+            <p className="contact-detail-text">Monday – Saturday</p>
+            <p className="contact-detail-text contact-detail-highlight">10:00 AM – 7:00 PM (IST)</p>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ── Important Information ── */}
+      <section className="contact-info-section">
+        <div className="contact-info-inner">
+          <motion.h2
+            className="contact-info-title"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5 }}
+          >
+            Important Information
+          </motion.h2>
+
+          <motion.div
+            className="contact-info-grid"
+            variants={{
+              hidden: { opacity: 0 },
+              show: { opacity: 1, transition: { staggerChildren: 0.08 } }
+            }}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-40px" }}
+          >
+            {[
+              { icon: <FaGlobe />, text: "Worldwide Shipping Available" },
+              { icon: <FaRulerCombined />, text: "Sizes Available from S to 12XL" },
+              { icon: <FaCreditCard />, text: "No Cash on Delivery (COD)" },
+              { icon: <FaTimesCircle />, text: "No Returns" },
+              { icon: <FaExchangeAlt />, text: "No Exchanges" },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                className="contact-info-item"
+                variants={{
+                  hidden: { opacity: 0, y: 15 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+                }}
+              >
+                <div className="contact-info-icon">{item.icon}</div>
+                <span className="contact-info-text">{item.text}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.p
+            className="contact-info-note"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            For faster assistance, please keep your order details ready when contacting our support team.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ── Send Message Form (preserved) ── */}
       <motion.section
         className="contact-form-section"
         initial={{ opacity: 0, y: 40 }}
@@ -224,16 +184,15 @@ const Contact = () => {
             <p className="contact-form-subtitle">
               Have A Doubt?
             </p>
-
             <h2 className="contact-form-title">
               Send Us A Message
             </h2>
           </div>
 
           <form className="contact-form" onSubmit={handleSubmit}>
-            {status.success && <div className="auth-error" style={{backgroundColor: '#e6ffe6', color: '#008000', borderColor: '#b3ffb3'}}>Message sent successfully! We will get back to you soon.</div>}
+            {status.success && <div className="auth-error" style={{ backgroundColor: '#e6ffe6', color: '#008000', borderColor: '#b3ffb3' }}>Message sent successfully! We will get back to you soon.</div>}
             {status.error && <div className="auth-error">{status.error}</div>}
-            
+
             <div className="contact-form-grid">
               <div className="stitch-input">
                 <input type="text" id="contactName" placeholder=" " value={formData.name} onChange={handleChange} required />
@@ -249,9 +208,10 @@ const Contact = () => {
                 <select id="contactSubject" required value={formData.subject} onChange={handleChange}>
                   <option value="" disabled hidden></option>
                   <option value="Order Issue">Order Issue</option>
-                  <option value="Return">Return</option>
                   <option value="Payment">Payment</option>
                   <option value="Product Query">Product Query</option>
+                  <option value="Sizing">Sizing</option>
+                  <option value="Shipping">Shipping</option>
                   <option value="Other">Other</option>
                 </select>
                 <label htmlFor="contactSubject">Select Query Type</label>
@@ -276,6 +236,12 @@ const Contact = () => {
           </form>
         </div>
       </motion.section>
+
+      {/* ── Closing line ── */}
+      <div className="contact-closing">
+        <p>Your style journey matters to us, and we're always happy to help.</p>
+      </div>
+
     </div>
   );
 };

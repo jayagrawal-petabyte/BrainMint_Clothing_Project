@@ -241,10 +241,9 @@ const bulkDeleteOrders = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Please provide an array of order IDs');
   }
 
-  // Only allow deleting cancelled or pending orders to be safe
+  // Admin can delete any orders
   const result = await Order.deleteMany({
-    _id: { $in: orderIds },
-    status: { $in: ['pending', 'cancelled'] }
+    _id: { $in: orderIds }
   });
 
   res.status(200).json({

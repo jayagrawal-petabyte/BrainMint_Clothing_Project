@@ -52,11 +52,21 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
         }
       },
       { $unwind: { path: '$product', preserveNullAndEmptyArrays: false } },
+      // Resolve category ObjectId → name
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'product.category',
+          foreignField: '_id',
+          as: 'categoryInfo'
+        }
+      },
       {
         $project: {
           productId: '$_id',
           name: '$product.name',
           slug: '$product.slug',
+          category: { $ifNull: [{ $arrayElemAt: ['$categoryInfo.name', 0] }, 'Uncategorized'] },
           quantitySold: 1,
           revenue: 1
         }

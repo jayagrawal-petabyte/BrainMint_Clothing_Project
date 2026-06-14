@@ -7,7 +7,8 @@ const {
   getAllOrders,
   getOrderById,
   cancelOrder,
-  updateOrderStatus
+  updateOrderStatus,
+  bulkDeleteOrders
 } = require('../controllers/orderController');
 
 const { protect } = require('../middleware/authMiddleware');
@@ -24,6 +25,7 @@ router.get('/', getUserOrders);
 router.get('/me', getUserOrders);
 
 // Admin routes
+router.delete('/bulk', adminOnly, bulkDeleteOrders);
 router.get('/all', adminOnly, getAllOrders);
 router.put('/:orderId/status', adminOnly, updateOrderStatus);
 

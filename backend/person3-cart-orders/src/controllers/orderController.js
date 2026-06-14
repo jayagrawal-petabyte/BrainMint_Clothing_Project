@@ -224,11 +224,35 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Bulk delete orders (Admin)
+// @route   DELETE /api/orders/bulk
+// @access  Admin
+const bulkDeleteOrders = asyncHandler(async (req, res) => {
+  const { orderIds } = req.body;
+
+  if (!Array.isArray(orderIds) || orderIds.length === 0) {
+    throw new ApiError(400, 'Please provide an array of order IDs');
+  }
+
+  // Only allow deleting cancelled or pending orders to be safe
+  const result = await Order.deleteMany({
+    _id: { $in: orderIds },
+    status: { $in: ['pending', 'cancelled'] }
+  });
+
+  res.status(200).json({
+    success: true,
+    message: `${result.deletedCount} orders permanently deleted`,
+    data: result
+  });
+});
+
 module.exports = {
   createOrder,
   getUserOrders,
   getAllOrders,
   getOrderById,
   cancelOrder,
-  updateOrderStatus
+  updateOrderStatus,
+  bulkDeleteOrders
 };

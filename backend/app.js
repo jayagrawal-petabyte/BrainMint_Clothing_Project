@@ -16,6 +16,7 @@ const wishlistRoutes = require('./person3-cart-orders/src/routes/wishlistRoutes'
 const orderRoutes = require('./person3-cart-orders/src/routes/orderRoutes');
 const checkoutRoutes = require('./person3-cart-orders/src/routes/checkoutRoutes');
 const paymentRoutes = require('./person3-cart-orders/src/routes/paymentRoutes');
+const settingsRoutes = require('./person3-cart-orders/src/routes/settingsRoutes');
 
 require('./person1-auth/src/models/User');
 require('./person1-auth/src/models/PendingUser');
@@ -29,6 +30,7 @@ require('./person3-cart-orders/src/models/Cart');
 require('./person3-cart-orders/src/models/Wishlist');
 require('./person3-cart-orders/src/models/Order');
 require('./person3-cart-orders/src/models/Payment');
+require('./person3-cart-orders/src/models/Settings');
 
 const { errorHandler } = require('./person3-cart-orders/src/middleware/errorMiddleware');
 
@@ -57,6 +59,7 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/settings', settingsRoutes);
 
 app.use(errorHandler);
 

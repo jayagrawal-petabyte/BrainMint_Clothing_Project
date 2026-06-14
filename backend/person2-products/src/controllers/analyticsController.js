@@ -52,7 +52,7 @@ const getSalesDashboard = asyncHandler(async (req, res) => {
           as: 'product'
         }
       },
-      { $unwind: { path: '$product', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: '$product', preserveNullAndEmptyArrays: false } },
       {
         $project: {
           productId: '$_id',

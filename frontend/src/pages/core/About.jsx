@@ -26,14 +26,14 @@ const features = [
     text: "On all orders over ₹1,999",
   },
   {
-    icon: <FaMoneyBillWave />,
-    title: "15 days returns",
-    text: "Moneyback guarantee",
+    icon: <FaStar />,
+    title: "Premium Quality",
+    text: "Handpicked fabrics",
   },
   {
     icon: <FaCreditCard />,
     title: "Secure checkout",
-    text: "Protected by Paypal",
+    text: "Protected by RazorPay",
   },
   {
     icon: <FaGift />,
@@ -176,12 +176,9 @@ const { theme } = useTheme();
         <motion.section
           className="about-content-grid"
           style={{
-            maxWidth: "1250px",
-            margin: "70px auto 0",
-            padding: "0 20px",
+            margin: "70px 0 0",
             display: "grid",
-            gridTemplateColumns: "1.1fr 1fr",
-            gap: "55px",
+            gridTemplateColumns: "1fr 1fr",
             alignItems: "stretch",
           }}
           initial={{ opacity: 0, y: 40 }}
@@ -189,7 +186,8 @@ const { theme } = useTheme();
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", padding: "0 5% 40px 5%" }}>
+            <div style={{ maxWidth: "650px", width: "100%", paddingRight: "4vw" }}>
             <div
               style={{
                 display: "flex",
@@ -379,6 +377,7 @@ const { theme } = useTheme();
             >
               Explore Collection
             </Link>
+            </div>
           </div>
 
           {/* IMAGE SIDE */}
@@ -386,31 +385,18 @@ const { theme } = useTheme();
             style={{
               position: "relative",
               height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center"
             }}
           >
-            <div
+            <img
+              src="/cloth1.jpg"
+              alt="Princess Size Plus Collection"
               style={{
-                overflow: "hidden",
-                background: "var(--border-color-11)",
+                width: "100%",
                 height: "100%",
                 minHeight: "750px",
-                borderRadius: "12px"
+                objectFit: "cover",
               }}
-            >
-              <img
-                src="/cloth1.jpg"
-                alt="Princess Size Plus Collection"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  transition: "transform 0.8s ease",
-                }}
-              />
-            </div>
+            />
 
             {/* FLOATING CARD */}
             <div

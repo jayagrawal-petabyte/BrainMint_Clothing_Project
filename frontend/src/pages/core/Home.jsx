@@ -200,7 +200,9 @@ const Home = ({ onSplashActive }) => {
                     top: item.y,
                     color: iconColor,
                     zIndex: 1,
-                    pointerEvents: "none"
+                    pointerEvents: "none",
+                    willChange: "transform, opacity",
+                    transform: "translateZ(0)"
                   }}
                 >
                   <Icon size={item.size} />
@@ -227,7 +229,9 @@ const Home = ({ onSplashActive }) => {
                 fontWeight: 800,
                 color: splashTextColor,
                 textAlign: "center",
-                zIndex: 2
+                zIndex: 2,
+                willChange: "transform, opacity, letter-spacing",
+                transform: "translateZ(0)"
               }}
             >
               Princess Size Plus Collection<span style={{ color: "var(--ltn__secondary-color, #f24c5c)" }}>.</span>

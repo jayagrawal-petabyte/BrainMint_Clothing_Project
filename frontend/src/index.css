@@ -59,6 +59,8 @@ body::-webkit-scrollbar {
 html {
   overflow-x: hidden !important;
   max-width: 100% !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scrollbar-width: none !important; /* Hide scrollbar in Firefox */
   -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
 }

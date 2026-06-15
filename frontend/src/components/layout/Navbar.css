@@ -802,3 +802,12 @@
     letter-spacing: 1px;
   }
 }
+
+@media (max-width: 450px) {
+  .brand-logo-text {
+    display: none;
+  }
+  .brand-logo-img {
+    height: 40px;
+  }
+}

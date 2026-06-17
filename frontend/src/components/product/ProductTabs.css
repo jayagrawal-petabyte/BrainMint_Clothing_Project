@@ -6,6 +6,7 @@
 
 .tabs-header {
   display: flex;
+  flex-wrap: wrap;
   border-bottom: 1px solid var(--border-color-1);
   margin-bottom: 40px;
 }

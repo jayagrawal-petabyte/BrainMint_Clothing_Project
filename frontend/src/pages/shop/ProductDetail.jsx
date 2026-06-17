@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, Heart, Star, Maximize2, X } from 'lucide-react';
+import { FaAmazonPay, FaApplePay, FaPaypal, FaCcVisa } from 'react-icons/fa';
+import { SiRazorpay } from 'react-icons/si';
 import { fetchProductById, fetchProducts, fetchPopularProducts } from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
@@ -616,26 +618,12 @@ const ProductDetail = () => {
               Guaranteed Safe Checkout
             </span>
 
-            <div className="payment-icons">
-              <div className="pay-icon">
-                Amazon
-              </div>
-
-              <div className="pay-icon">
-                Apple Pay
-              </div>
-
-              <div className="pay-icon">
-                G Pay
-              </div>
-
-              <div className="pay-icon">
-                PayPal
-              </div>
-
-              <div className="pay-icon">
-                VISA
-              </div>
+            <div className="payment-icons" style={{ fontSize: '26px', display: 'flex', gap: '15px', color: 'var(--ltn__paragraph-color)' }}>
+              <FaAmazonPay title="Amazon Pay" />
+              <FaApplePay title="Apple Pay" />
+              <SiRazorpay title="Razorpay" />
+              <FaPaypal title="PayPal" />
+              <FaCcVisa title="VISA" />
             </div>
           </div>
         </div>

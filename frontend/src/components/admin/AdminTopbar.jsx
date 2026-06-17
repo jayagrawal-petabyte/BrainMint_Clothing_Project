@@ -290,7 +290,7 @@ const AdminTopbar = ({ toggleSidebar }) => {
           <div className="w-10 h-10 rounded-full bg-admin-bg dark:bg-[#222] border border-admin-border dark:border-admin-border-dark flex items-center justify-center text-admin-heading dark:text-admin-heading-dark group-hover:border-admin-accent transition-colors flex-shrink-0">
             <User size={20} />
           </div>
-          <div className="flex flex-col justify-center leading-tight">
+          <div className="hidden sm:flex flex-col justify-center leading-tight">
             <span className="text-sm font-semibold text-admin-heading dark:text-admin-heading-dark font-montserrat mb-0.5">Admin User</span>
             <span className="text-xs text-admin-text dark:text-admin-text-dark font-rubik">Manager</span>
           </div>

@@ -8,8 +8,8 @@
 .testimonials-swiper .swiper-button-prev {
   background: #fff;
   color: #111;
-  width: 50px;
-  height: 50px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   opacity: 0;
@@ -20,16 +20,16 @@
 
 .testimonials-swiper .swiper-button-next::after,
 .testimonials-swiper .swiper-button-prev::after {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
 }
 
 /* Move arrows slightly outward */
 .testimonials-swiper .swiper-button-prev {
-  left: 15px;
+  left: 5px;
 }
 .testimonials-swiper .swiper-button-next {
-  right: 15px;
+  right: 5px;
 }
 
 /* Show arrows on hover of the swiper container */

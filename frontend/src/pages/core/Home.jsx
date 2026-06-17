@@ -15,6 +15,7 @@ import TrendingSearches from '../../components/product/TrendingSearches';
 import PopularProducts from '../../components/product/PopularProducts';
 import { fetchNewArrivals } from '../../services/api';
 import { ShoppingBag, Shirt, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import logoUrl from '../../assets/logo.png';
 import './Home.css';
 
 const Home = ({ onSplashActive }) => {
@@ -48,7 +49,7 @@ const Home = ({ onSplashActive }) => {
   }, [loadingHome, onSplashActive]);
 
   const isDark = theme === 'dark';
-  const splashBg = isDark ? "#0a0a0a" : "#FAF9F6";
+  const splashBg = isDark ? "#0a0a0a" : "#ffffff";
   const splashTextColor = isDark ? "#ffffff" : "#111111";
   const iconColor = isDark ? "rgba(255, 255, 255, 0.45)" : "rgba(17, 17, 17, 0.45)";
   const progressBg = isDark 
@@ -57,33 +58,44 @@ const Home = ({ onSplashActive }) => {
 
   const floatingWallpaperItems = [
     // Top Row
-    { Icon: ShoppingBag, size: 28, x: "8%", y: "10%", delay: 0 },
-    { Icon: Shirt, size: 36, x: "32%", y: "8%", delay: 0.3 },
-    { Icon: Sparkles, size: 24, x: "50%", y: "6%", delay: 0.1 },
-    { Icon: ShoppingBag, size: 28, x: "68%", y: "8%", delay: 0.4 },
-    { Icon: Shirt, size: 32, x: "88%", y: "12%", delay: 0.2 },
-    
+    { Icon: ShoppingBag, size: 28, x: "8%", y: "10%", delayClass: "delay-0" },
+    { Icon: Shirt, size: 36, x: "32%", y: "8%", delayClass: "delay-5" },
+    { Icon: Sparkles, size: 24, x: "50%", y: "6%", delayClass: "delay-1" },
+    { Icon: ShoppingBag, size: 28, x: "68%", y: "8%", delayClass: "delay-7" },
+    { Icon: Shirt, size: 32, x: "88%", y: "12%", delayClass: "delay-3" },
     // Upper Middle Row (Outer Sides)
-    { Icon: Sparkles, size: 20, x: "5%", y: "28%", delay: 0.5 },
-    { Icon: ShoppingBag, size: 24, x: "92%", y: "26%", delay: 0.15 },
-    
+    { Icon: Sparkles, size: 20, x: "5%", y: "28%", delayClass: "delay-9" },
+    { Icon: ShoppingBag, size: 24, x: "92%", y: "26%", delayClass: "delay-2" },
     // Lower Middle Row (Outer Sides)
-    { Icon: Shirt, size: 30, x: "6%", y: "55%", delay: 0.25 },
-    { Icon: Sparkles, size: 24, x: "90%", y: "58%", delay: 0.45 },
-    
+    { Icon: Shirt, size: 30, x: "6%", y: "55%", delayClass: "delay-4" },
+    { Icon: Sparkles, size: 24, x: "90%", y: "58%", delayClass: "delay-8" },
     // Bottom Rows
-    { Icon: ShoppingBag, size: 32, x: "8%", y: "76%", delay: 0.1 },
-    { Icon: Shirt, size: 28, x: "28%", y: "88%", delay: 0.35 },
-    { Icon: Sparkles, size: 20, x: "48%", y: "90%", delay: 0.5 },
-    { Icon: ShoppingBag, size: 26, x: "70%", y: "86%", delay: 0.2 },
-    { Icon: Shirt, size: 36, x: "86%", y: "78%", delay: 0.4 },
-
-    // Intermediate Safe Diagonals (Out of the exact center: x:35-65%, y:35-65%)
-    { Icon: Sparkles, size: 22, x: "22%", y: "20%", delay: 0.6 },
-    { Icon: ShoppingBag, size: 24, x: "74%", y: "22%", delay: 0.15 },
-    { Icon: Shirt, size: 26, x: "20%", y: "68%", delay: 0.3 },
-    { Icon: Sparkles, size: 24, x: "78%", y: "66%", delay: 0.55 }
+    { Icon: ShoppingBag, size: 32, x: "8%", y: "76%", delayClass: "delay-1" },
+    { Icon: Shirt, size: 28, x: "28%", y: "88%", delayClass: "delay-6" },
+    { Icon: Sparkles, size: 20, x: "48%", y: "90%", delayClass: "delay-9" },
+    { Icon: ShoppingBag, size: 26, x: "70%", y: "86%", delayClass: "delay-3" },
+    { Icon: Shirt, size: 36, x: "86%", y: "78%", delayClass: "delay-7" },
+    // Intermediate Safe Diagonals
+    { Icon: Sparkles, size: 22, x: "22%", y: "20%", delayClass: "delay-11" },
+    { Icon: ShoppingBag, size: 24, x: "74%", y: "22%", delayClass: "delay-2" },
+    { Icon: Shirt, size: 26, x: "20%", y: "68%", delayClass: "delay-5" },
+    { Icon: Sparkles, size: 24, x: "78%", y: "66%", delayClass: "delay-10" }
   ];
+
+  // Mobile: fewer icons but evenly spread across all screen regions
+  const mobileWallpaperItems = [
+    { Icon: ShoppingBag, size: 22, x: "10%", y: "8%", delayClass: "delay-0" },
+    { Icon: Shirt, size: 26, x: "80%", y: "10%", delayClass: "delay-3" },
+    { Icon: Sparkles, size: 18, x: "8%", y: "30%", delayClass: "delay-7" },
+    { Icon: ShoppingBag, size: 20, x: "85%", y: "32%", delayClass: "delay-1" },
+    { Icon: Shirt, size: 22, x: "12%", y: "62%", delayClass: "delay-5" },
+    { Icon: Sparkles, size: 20, x: "82%", y: "60%", delayClass: "delay-9" },
+    { Icon: ShoppingBag, size: 24, x: "15%", y: "85%", delayClass: "delay-2" },
+    { Icon: Shirt, size: 22, x: "78%", y: "84%", delayClass: "delay-6" }
+  ];
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const activeWallpaperItems = isMobile ? mobileWallpaperItems : floatingWallpaperItems;
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -175,48 +187,30 @@ const Home = ({ onSplashActive }) => {
               overflow: "hidden"
             }}
           >
-            {/* Elegant Floating Fashion Wallpaper Pattern */}
-            {floatingWallpaperItems.map((item, index) => {
+            {/* Elegant Floating Fashion Wallpaper Pattern — Pure CSS, zero JS overhead */}
+            {activeWallpaperItems.map((item, index) => {
               const Icon = item.Icon;
               return (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ 
-                    opacity: [0, 0.8, 0.8, 0],
-                    scale: [0.8, 1.1, 1.1, 0.8],
-                    y: [0, -45],
-                    rotate: [0, 20, -20, 0]
-                  }}
-                  transition={{
-                    duration: 2.2,
-                    times: [0, 0.2, 0.8, 1],
-                    ease: "easeInOut",
-                    delay: item.delay
-                  }}
+                  className={`splash-float-icon ${item.delayClass}`}
                   style={{
-                    position: "absolute",
                     left: item.x,
                     top: item.y,
-                    color: iconColor,
-                    zIndex: 1,
-                    pointerEvents: "none",
-                    willChange: "transform, opacity",
-                    transform: "translateZ(0)"
+                    color: iconColor
                   }}
                 >
                   <Icon size={item.size} />
-                </motion.div>
+                </div>
               );
             })}
 
             <motion.div
               className="neon-glow-logo"
-              initial={{ opacity: 0, scale: 0.9, letterSpacing: "0px" }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ 
-                opacity: [0, 1, 1, 0],
-                scale: [0.95, 1, 1.02, 1.05],
-                letterSpacing: ["2px", "5px", "7px", "9px"]
+                opacity: [0, 0.9, 0.9, 0],
+                scale: [0.95, 1, 1.02, 1.05]
               }}
               transition={{
                 duration: 2.2,
@@ -224,17 +218,18 @@ const Home = ({ onSplashActive }) => {
                 ease: "easeInOut"
               }}
               style={{
-                fontFamily: "var(--ltn__heading-font)",
-                fontSize: "46px",
-                fontWeight: 800,
-                color: splashTextColor,
                 textAlign: "center",
                 zIndex: 2,
-                willChange: "transform, opacity, letter-spacing",
+                position: "relative",
+                display: "inline-flex",
+                justifyContent: "center",
+                alignItems: "center",
+                willChange: "transform, opacity",
                 transform: "translateZ(0)"
               }}
             >
-              Princess Size Plus Collection<span style={{ color: "var(--ltn__secondary-color, #f24c5c)" }}>.</span>
+              {/* Main Crisp Logo */}
+              <img src={logoUrl} alt="Princess Size+ Collection" style={{ height: '300px', width: 'auto', display: 'block', position: 'relative', zIndex: 1 }} />
             </motion.div>
             
             {/* Elegant loader line */}
@@ -254,6 +249,7 @@ const Home = ({ onSplashActive }) => {
         )}
       </AnimatePresence>
 
+      {!loadingHome && (
       <div className="home-container">
       {/* Cinematic Swiper Hero */}
       <section className="hero-full">
@@ -519,6 +515,7 @@ const Home = ({ onSplashActive }) => {
       <TrendingSearches />
       <PopularProducts />
     </div>
+      )}
   </>
 );
 };

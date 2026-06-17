@@ -56,16 +56,18 @@ const ProductTable = ({ products, searchQuery, categoryFilter, onDelete, isLoadi
                     {status}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-right text-sm font-medium space-x-3">
-                  <button className="text-admin-text hover:text-blue-500 dark:text-admin-text-dark dark:hover:text-blue-400 transition-colors" title="View">
-                    <Eye size={18} />
-                  </button>
-                  <Link to={`/admin/products/edit/${product._id}`} className="text-admin-text hover:text-emerald-500 dark:text-admin-text-dark dark:hover:text-emerald-400 transition-colors inline-block" title="Edit">
-                    <Edit2 size={18} />
-                  </Link>
-                  <button onClick={() => onDelete(product._id)} className="text-admin-text hover:text-red-500 dark:text-admin-text-dark dark:hover:text-red-400 transition-colors" title="Delete">
-                    <Trash2 size={18} />
-                  </button>
+                <td className="px-6 py-4 text-right text-sm font-medium">
+                  <div className="flex items-center justify-end gap-3 whitespace-nowrap">
+                    <Link to={`/product/${product._id}`} target="_blank" className="text-admin-text hover:text-blue-500 dark:text-admin-text-dark dark:hover:text-blue-400 transition-colors inline-block" title="View Live Product">
+                      <Eye size={18} />
+                    </Link>
+                    <Link to={`/admin/products/edit/${product._id}`} className="text-admin-text hover:text-emerald-500 dark:text-admin-text-dark dark:hover:text-emerald-400 transition-colors inline-block" title="Edit">
+                      <Edit2 size={18} />
+                    </Link>
+                    <button onClick={() => onDelete(product._id)} className="text-admin-text hover:text-red-500 dark:text-admin-text-dark dark:hover:text-red-400 transition-colors" title="Delete">
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             )})}

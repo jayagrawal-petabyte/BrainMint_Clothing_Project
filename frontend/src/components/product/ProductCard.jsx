@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Heart,
   ShoppingCart,
@@ -22,6 +22,7 @@ import './ProductCard.css';
 const ProductCard = ({ product, badgeText }) => {
   const { toggleWishlist, isWishlisted } =
     useWishlist();
+  const navigate = useNavigate();
 
   const {
     cartItems,
@@ -172,7 +173,11 @@ const ProductCard = ({ product, badgeText }) => {
             <li>
               <motion.button
                 type="button"
-                title="Quick View"
+                title="View Product"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/product/${productId}`);
+                }}
                 whileHover={{ scale: 1.12 }}
                 whileTap={{ scale: 0.85 }}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}

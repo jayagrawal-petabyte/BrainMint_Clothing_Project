@@ -19,6 +19,23 @@ import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import "./About.css";
 
+const titleContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+  },
+};
+
+const titleWord = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", damping: 12, stiffness: 100 },
+  },
+};
+
 const features = [
   {
     icon: <FaTruck />,
@@ -105,7 +122,17 @@ const About = () => {
         }}
       >
         {/* FEATURES */}
-        <div
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
           style={{
             maxWidth: "1250px",
             margin: "0 auto",
@@ -119,8 +146,12 @@ const About = () => {
           }}
         >
           {features.map((item, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { type: "spring", damping: 15 } }
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -168,9 +199,9 @@ const About = () => {
                   {item.text}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* ABOUT CONTENT */}
         <motion.section
@@ -218,23 +249,36 @@ const About = () => {
                 </span>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "30px", flexWrap: "wrap" }}>
-                <h1
+              <div style={{ marginBottom: "30px" }}>
+                <motion.h1
+                  variants={titleContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
                   style={{
                     fontFamily: "var(--ltn__heading-font)",
-                    fontSize: "48px",
+                    fontSize: "clamp(32px, 8vw, 48px)",
                     fontWeight: "600",
                     lineHeight: "1.2",
                     color: "var(--ltn__heading-color)",
                     letterSpacing: "-1px",
-                    margin: 0
+                    margin: 0,
+                    display: "inline"
                   }}
                 >
-                  From Vellore To Global
-                </h1>
-                <div style={{ color: "var(--ltn__secondary-color)", display: "flex", alignItems: "center" }}>
-                  <Globe size={38} strokeWidth={1.5} />
-                </div>
+                  {["From", "Vellore", "To", "Global"].map((word, index) => (
+                    <motion.span
+                      key={index}
+                      variants={titleWord}
+                      style={{ display: "inline-block", marginRight: "10px" }}
+                    >
+                      {word}
+                    </motion.span>
+                  ))}
+                  <motion.span variants={titleWord} style={{ color: "var(--ltn__secondary-color)", display: "inline-flex", verticalAlign: "middle" }}>
+                    <Globe size={34} strokeWidth={1.5} />
+                  </motion.span>
+                </motion.h1>
               </div>
 
               <h3
@@ -247,7 +291,7 @@ const About = () => {
                   marginBottom: "20px",
                 }}
               >
-                Designed For Every Curve, Inspired By Every Woman.
+                Designed For Every Style, Inspired By Every Woman.
               </h3>
 
               <p
@@ -273,7 +317,7 @@ const About = () => {
                   maxWidth: "550px",
                 }}
               >
-                Our collections are carefully chosen to celebrate women of all shapes and sizes, offering styles that blend comfort, elegance, and everyday confidence. Whether you're looking for effortless daily wear or statement pieces, we bring you fashion that fits both your style and your personality.
+                Our collections are carefully chosen to celebrate women offering styles that blend comfort, elegance, and everyday confidence. Whether you're looking for effortless daily wear or statement pieces, we bring you fashion that fits both your style and your personality.
               </p>
 
               <p
@@ -286,7 +330,7 @@ const About = () => {
                   maxWidth: "550px",
                 }}
               >
-                At the heart of our brand is inclusivity—because style has no size limit. From Vellore to Global, we're proud to help women everywhere express themselves through fashion.
+                At the heart of our brand is inclusivity because style has no size limit. We are proud to empower women everywhere to express their unique style through fashion that celebrates confidence, comfort, and individuality.
               </p>
 
               <div
@@ -313,42 +357,38 @@ const About = () => {
               <div style={{ marginBottom: "50px", marginTop: "30px", width: "100%" }}>
                 <h3 style={{ fontSize: "22px", marginBottom: "25px", fontFamily: "var(--ltn__heading-font)", color: "var(--ltn__heading-color)", fontWeight: "600" }}>Why Shop With Us</h3>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px", maxWidth: "550px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                      <Sparkles size={20} strokeWidth={1.5} />
-                    </div>
-                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Women's Fashion for Every Occasion</span>
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                      <Maximize size={20} strokeWidth={1.5} />
-                    </div>
-                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Sizes Available from S to 12XL</span>
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                      <Globe size={20} strokeWidth={1.5} />
-                    </div>
-                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Worldwide Shipping Available</span>
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                      <Heart size={20} strokeWidth={1.5} />
-                    </div>
-                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Inclusive Styles for Every Body Type</span>
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
-                      <ShoppingBag size={20} strokeWidth={1.5} />
-                    </div>
-                    <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>Trendy, Comfortable & Affordable</span>
-                  </div>
-                </div>
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-50px" }}
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                  }}
+                  style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px", maxWidth: "550px" }}
+                >
+                  {[
+                    { icon: <Sparkles size={20} strokeWidth={1.5} />, text: "Women's Fashion for Every Occasion" },
+                    { icon: <Maximize size={20} strokeWidth={1.5} />, text: "Sizes Available from S to 12XL" },
+                    { icon: <Globe size={20} strokeWidth={1.5} />, text: "Worldwide Shipping Available" },
+                    { icon: <Heart size={20} strokeWidth={1.5} />, text: "Inclusive Styles for Everyone" },
+                    { icon: <ShoppingBag size={20} strokeWidth={1.5} />, text: "Trendy, Comfortable & Affordable" }
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 100 } }
+                      }}
+                      style={{ display: "flex", alignItems: "center", gap: "18px", padding: "16px 20px", borderRadius: "12px", background: isDark ? "rgba(255,255,255,0.03)" : "#f9f9f9", border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "#f0f0f0"}` }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "45px", height: "45px", borderRadius: "50%", background: isDark ? "rgba(229, 84, 114, 0.15)" : "rgba(229, 84, 114, 0.1)", color: "var(--ltn__secondary-color)" }}>
+                        {item.icon}
+                      </div>
+                      <span style={{ fontSize: "15px", color: "var(--ltn__heading-color)", fontWeight: "500" }}>{item.text}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
               </div>
 
               <Link
@@ -388,8 +428,8 @@ const About = () => {
             }}
           >
             <img
-              src="/cloth1.jpg"
-              alt="Princess Size Plus Collection"
+              src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&q=80&w=2000"
+              alt="Women's Clothing Store Racks"
               style={{
                 width: "100%",
                 height: "100%",
@@ -399,7 +439,11 @@ const About = () => {
             />
 
             {/* FLOATING CARD */}
-            <div
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 20 }}
+              whileInView={{ opacity: 1, scale: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ type: "spring", stiffness: 80, delay: 0.3 }}
               style={{
                 position: "absolute",
                 bottom: "-35px",
@@ -433,7 +477,7 @@ const About = () => {
                 Every collection reflects modern simplicity with timeless
                 elegance.
               </p>
-            </div>
+            </motion.div>
           </div>
         </motion.section>
       </section>
@@ -516,8 +560,6 @@ const About = () => {
                   padding: "40px 35px",
                   minHeight: "320px",
                   textAlign: "left",
-                  boxShadow:
-                    "0 15px 35px rgba(0,0,0,0.08), 0 8px 16px rgba(242, 76, 92, 0.08)",
                   transition: "0.3s ease",
                   border: "1px solid rgba(242, 76, 92, 0.15)",
                   borderRadius: "6px",

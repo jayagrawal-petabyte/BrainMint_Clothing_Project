@@ -69,10 +69,11 @@ const Contact = () => {
             </div>
             <h1 className="contact-hero-title">We're Here To Help.</h1>
             <p className="contact-hero-desc">
-              At Princess Size Plus Collection, your satisfaction is important to us. Whether you have questions about sizing, orders, shipping, or product details, our support team is ready to assist you.
+              At Princess Size Plus Collection, your satisfaction is our priority. Whether you have questions about sizing, orders, shipping, or product information, our dedicated support team is here to help.
             </p>
             <p className="contact-hero-desc">
-              We strive to provide a smooth and enjoyable shopping experience for every customer, from Vellore to destinations around the world.
+              We are committed to delivering a seamless and enjoyable shopping experience for every customer, wherever you are. From product inquiries to order assistance, we strive to provide prompt, reliable, and personalized support at every step of your journey.
+              Feel free to reach out to us—we look forward to assisting you and ensuring your experience with Princess Size Plus Collection exceeds your expectations.
             </p>
           </motion.div>
         </div>

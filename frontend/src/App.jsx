@@ -104,8 +104,12 @@ function App() {
                   </PageTransition>
                 </Suspense>
               } />
-
             {/* Admin Routes */}
+            <Route path="/admin/login" element={
+              <Suspense fallback={<PageLoader />}>
+                <AdminLogin />
+              </Suspense>
+            } />
             <Route path="/admin" element={<ProtectedRoute />}>
               <Route element={<Suspense fallback={<PageLoader />}><AdminLayout /></Suspense>}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />

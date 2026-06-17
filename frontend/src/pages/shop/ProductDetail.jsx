@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minus, Plus, Heart, Star } from 'lucide-react';
+import { Minus, Plus, Heart, Star, Maximize2, X } from 'lucide-react';
 import { fetchProductById, fetchProducts, fetchPopularProducts } from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
@@ -26,6 +26,9 @@ const ProductDetail = () => {
   const [sizeError, setSizeError] = useState(false);
   const [similarProducts, setSimilarProducts] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
+
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
@@ -142,18 +145,167 @@ const ProductDetail = () => {
 
   return (
     <div className="product-detail-page">
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {isZoomed && (
+          <motion.div
+            className="lightbox-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setIsZoomed(false);
+              setZoomLevel(1);
+            }}
+            onWheel={(e) => {
+              e.preventDefault();
+              setZoomLevel(prev => {
+                const newZoom = prev - e.deltaY * 0.005;
+                return Math.min(Math.max(1, newZoom), 5); // Clamp between 1x and 5x
+              });
+            }}
+            style={{
+              position: 'fixed',
+              top: 0, left: 0, right: 0, bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.9)',
+              zIndex: 9999,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              overflow: 'hidden'
+            }}
+          >
+            {/* Controls Container */}
+            <div 
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                display: 'flex',
+                gap: '15px',
+                zIndex: 10000
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setZoomLevel(prev => Math.min(prev + 0.5, 5))}
+                title="Zoom In"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '50%',
+                  color: 'white',
+                  cursor: 'pointer',
+                  width: '44px',
+                  height: '44px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  transition: 'background 0.2s'
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+                onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              >
+                <Plus size={24} />
+              </button>
+              
+              <button 
+                onClick={() => setZoomLevel(prev => Math.max(prev - 0.5, 1))}
+                title="Zoom Out"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '50%',
+                  color: 'white',
+                  cursor: 'pointer',
+                  width: '44px',
+                  height: '44px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  transition: 'background 0.2s'
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+                onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              >
+                <Minus size={24} />
+              </button>
 
+              <button 
+                onClick={() => {
+                  setIsZoomed(false);
+                  setZoomLevel(1);
+                }}
+                title="Close"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '50%',
+                  color: 'white',
+                  cursor: 'pointer',
+                  width: '44px',
+                  height: '44px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  transition: 'background 0.2s',
+                  marginLeft: '10px'
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+                onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <motion.div
+              drag={zoomLevel > 1}
+              dragConstraints={{ left: -1000, right: 1000, top: -1000, bottom: 1000 }}
+              dragElastic={0.1}
+              style={{
+                cursor: zoomLevel > 1 ? 'grab' : 'default',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '100%'
+              }}
+              whileTap={{ cursor: zoomLevel > 1 ? 'grabbing' : 'default' }}
+            >
+              <motion.img
+                src={selectedImage}
+                alt={product.name}
+                initial={{ scale: 0.9 }}
+                animate={{ scale: zoomLevel }}
+                exit={{ scale: 0.9 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                style={{
+                  maxWidth: '90%',
+                  maxHeight: '90vh',
+                  objectFit: 'contain'
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="product-detail-container">
         {/* LEFT IMAGE */}
         <div className="product-gallery">
           <div className="main-image-container">
+            <button className="expand-btn" onClick={() => setIsZoomed(true)} aria-label="Zoom image">
+              <Maximize2 size={20} />
+            </button>
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImage}
                 src={selectedImage}
                 alt={product.name}
                 className="main-image"
+                onClick={() => setIsZoomed(true)}
+                style={{ cursor: 'zoom-in' }}
                 initial={{
                   opacity: 0
                 }}

@@ -13,13 +13,14 @@ import PromoBanner from '../../components/shop/PromoBanner';
 import TrustBadges from '../../components/ui/TrustBadges';
 import TrendingSearches from '../../components/product/TrendingSearches';
 import PopularProducts from '../../components/product/PopularProducts';
-import { fetchNewArrivals } from '../../services/api';
+import { fetchNewArrivals, fetchCategories, fetchProducts } from '../../services/api';
 import { ShoppingBag, Shirt, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import logoUrl from '../../assets/logo.png';
 import './Home.css';
 
 const Home = ({ onSplashActive }) => {
   const [newArrivals, setNewArrivals] = useState([]);
+  const [homeCategories, setHomeCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { theme } = useTheme();
   const location = useLocation();
@@ -97,20 +98,58 @@ const Home = ({ onSplashActive }) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const activeWallpaperItems = isMobile ? mobileWallpaperItems : floatingWallpaperItems;
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const products = await fetchNewArrivals();
+  const HARDCODED_CATEGORY_IMAGES = {
+    "Dress": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500",
+    "Top": "https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=500",
+    "Skirt": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500",
+    "Coat": "https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500",
+    "T-Shirt": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500", // Women's T-shirt
+    "Kurthi": "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=500", // Verified ethnic wear image
+  };
 
-        // backend response safety
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [products, catsData, allProdsData] = await Promise.all([
+          fetchNewArrivals(),
+          fetchCategories(),
+          fetchProducts('?limit=100')
+        ]);
+
         setNewArrivals(products || []);
+        
+        const allProds = allProdsData?.products || [];
+        const cats = catsData || [];
+        
+        const mappedCats = cats.map(cat => {
+          let coverImage;
+          
+          if (HARDCODED_CATEGORY_IMAGES[cat.name]) {
+            coverImage = HARDCODED_CATEGORY_IMAGES[cat.name];
+          } else {
+            const productWithImage = allProds.find(p => p.category === cat.name && p.images && p.images.length > 0);
+            coverImage = productWithImage 
+              ? (productWithImage.images[0].url || productWithImage.images[0])
+              // Elegant subtle placeholder for categories without products
+              : "https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&q=80";
+          }
+
+          return {
+            _id: cat._id,
+            name: cat.name,
+            slug: cat.name, // using name for shop filter since backend saves category name on product
+            image: coverImage
+          };
+        });
+
+        setHomeCategories(mappedCats);
       } catch {
       } finally {
         setLoading(false);
       }
     };
 
-    loadProducts();
+    loadData();
   }, []);
 
   const heroSlides = [
@@ -333,88 +372,79 @@ const Home = ({ onSplashActive }) => {
         </Swiper>
       </section>
 
-      {/* Shop By Category Staggered Reveal */}
-      <section className="featured-categories">
+      {/* Shop By Category Carousel */}
+      {/* Shop By Category Carousel */}
+      <section className="featured-categories" style={{ position: 'relative' }}>
         <motion.h2 
           className="section-title"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          style={{ position: 'relative' }}
         >
           Shop by Category
+
+          {homeCategories.length > 4 && (
+            <div className="popular-nav-actions" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}>
+              <button className="popular-nav-btn category-prev-btn" aria-label="Previous Slide">
+                <ChevronLeft size={18} />
+              </button>
+              <button className="popular-nav-btn category-next-btn" aria-label="Next Slide">
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
         </motion.h2>
 
 <motion.div
-  className="categories-grid"
+  className="categories-carousel-wrapper"
   variants={gridVariants}
   initial="hidden"
   whileInView="show"
   viewport={{ once: true, margin: "-80px" }}
 >
-  <motion.div variants={itemVariants}>
-    <Link
-      to="/shop?category=Dress"
-      className="category-tile"
-      aria-label="Shop Dresses"
-    >
-      <img
-        src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"
-        alt="Dresses"
-      />
-      <div className="category-content">
-        <h3>Dresses</h3>
-      </div>
-    </Link>
-  </motion.div>
-
-  <motion.div variants={itemVariants}>
-    <Link
-      to="/shop?category=Top"
-      className="category-tile"
-      aria-label="Shop Tops"
-    >
-      <img
-        src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=500"
-        alt="Tops"
-      />
-      <div className="category-content">
-        <h3>Tops</h3>
-      </div>
-    </Link>
-  </motion.div>
-
-  <motion.div variants={itemVariants}>
-    <Link
-      to="/shop?category=Skirt"
-      className="category-tile"
-      aria-label="Shop Skirts"
-    >
-      <img
-        src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500"
-        alt="Skirts"
-      />
-      <div className="category-content">
-        <h3>Skirts</h3>
-      </div>
-    </Link>
-  </motion.div>
-
-  <motion.div variants={itemVariants}>
-    <Link
-      to="/shop?category=Coat"
-      className="category-tile"
-      aria-label="Shop Coats"
-    >
-      <img
-        src="https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500"
-        alt="Coats"
-      />
-      <div className="category-content">
-        <h3>Coats</h3>
-      </div>
-    </Link>
-  </motion.div>
+  <Swiper
+    modules={[Navigation]}
+    navigation={{
+      prevEl: '.category-prev-btn',
+      nextEl: '.category-next-btn',
+    }}
+    spaceBetween={30}
+    slidesPerView={4}
+    breakpoints={{
+      320: { slidesPerView: 1.3, spaceBetween: 15 },
+      480: { slidesPerView: 2, spaceBetween: 15 },
+      768: { slidesPerView: 3, spaceBetween: 20 },
+      1024: { slidesPerView: 4, spaceBetween: 30 }
+    }}
+    className="categories-swiper"
+  >
+    {homeCategories.map(cat => (
+      <SwiperSlide key={cat._id}>
+        <motion.div variants={itemVariants} style={{ height: '100%' }}>
+          <Link
+            to={`/shop?category=${encodeURIComponent(cat.slug)}`}
+            className="category-tile"
+            aria-label={`Shop ${cat.name}`}
+          >
+            <img
+              src={cat.image}
+              alt={cat.name}
+              loading="lazy"
+            />
+            <div className="category-content">
+              <h3>{cat.name}</h3>
+            </div>
+          </Link>
+        </motion.div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+  
+  {homeCategories.length === 0 && !loading && (
+    <p style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>No categories found.</p>
+  )}
 </motion.div>
 </section>
       {/* Scroll reveals for secondary banners */}

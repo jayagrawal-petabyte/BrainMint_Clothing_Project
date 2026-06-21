@@ -85,7 +85,7 @@ const PopularProducts = () => {
       <div className="popular-tagline">Trending Curations</div>
       <div className="section-header">
         <h2 className="section-title">Popular Right Now</h2>
-        
+
         <div className="popular-nav-actions">
           <button className="popular-nav-btn popular-prev-btn" aria-label="Previous Slide">
             <ChevronLeft size={18} />

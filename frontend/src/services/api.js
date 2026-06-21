@@ -781,7 +781,7 @@ export const fetchPopularProducts = async () => {
 
   popularProductsPromise = (async () => {
     try {
-      const response = await fetch(`${PRODUCTS_URL}/products/trending`);
+      const response = await fetch(`${PRODUCTS_URL}/products?sort=bestseller&limit=10`);
       if (!response.ok) {
         throw new Error(`API returned status ${response.status}`);
       }

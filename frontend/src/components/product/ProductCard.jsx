@@ -86,17 +86,16 @@ const ProductCard = ({ product, badgeText }) => {
   const [cartSplat, setCartSplat] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(1);
 
   useEffect(() => {
     let interval;
     if (isHovered && product?.images?.length > 1) {
-      setCurrentImageIndex(1);
       interval = setInterval(() => {
         setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-      }, 2500);
+      }, 2000);
     } else {
-      setCurrentImageIndex(0);
+      setCurrentImageIndex(1);
     }
     return () => clearInterval(interval);
   }, [isHovered, product?.images]);
@@ -155,15 +154,28 @@ const ProductCard = ({ product, badgeText }) => {
         <Link
           to={`/product/${productId}`}
         >
-          <motion.img
-            key={currentImageIndex}
-            src={product?.images?.[currentImageIndex]?.url || productImage}
+          <img
+            src={productImage}
             alt={productName}
             loading="lazy"
-            initial={{ opacity: 0.7 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="primary-img"
           />
+          {product?.images?.length > 1 && product.images.slice(1).map((img, idx) => {
+            const actualIndex = idx + 1;
+            return (
+              <img
+                key={actualIndex}
+                src={img?.url || img}
+                alt={`${productName} view ${actualIndex}`}
+                loading="lazy"
+                className="secondary-img"
+                style={{
+                  transition: 'opacity 0.6s ease',
+                  opacity: (isHovered && currentImageIndex === actualIndex) ? 1 : 0
+                }}
+              />
+            );
+          })}
         </Link>
 
         {/* Hover Actions */}

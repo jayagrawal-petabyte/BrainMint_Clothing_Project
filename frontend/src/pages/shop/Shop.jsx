@@ -17,7 +17,7 @@ const Shop = () => {
   const [sortType, setSortType] = useState('default');
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
   const initialCategory = searchParams.get('category');
@@ -90,6 +90,15 @@ const Shop = () => {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
+    
+    // Sync category back to URL to prevent stale reload
+    const newParams = new URLSearchParams(searchParams);
+    if (filters.categories?.length > 0) {
+      newParams.set('category', filters.categories[0]);
+    } else {
+      newParams.delete('category');
+    }
+    setSearchParams(newParams, { replace: true });
   }, [filters, sortType, searchQuery]);
 
   // Close mobile filter on route change

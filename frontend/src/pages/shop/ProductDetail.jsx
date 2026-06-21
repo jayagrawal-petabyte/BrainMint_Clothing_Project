@@ -11,6 +11,7 @@ import ProductTabs from '../../components/product/ProductTabs';
 import AddToCartPopup from '../../components/product/AddToCartPopup';
 import SizeGuideModal from '../../components/product/SizeGuideModal';
 import ProductSlider from '../../components/product/ProductSlider';
+import { getColorName } from '../../utils/helpers';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -660,7 +661,7 @@ const ProductDetail = () => {
         <div className="sticky-atc-variants">
           <span>
             {selectedSize && `${selectedSize} / `}
-            {selectedColor && `${selectedColor} / `}
+            {selectedColor && `${getColorName(selectedColor)} / `}
             {product.brand || 'Princess Size Plus Collection'} - ₹{currentPrice.toLocaleString('en-IN')}
           </span>
         </div>

@@ -1,26 +1,40 @@
 import { useState, useEffect } from 'react';
 import { Star, Loader2 } from 'lucide-react';
-import { fetchProductReviews, submitProductReview } from '../../services/api';
+import { fetchProductReviews, submitProductReview, fetchSettings } from '../../services/api';
 import './ProductTabs.css';
 
-const TABS = ['Description', 'Reviews', 'Shipping Policy'];
+const TABS = ['Reviews', 'Shipping Policy'];
 
 const ProductTabs = ({ productId, onReviewAdded }) => {
-  const [activeTab, setActiveTab] = useState('Description');
+  const [activeTab, setActiveTab] = useState('Reviews');
   const [reviews, setReviews] = useState([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(false);
-  
+
   // Review form state
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
+  // Store settings for shipping info
+  const [storeSettings, setStoreSettings] = useState({ shippingCost: 99, freeShippingThreshold: 2500 });
+
   useEffect(() => {
     if (activeTab === 'Reviews' && productId) {
       loadReviews();
     }
   }, [activeTab, productId]);
+
+  useEffect(() => {
+    fetchSettings().then(res => {
+      if (res && res.success && res.data) {
+        setStoreSettings({
+          shippingCost: res.data.shippingCost ?? 99,
+          freeShippingThreshold: res.data.freeShippingThreshold ?? 2500
+        });
+      }
+    });
+  }, []);
 
   const loadReviews = async () => {
     setIsLoadingReviews(true);
@@ -72,17 +86,6 @@ const ProductTabs = ({ productId, onReviewAdded }) => {
       </div>
 
       <div className="tab-content">
-        {activeTab === 'Description' && (
-          <div className="tab-pane">
-            <h4>Separated they live in Bookmarksgrove right</h4>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-            <h4>It is a paradisematic country</h4>
-            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-            <h4>Powerful Pointing</h4>
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life. One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-          </div>
-        )}
-
         {activeTab === 'Reviews' && (
           <div className="tab-pane">
             <div className="reviews-section">
@@ -134,7 +137,7 @@ const ProductTabs = ({ productId, onReviewAdded }) => {
                   </div>
                   <div className="form-group">
                     <label className="form-label">Your Review</label>
-                    <textarea 
+                    <textarea
                       className="review-textarea"
                       rows="4"
                       placeholder="What did you think about this product?"
@@ -142,8 +145,8 @@ const ProductTabs = ({ productId, onReviewAdded }) => {
                       onChange={(e) => setComment(e.target.value)}
                     ></textarea>
                   </div>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={isSubmitting}
                     className="submit-review-btn"
                   >
@@ -162,12 +165,12 @@ const ProductTabs = ({ productId, onReviewAdded }) => {
 
         {activeTab === 'Shipping Policy' && (
           <div className="tab-pane">
-            <h4>Free Standard Shipping</h4>
-            <p>We offer free standard shipping on all orders above ₹999. Orders are processed within 1–2 business days and typically arrive within 5–7 business days.</p>
+            <h4>Standard Shipping</h4>
+            <p>We offer free standard shipping on all orders above ₹{storeSettings.freeShippingThreshold.toLocaleString('en-IN')}. A flat shipping charge of ₹{storeSettings.shippingCost.toLocaleString('en-IN')} applies to orders below this amount. Orders are processed within 1–2 business days and typically arrive within 5–7 business days.</p>
             <h4>Express Shipping</h4>
-            <p>Express shipping is available for an additional fee. Express orders are delivered within 2–3 business days.</p>
+            <p>Express shipping is available for an additional fee. Express orders are delivered within 5-7 business days.</p>
             <h4>Returns</h4>
-            <p>We accept returns within 30 days of purchase. Items must be unworn, unwashed, and in their original packaging.</p>
+            <p>We currently do not accept any returns or exchanges. All sales are final.</p>
           </div>
         )}
       </div>

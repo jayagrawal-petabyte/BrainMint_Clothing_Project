@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getColorName } from '../../utils/helpers';
-import { fetchCategories } from '../../services/api';
+import { fetchCategories, fetchProducts } from '../../services/api';
 import './FilterSidebar.css';
 
 const FilterSection = ({
@@ -113,13 +113,18 @@ const FilterSidebar = ({
   };
 
   const [dbCategories, setDbCategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
     fetchCategories().then(data => {
-      // API might return strings or objects depending on implementation
       if (data && Array.isArray(data)) {
         setDbCategories(data.map(cat => typeof cat === 'object' ? cat.name : cat));
       }
+    });
+    
+    // Fetch all products once to calculate global filter counts
+    fetchProducts('?limit=1000').then(data => {
+      setAllProducts(data?.products || []);
     });
   }, []);
 
@@ -310,7 +315,7 @@ const FilterSidebar = ({
         <ul className="menu-list">
           {dbCategories.map(cat => {
             const count =
-              products.filter(
+              allProducts.filter(
                 p => {
                   const catName = typeof p.category === 'object' && p.category ? p.category.name : p.category;
                   return catName === cat;
@@ -376,7 +381,7 @@ const FilterSidebar = ({
       >
         <ul className="menu-list color-list">
           {colors.map(color => {
-            const count = products.filter(p => p.colors && p.colors.includes(color.hex)).length;
+            const count = allProducts.filter(p => p.colors && p.colors.includes(color.hex)).length;
             return (
               <li key={color.name}>
                 <label className="filter-checkbox">

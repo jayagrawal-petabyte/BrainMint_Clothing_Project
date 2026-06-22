@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Phone, Lock, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { loginUser, fetchAdminStatus } from '../../services/api';
@@ -88,7 +88,9 @@ const AdminLogin = () => {
           className="relative z-10 flex flex-col justify-center px-16 w-full h-full"
         >
           <motion.h1 variants={itemVariant} className="text-5xl font-bold font-montserrat text-white tracking-wide mb-6">
-            Princess<span className="text-admin-accent">Size+</span>
+            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+              Princess<span className="text-admin-accent">Size+</span>
+            </Link>
           </motion.h1>
           <motion.p variants={itemVariant} className="text-xl text-gray-200 font-light max-w-md">
             Premium ecommerce management system. Control your inventory, orders, and business analytics.

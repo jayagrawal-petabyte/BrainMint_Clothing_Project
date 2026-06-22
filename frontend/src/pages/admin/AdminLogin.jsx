@@ -188,7 +188,11 @@ const AdminLogin = () => {
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-admin-accent hover:text-red-400 transition-colors">
+                <a 
+                  href="#" 
+                  title="Contact the support team for admin help"
+                  className="font-medium text-admin-accent hover:text-red-400 transition-colors"
+                >
                   Forgot password?
                 </a>
               </div>

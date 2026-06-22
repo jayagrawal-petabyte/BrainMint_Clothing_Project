@@ -85,7 +85,7 @@ const Login = () => {
           className="relative z-10 flex flex-col justify-center px-16 w-full h-full"
         >
           <motion.h1 variants={itemVariant} className="text-5xl font-bold font-montserrat text-white tracking-wide mb-6">
-            URBAN<span className="text-admin-accent">WEAR</span>
+            Princess<span className="text-admin-accent">Size+</span>
           </motion.h1>
           <motion.p variants={itemVariant} className="text-xl text-gray-200 font-light max-w-md">
             Discover the latest trends in fashion and elevate your everyday style.

@@ -44,10 +44,14 @@ const ProductDetail = () => {
 
       if (!data) {
         setProduct(null);
+        document.title = 'Product Not Found | Princess Size+ Collection';
         return;
       }
 
       setProduct(data);
+      if (data.name) {
+        document.title = `${data.name} | Princess Size+ Collection`;
+      }
 
       setSelectedImage(
         data.images?.[0]?.url ||

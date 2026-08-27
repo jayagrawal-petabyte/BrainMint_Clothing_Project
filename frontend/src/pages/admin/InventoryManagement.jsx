@@ -10,7 +10,7 @@ const InventoryManagement = () => {
 
   const loadProducts = async () => {
     setIsLoading(true);
-    const data = await fetchProducts('?limit=100');
+    const data = await fetchProducts('?limit=100&isActive=all');
     setProducts(data.products || []);
     setIsLoading(false);
   };

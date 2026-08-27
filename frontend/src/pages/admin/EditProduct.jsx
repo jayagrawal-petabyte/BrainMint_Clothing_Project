@@ -21,7 +21,8 @@ const EditProduct = () => {
           category: data.categoryId || data.category || '',
           price: data.price || '',
           discount: data.discountPrice ? Math.round(((data.price - data.discountPrice) / data.price) * 100) : '',
-          stock: data.inventory?.stock || '',
+          stock: data.inventory?.stock ?? '',
+          sku: data.inventory?.sku || '',
           status: data.isActive ? 'Active' : 'Draft',
           sizes: data.sizes || [],
           colors: data.colors || [],
@@ -42,7 +43,8 @@ const EditProduct = () => {
       price: Number(formData.price),
       discountPrice: formData.discount ? Number(formData.price) - (Number(formData.price) * Number(formData.discount) / 100) : undefined,
       inventory: { 
-        stock: Number(formData.stock)
+        stock: Number(formData.stock),
+        sku: formData.sku || undefined
       },
       sizes: formData.sizes || [],
       colors: formData.colors || [],

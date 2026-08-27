@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProductTable from '../../components/admin/ProductTable';
-import { fetchProducts, adminDeleteProduct } from '../../services/api';
+import { fetchProducts, adminDeleteProduct, adminUpdateProduct } from '../../services/api';
 
 const ProductManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,7 +12,7 @@ const ProductManagement = () => {
 
   const loadProducts = async () => {
     setIsLoading(true);
-    const data = await fetchProducts('?limit=100');
+    const data = await fetchProducts('?limit=100&isActive=all');
     setProducts(data.products || []);
     setIsLoading(false);
   };
@@ -25,6 +25,17 @@ const ProductManagement = () => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       const token = localStorage.getItem('adminToken');
       await adminDeleteProduct(id, token);
+      loadProducts();
+    }
+  };
+
+  const handleToggleStatus = async (id, currentIsActive) => {
+    const token = localStorage.getItem('adminToken');
+    const newStatus = !currentIsActive;
+    // Optimistically update local state
+    setProducts(prev => prev.map(p => (p._id === id || p.id === id) ? { ...p, isActive: newStatus } : p));
+    const res = await adminUpdateProduct(id, { isActive: newStatus }, token);
+    if (!res || res.success === false) {
       loadProducts();
     }
   };
@@ -79,6 +90,7 @@ const ProductManagement = () => {
         searchQuery={searchQuery} 
         categoryFilter={categoryFilter}
         onDelete={handleDelete} 
+        onToggleStatus={handleToggleStatus}
         isLoading={isLoading} 
       />
     </div>

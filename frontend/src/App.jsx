@@ -46,6 +46,7 @@ const PageLoader = () => (
 
 import ScrollToTop from './components/ui/ScrollToTop';
 import ScrollToTopRoute from './components/ui/ScrollToTopRoute';
+import DynamicPageTitle from './components/ui/DynamicPageTitle';
 import Contact from "./pages/core/Contact";
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -93,6 +94,7 @@ function App() {
       <CartProvider>
         <WishlistProvider>
         <Router>
+          <DynamicPageTitle />
           <ScrollToTopRoute />
           <AnimatePresence mode="wait">
             <Routes>

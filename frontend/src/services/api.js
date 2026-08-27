@@ -1,8 +1,9 @@
 // ─── Backend Service URLs ────────────────────────────────────────────────────
-const AUTH_URL = "https://clothing-project-combined.onrender.com/api";
-const PRODUCTS_URL = "https://clothing-project-combined.onrender.com/api";
-const CART_URL = "https://clothing-project-combined.onrender.com/api";
-const COMBINED_URL = "https://clothing-project-combined.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://clothing-project-combined.onrender.com/api";
+const AUTH_URL = BASE_URL;
+const PRODUCTS_URL = BASE_URL;
+const CART_URL = BASE_URL;
+const COMBINED_URL = BASE_URL;
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 export const fetchProducts = async (params = "") => {
@@ -17,7 +18,12 @@ export const fetchProducts = async (params = "") => {
 
 export const fetchProductById = async (id) => {
   try {
-    const response = await fetch(`${PRODUCTS_URL}/products/${id}`);
+    const headers = {};
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${PRODUCTS_URL}/products/${id}`, { headers });
     const data = await response.json();
     return data.data || null;
   } catch (error) {

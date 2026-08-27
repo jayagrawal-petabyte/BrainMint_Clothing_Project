@@ -98,14 +98,16 @@ const Home = ({ onSplashActive }) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const activeWallpaperItems = isMobile ? mobileWallpaperItems : floatingWallpaperItems;
 
-  const HARDCODED_CATEGORY_IMAGES = {
+  const CATEGORY_FALLBACK_IMAGES = {
+    "T-Shirt": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500", // Women's T-shirt
     "Dress": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500",
     "Top": "https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=500",
     "Skirt": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500",
     "Coat": "https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500",
-    "T-Shirt": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500", // Women's T-shirt
-    "Kurthi": "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=500", // Verified ethnic wear image
+    "Kurthi": "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=500",
   };
+
+  const FALLBACK_CATEGORY_IMAGE = "https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&q=80";
 
   useEffect(() => {
     const loadData = async () => {
@@ -122,22 +124,22 @@ const Home = ({ onSplashActive }) => {
         const cats = catsData || [];
         
         const mappedCats = cats.map(cat => {
-          let coverImage;
-          
-          if (HARDCODED_CATEGORY_IMAGES[cat.name]) {
-            coverImage = HARDCODED_CATEGORY_IMAGES[cat.name];
-          } else {
-            const productWithImage = allProds.find(p => p.category === cat.name && p.images && p.images.length > 0);
-            coverImage = productWithImage 
-              ? (productWithImage.images[0].url || productWithImage.images[0])
-              // Elegant subtle placeholder for categories without products
-              : "https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&q=80";
-          }
+          // 1. Find any active product in this category that has an image (preferring working URLs)
+          const productWithImage = allProds.find(p => {
+            const prodCat = typeof p.category === 'object' ? p.category?.name : p.category;
+            const hasImage = p.images && p.images.length > 0 && (p.images[0].url || p.images[0]);
+            return prodCat?.toLowerCase() === cat.name?.toLowerCase() && hasImage;
+          });
+
+          // 2. Automatically use product image if available; otherwise use category fallback image
+          const coverImage = productWithImage 
+            ? (productWithImage.images[0].url || productWithImage.images[0])
+            : (CATEGORY_FALLBACK_IMAGES[cat.name] || cat.image?.url || FALLBACK_CATEGORY_IMAGE);
 
           return {
             _id: cat._id,
             name: cat.name,
-            slug: cat.name, // using name for shop filter since backend saves category name on product
+            slug: cat.name,
             image: coverImage
           };
         });

@@ -244,10 +244,15 @@ const buildProductQuery = async (queryParams) => {
   ));
   const isFeatured = toBoolean(firstDefined(queryParams.isFeatured, queryParams.featured));
   const isBestseller = toBoolean(firstDefined(queryParams.isBestseller, queryParams.bestseller));
-  const isActive = toBoolean(queryParams.isActive);
   const inStock = toBoolean(queryParams.inStock);
 
-  query.isActive = isActive === undefined ? true : isActive;
+  if (queryParams.isActive === 'all' || queryParams.isActive === '') {
+    // Return both active and inactive
+  } else if (queryParams.isActive !== undefined) {
+    query.isActive = toBoolean(queryParams.isActive);
+  } else {
+    query.isActive = true;
+  }
 
   if (categoryValue) query.category = await resolveCategoryFilter(categoryValue);
   if (brandList.length > 0) query.brand = { $in: brandList.map((brand) => new RegExp(`^${escapeRegex(brand)}$`, 'i')) };
@@ -376,6 +381,25 @@ const getProductById = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Product not found');
   }
 
+  if (!product.isActive) {
+    let isAdmin = false;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded && (decoded.role === 'admin' || decoded.isAdmin)) {
+          isAdmin = true;
+        }
+      } catch (_) {}
+    }
+
+    if (!isAdmin) {
+      throw new ApiError(404, 'Product not found');
+    }
+  }
+
   res.json({
     success: true,
     message: 'Product fetched successfully',
@@ -402,7 +426,17 @@ const getProductForCart = asyncHandler(async (req, res) => {
 });
 
 const createProduct = asyncHandler(async (req, res) => {
-  const product = await Product.create(normalizeProductImagesPayload(req.body));
+  const payload = normalizeProductImagesPayload(req.body);
+  if (!payload.inventory || typeof payload.inventory !== 'object') {
+    payload.inventory = {
+      sku: `SKU-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+      stock: 0
+    };
+  } else if (!payload.inventory.sku) {
+    payload.inventory.sku = `SKU-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  }
+
+  const product = await Product.create(payload);
 
   res.status(201).json({
     success: true,
@@ -412,14 +446,26 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findByIdAndUpdate(req.params.id, normalizeProductImagesPayload(req.body), {
+  const existingProduct = await Product.findById(req.params.id);
+  if (!existingProduct) {
+    throw new ApiError(404, 'Product not found');
+  }
+
+  const payload = normalizeProductImagesPayload(req.body);
+
+  if (payload.inventory && typeof payload.inventory === 'object') {
+    payload.inventory = {
+      sku: payload.inventory.sku || existingProduct.inventory?.sku || `SKU-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+      stock: payload.inventory.stock !== undefined ? Number(payload.inventory.stock) : (existingProduct.inventory?.stock ?? 0),
+      lowStockThreshold: payload.inventory.lowStockThreshold !== undefined ? Number(payload.inventory.lowStockThreshold) : (existingProduct.inventory?.lowStockThreshold ?? 5),
+      sold: payload.inventory.sold !== undefined ? Number(payload.inventory.sold) : (existingProduct.inventory?.sold ?? 0)
+    };
+  }
+
+  const product = await Product.findByIdAndUpdate(req.params.id, payload, {
     new: true,
     runValidators: true
   });
-
-  if (!product) {
-    throw new ApiError(404, 'Product not found');
-  }
 
   res.json({
     success: true,

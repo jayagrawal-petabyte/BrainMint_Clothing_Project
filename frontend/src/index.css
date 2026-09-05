@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Rubik:wght@300;400;500;600&display=swap');
+/* This is a CSS comment */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --ltn__primary-color: #111111;
+  --ltn__primary-color-2: #333333;
+  --ltn__secondary-color: #f24c5c;
+  --ltn__heading-color: #111111;
+  --ltn__paragraph-color: #555555;
+  --ltn__heading-font: 'Montserrat', sans-serif;
+  --ltn__body-font: 'Rubik', sans-serif;
+  --section-bg-1: #f9f9f9;
+  --border-color-1: #e5e5e5;
+  --border-color-7: #d1dae0;
+  --border-color-11: #ededed;
+  --white-7: #ffffff;
+}
+
+[data-theme="dark"] {
+  --ltn__primary-color: #F5F5F5;
+  --ltn__primary-color-2: #AAAAAA;
+  --ltn__secondary-color: #f24c5c;
+  --ltn__heading-color: #F5F5F5;
+  --ltn__paragraph-color: #AAAAAA;
+  --section-bg-1: #1A1A1A;
+  --border-color-1: #333333;
+  --border-color-7: #444444;
+  --border-color-11: #222222;
+  --white-7: #111111;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, fill 0.3s ease;
+}
+
+body {
+  font-family: var(--ltn__body-font);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ltn__paragraph-color);
+  background-color: var(--white-7);
+  line-height: 1.8;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  width: 100%;
+  scrollbar-width: none !important; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none !important; /* Hide scrollbar in Chrome/Safari/Opera */
+}
+
+html {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-width: none !important; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none !important; /* Hide scrollbar in Chrome/Safari/Opera */
+}
+
+#root,
+.app {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+#root::-webkit-scrollbar,
+.app::-webkit-scrollbar {
+  display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ltn__heading-font);
+  color: var(--ltn__heading-color);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+a {
+  color: var(--ltn__heading-color);
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Accessibility Focus Rings */
+*:focus-visible {
+  outline: 2px solid var(--ltn__secondary-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Fix for dropdown options rendering white-on-white */
+select option {
+  background-color: var(--white);
+  color: var(--ltn__heading-color);
+}
+[data-theme='dark'] select option {
+  background-color: var(--section-bg-1);
+  color: var(--ltn__heading-color);
+}

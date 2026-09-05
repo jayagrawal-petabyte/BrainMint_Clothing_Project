@@ -1,0 +1,107 @@
+.trending-searches-container {
+  padding: 0 8%;
+  width: 100%;
+}
+
+.trending-searches-container.compact {
+  margin: 20px auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+  justify-content: flex-start;
+  background: transparent;
+}
+
+.trending-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.trending-searches-container.compact .trending-chips {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+/* Matching homepage mini-pills layout */
+.trending-chip {
+  background-color: transparent;
+  color: var(--ltn__primary-color);
+  border: 1px solid var(--border-color-1);
+  padding: 8px 20px;
+  font-family: var(--ltn__body-font);
+  font-size: 13px;
+  font-weight: 400;
+  border-radius: 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.4s ease;
+}
+
+.trending-searches-container.compact .trending-chip {
+  padding: 6px 16px;
+  font-size: 12px;
+}
+
+.trending-chip:hover {
+  background-color: var(--ltn__primary-color);
+  color: var(--white-7);
+  border-color: var(--ltn__primary-color);
+}
+
+.trending-label-compact {
+  font-family: var(--ltn__heading-font);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ltn__secondary-color);
+  white-space: nowrap;
+}
+
+/* --- Loading Skeletons --- */
+.trending-chip-skeleton {
+  width: 110px;
+  height: 38px;
+  background-color: var(--border-color-11);
+  border-radius: 30px;
+}
+
+.pulse {
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trending-searches-container {
+    padding: 0 8%;
+  }
+
+  .trending-chip {
+    padding: 6px 16px;
+    font-size: 12px;
+  }
+
+  .trending-searches-container.compact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 15px auto;
+  }
+}

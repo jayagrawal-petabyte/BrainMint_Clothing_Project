@@ -1,0 +1,632 @@
+.account-page {
+  padding: 0 0 100px;
+  background-color: #fafafa;
+  min-height: calc(100vh - 200px);
+}
+
+.account-hero {
+  background-color: var(--ltn__heading-color);
+  color: #fff;
+  padding: 60px 0;
+  margin-bottom: 60px;
+}
+
+.account-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+}
+
+.account-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: var(--ltn__heading-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--ltn__heading-font);
+}
+
+.account-hero-text h1 {
+  color: #fff;
+  margin: 0 0 5px 0;
+  font-size: 32px;
+}
+
+.account-hero-text p {
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+  font-size: 16px;
+}
+
+.account-logout-btn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.account-logout-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.account-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .account-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .account-hero-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .account-logout-btn {
+    margin: 10px auto 0;
+  }
+}
+
+/* Sidebar Nav */
+.account-sidebar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  border: 1px solid #eaeaea;
+}
+
+.account-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 15px;
+  background: none;
+  border: none;
+  text-align: left;
+  border-radius: 8px;
+  color: var(--ltn__paragraph-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.account-nav-btn .nav-arrow {
+  margin-left: auto;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.2s ease;
+}
+
+.account-nav-btn:hover {
+  background: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+.account-nav-btn:hover .nav-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.account-nav-btn.active {
+  background: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+.account-nav-btn.active .nav-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Main Content Area */
+.account-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  border: 1px solid #eaeaea;
+  min-height: 400px;
+}
+
+.account-panel-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.account-panel-header h2 {
+  font-size: 24px;
+  margin: 0 0 5px 0;
+  color: var(--ltn__heading-color);
+}
+
+.account-panel-header p {
+  margin: 0;
+  color: var(--ltn__paragraph-color);
+}
+
+/* Empty State */
+.account-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.account-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.account-empty-state h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.account-empty-state p {
+  color: var(--ltn__paragraph-color);
+  margin-bottom: 25px;
+}
+
+.account-empty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: #000;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.account-empty-btn:hover {
+  background: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+/* Orders List */
+.account-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.account-order-card {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.order-card-header {
+  background: #fcfcfc;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-id {
+  font-weight: 600;
+  color: var(--ltn__heading-color);
+}
+
+.order-date {
+  font-size: 13px;
+  color: var(--ltn__paragraph-color);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.order-card-body {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
+}
+
+.order-details-col {
+  flex: 1;
+  min-width: 120px;
+}
+
+.order-label {
+  font-size: 13px;
+  color: var(--ltn__paragraph-color);
+  margin: 0 0 5px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.order-value {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--ltn__heading-color);
+}
+
+.order-actions {
+  margin-left: auto;
+}
+
+.order-action-btn {
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  color: var(--ltn__heading-color);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order-action-btn:hover {
+  background: var(--ltn__secondary-color);
+  border-color: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+@media (max-width: 576px) {
+  .order-card-body {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .order-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+  .order-action-btn {
+    width: 100%;
+  }
+}
+
+/* Badges */
+.acc-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.acc-badge--success { background: #e6f6eb; color: #00a046; }
+.acc-badge--warning { background: #fff5e6; color: #f59e0b; }
+.acc-badge--danger { background: #fde8e8; color: #dc2626; }
+.acc-badge--pending { background: #f3f4f6; color: #4b5563; }
+
+/* Skeletons */
+.account-skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.account-skeleton-item {
+  height: 120px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Address Card */
+.account-address-card {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.address-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.address-card-header h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.btn-edit-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--ltn__paragraph-color);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.btn-edit-address:hover {
+  color: #000;
+}
+
+.address-content p {
+  margin: 0 0 5px 0;
+  color: var(--ltn__paragraph-color);
+}
+
+.address-name {
+  font-weight: 600;
+  color: var(--ltn__heading-color) !important;
+  font-size: 16px;
+  margin-bottom: 8px !important;
+}
+
+.address-phone {
+  margin-top: 15px !important;
+}
+
+/* Address Form */
+.account-address-form {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 24px;
+  background: #fcfcfc;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.account-address-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--ltn__heading-color);
+}
+
+.account-address-form input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.account-address-form input:focus {
+  border-color: #000;
+  outline: none;
+}
+
+.account-address-form input:disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.btn-save {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-save:hover {
+  background: var(--ltn__secondary-color);
+}
+
+.btn-cancel {
+  padding: 12px 24px;
+  background: #fff;
+  color: var(--ltn__heading-color);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  border-color: var(--ltn__secondary-color);
+  color: var(--ltn__secondary-color);
+}
+
+/* Account Details Specifics */
+.account-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.details-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.details-section-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--ltn__heading-color);
+}
+
+.details-section-header svg {
+  color: var(--ltn__paragraph-color);
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .account-page {
+  background-color: var(--white-7); /* #111 */
+}
+
+[data-theme="dark"] .account-hero {
+  background-color: var(--border-color-11);
+}
+
+[data-theme="dark"] .account-hero-text h1,
+[data-theme="dark"] .account-hero-text p {
+  color: var(--ltn__heading-color);
+}
+
+[data-theme="dark"] .account-logout-btn {
+  background: var(--border-color-1);
+  border-color: var(--border-color-7);
+  color: var(--ltn__heading-color);
+}
+
+[data-theme="dark"] .account-logout-btn:hover {
+  background: var(--border-color-7);
+}
+
+[data-theme="dark"] .account-sidebar,
+[data-theme="dark"] .account-panel,
+[data-theme="dark"] .account-address-form,
+[data-theme="dark"] .account-address-card {
+  background: var(--section-bg-1); /* #1a1a1a */
+  border-color: var(--border-color-1);
+}
+
+[data-theme="dark"] .order-card-header,
+[data-theme="dark"] .account-empty-icon {
+  background: var(--border-color-11); /* #222 */
+  border-color: var(--border-color-1);
+}
+
+[data-theme="dark"] .account-order-card {
+  border-color: var(--border-color-1);
+}
+
+[data-theme="dark"] .order-action-btn,
+[data-theme="dark"] .btn-cancel {
+  background: var(--border-color-11);
+  border-color: var(--border-color-1);
+  color: var(--ltn__heading-color);
+}
+
+[data-theme="dark"] .order-action-btn:hover,
+[data-theme="dark"] .btn-cancel:hover {
+  background: var(--ltn__secondary-color);
+  border-color: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+[data-theme="dark"] .account-nav-btn:hover {
+  background: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+[data-theme="dark"] .account-nav-btn.active {
+  background: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+[data-theme="dark"] .account-address-form input {
+  background: var(--border-color-11);
+  border-color: var(--border-color-1);
+  color: var(--ltn__heading-color);
+}
+
+[data-theme="dark"] .account-address-form input:disabled {
+  background: var(--border-color-1);
+  color: var(--ltn__paragraph-color);
+}
+
+[data-theme="dark"] .account-address-form input:focus {
+  border-color: var(--ltn__primary-color);
+}
+
+[data-theme="dark"] .btn-save {
+  background: var(--ltn__primary-color);
+  color: var(--white-7);
+}
+
+[data-theme="dark"] .btn-save:hover {
+  background: var(--ltn__secondary-color);
+}
+
+[data-theme="dark"] .acc-badge--pending {
+  background: var(--border-color-7);
+  color: var(--ltn__heading-color);
+}
+
+[data-theme="dark"] .account-skeleton-item {
+  background: linear-gradient(90deg, #222 25%, #333 50%, #222 75%);
+  background-size: 200% 100%;
+}
+
+[data-theme="dark"] .account-avatar {
+  background: var(--section-bg-1);
+  color: var(--ltn__primary-color);
+}

@@ -1,0 +1,55 @@
+.testimonials-swiper {
+  position: relative;
+  padding: 0 20px !important;
+}
+
+/* Base state for arrows */
+.testimonials-swiper .swiper-button-next,
+.testimonials-swiper .swiper-button-prev {
+  background: #fff;
+  color: #111;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  z-index: 10;
+}
+
+.testimonials-swiper .swiper-button-next::after,
+.testimonials-swiper .swiper-button-prev::after {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Move arrows slightly outward */
+.testimonials-swiper .swiper-button-prev {
+  left: 5px;
+}
+.testimonials-swiper .swiper-button-next {
+  right: 5px;
+}
+
+/* Show arrows on hover of the swiper container */
+.testimonials-swiper:hover .swiper-button-next,
+.testimonials-swiper:hover .swiper-button-prev {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Extra hover state for the buttons themselves */
+.testimonials-swiper .swiper-button-next:hover,
+.testimonials-swiper .swiper-button-prev:hover {
+  background: #f24c5c;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+@media (max-width: 991px) {
+  .about-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+}

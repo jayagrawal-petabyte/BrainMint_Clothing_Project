@@ -1,0 +1,50 @@
+.trust-badges-container {
+  padding: 0 8%;
+  position: relative;
+  z-index: 10;
+  margin-top: -125px;
+  /* Overlap the banner above */
+  margin-bottom: 80px;
+}
+
+.trust-badges-wrapper {
+  background: var(--white-7);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  box-shadow: -8px 12px 30px rgba(0, 0, 0, 0.05), 0px 6px 15px rgba(0, 0, 0, 0.04);
+}
+
+.trust-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 42px 34px;
+  transition: all 0.3s ease;
+  background: var(--white-7);
+}
+
+.trust-badge-item:hover {
+  background: var(--section-bg-1);
+}
+
+.badge-icon {
+  font-size: 42px;
+  color: var(--ltn__heading-color);
+  min-width: 55px;
+  display: flex;
+}
+
+.badge-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ltn__heading-color);
+  margin-bottom: 6px;
+}
+
+.badge-info p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ltn__paragraph-color);
+  line-height: 1.6;
+}

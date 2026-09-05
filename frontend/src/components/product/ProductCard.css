@@ -1,0 +1,209 @@
+.ltn__product-item {
+  margin-bottom: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 4px;
+}
+
+.ltn__product-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .ltn__product-item:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* --- Product Image Area --- */
+.product-img {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--white-7);
+  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-img img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.product-img .secondary-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.ltn__product-item:hover .product-img img {
+  transform: scale(1.03);
+}
+
+.ltn__product-item:hover .product-img {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+
+[data-theme="dark"] .ltn__product-item:hover .product-img {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+}
+
+/* --- Hover Actions --- */
+.product-hover-action {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 10;
+}
+
+.ltn__product-item:hover .product-hover-action {
+  opacity: 1;
+  top: 50%;
+}
+
+.product-hover-action ul {
+  display: inline-flex;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.product-hover-action li button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--white-7);
+  color: var(--ltn__heading-color);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .product-hover-action li button {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.product-hover-action li button:hover {
+  background-color: var(--ltn__primary-color);
+  color: var(--white-7);
+  transform: scale(1.05);
+}
+
+.product-hover-action li button.incart {
+  color: var(--ltn__primary-color);
+}
+
+.product-hover-action li button.incart:hover {
+  color: var(--white-7);
+}
+
+/* --- Product Info --- */
+.product-info {
+  padding: 20px 0 5px;
+  text-align: center; /* Center aligning product info for a more editorial look */
+}
+
+.product-title {
+  font-family: var(--ltn__heading-font);
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+}
+
+.product-title a {
+  color: var(--ltn__heading-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.product-title a:hover {
+  color: var(--ltn__secondary-color);
+}
+
+.product-price {
+  font-family: var(--ltn__body-font);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ltn__paragraph-color);
+}
+
+/* --- Product Badges --- */
+.product-card-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: var(--ltn__primary-color);
+  color: var(--white-7);
+  padding: 5px 12px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 0px;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.product-card-badge.trending {
+  background-color: var(--ltn__secondary-color);
+  color: #ffffff !important;
+}
+
+
+
+/* --- Product Ratings --- */
+.product-card-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.product-card-rating .star-icon {
+  display: inline-block;
+}
+
+.product-card-rating .rating-value {
+  font-weight: 500;
+  color: var(--ltn__heading-color);
+}
+
+.product-card-rating .rating-count {
+  color: var(--ltn__paragraph-color);
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* --- Hover Default Size --- */
+.product-card-default-size {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-bottom: 0 !important;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
+}
+
+.ltn__product-item:hover .product-card-default-size {
+  max-height: 20px;
+  opacity: 1;
+  margin-bottom: 6px !important;
+}
+
+

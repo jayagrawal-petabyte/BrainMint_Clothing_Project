@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Rubik:wght@400;500&display=swap');
+
+.auth-page {
+  padding: 0 0 100px;
+  background-color: #f9f9f9; /* Princess Size+ Collection Minimal Luxury Surface */
+  min-height: 100vh;
+}
+
+.auth-header {
+  background-color: var(--section-bg-1, transparent);
+  padding: 60px 0;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.auth-header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: #1a1c1c;
+  letter-spacing: -0.02em;
+}
+
+.auth-breadcrumb {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555555;
+}
+
+.auth-breadcrumb a {
+  color: #555555;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.auth-breadcrumb a:hover {
+  color: #b71e36;
+}
+
+.auth-breadcrumb span {
+  margin: 0 10px;
+}
+
+.auth-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.stitch-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 0.5rem;
+  padding: 50px 40px;
+  box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.auth-form-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.auth-form-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #1a1c1c;
+  letter-spacing: -0.02em;
+}
+
+.auth-form-header p {
+  font-family: 'Rubik', sans-serif;
+  color: #555555;
+  font-size: 15px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.stitch-input {
+  position: relative;
+  margin-top: 10px;
+}
+
+.stitch-input input,
+.stitch-input select,
+.stitch-input textarea {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid #e8e8e8;
+  background-color: transparent;
+  font-family: 'Rubik', sans-serif;
+  font-size: 16px;
+  color: #1a1c1c;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0;
+}
+
+.stitch-input label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #747878;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left top;
+}
+
+.stitch-input input:focus,
+.stitch-input input:not(:placeholder-shown),
+.stitch-input select:focus,
+.stitch-input select:valid,
+.stitch-input textarea:focus,
+.stitch-input textarea:not(:placeholder-shown) {
+  border-bottom-color: var(--ltn__secondary-color);
+}
+
+.stitch-input input:focus,
+.stitch-input select:focus,
+.stitch-input textarea:focus {
+  filter: drop-shadow(0 2px 6px rgba(242, 76, 92, 0.25));
+}
+
+.stitch-input input:focus + label,
+.stitch-input input:not(:placeholder-shown) + label,
+.stitch-input select:focus + label,
+.stitch-input select:valid + label,
+.stitch-input textarea:focus + label,
+.stitch-input textarea:not(:placeholder-shown) + label {
+  transform: translateY(-24px) scale(0.85);
+  color: var(--ltn__secondary-color);
+}
+
+.auth-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.stitch-btn {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 16px 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stitch-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 24px rgba(242, 76, 92, 0.35);
+  background-color: #1a1c1c;
+}
+
+.stitch-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.stitch-link {
+  font-family: 'Rubik', sans-serif;
+  color: #555555;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.stitch-link:hover {
+  color: #b71e36;
+}
+
+.auth-footer-link {
+  display: inline-block;
+  margin-top: 30px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #555555;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.auth-footer-link:hover {
+  color: #b71e36;
+}
+
+.auth-error {
+  background-color: #ffdad6;
+  border: 1px solid #ffdad6;
+  color: #93000a;
+  padding: 12px 20px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+  border-radius: 0.25rem;
+  margin-bottom: 10px;
+}
+
+/* --- Dark Mode Styles --- */
+[data-theme="dark"] .auth-page {
+  background-color: #1a1a1a;
+}
+
+[data-theme="dark"] .auth-header h1 {
+  color: #f5f5f5;
+}
+
+[data-theme="dark"] .auth-breadcrumb {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .auth-breadcrumb a {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .auth-breadcrumb a:hover {
+  color: #e89ca9;
+}
+
+[data-theme="dark"] .stitch-card {
+  background: rgba(45, 45, 45, 0.7);
+  box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .auth-form-header h2 {
+  color: #f5f5f5;
+}
+
+[data-theme="dark"] .auth-form-header p {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .stitch-input input,
+[data-theme="dark"] .stitch-input select,
+[data-theme="dark"] .stitch-input textarea {
+  color: #f5f5f5;
+  border-bottom-color: #444444;
+}
+
+[data-theme="dark"] .stitch-input label {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .stitch-input input:focus,
+[data-theme="dark"] .stitch-input input:not(:placeholder-shown),
+[data-theme="dark"] .stitch-input select:focus,
+[data-theme="dark"] .stitch-input select:valid,
+[data-theme="dark"] .stitch-input textarea:focus,
+[data-theme="dark"] .stitch-input textarea:not(:placeholder-shown) {
+  border-bottom-color: #e89ca9;
+}
+
+[data-theme="dark"] .stitch-input input:focus + label,
+[data-theme="dark"] .stitch-input input:not(:placeholder-shown) + label,
+[data-theme="dark"] .stitch-input select:focus + label,
+[data-theme="dark"] .stitch-input select:valid + label,
+[data-theme="dark"] .stitch-input textarea:focus + label,
+[data-theme="dark"] .stitch-input textarea:not(:placeholder-shown) + label {
+  color: #e89ca9;
+}
+
+[data-theme="dark"] .stitch-btn {
+  background-color: #f5f5f5;
+  color: #111111;
+}
+
+[data-theme="dark"] .stitch-btn:hover {
+  background-color: #ffffff;
+  box-shadow: 0px 8px 24px rgba(242, 76, 92, 0.45);
+}
+
+[data-theme="dark"] .stitch-link,
+[data-theme="dark"] .auth-footer-link {
+  color: #aaaaaa;
+}
+
+[data-theme="dark"] .stitch-link:hover,
+[data-theme="dark"] .auth-footer-link:hover {
+  color: #e89ca9;
+}
+
+[data-theme="dark"] .auth-error {
+  background-color: #3b0000;
+  border-color: #93000a;
+  color: #ffdad6;
+}

@@ -1,0 +1,130 @@
+.atc-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.atc-popup {
+  background: var(--white-7);
+  width: 420px;
+  max-width: 90vw;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+
+.atc-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ltn__paragraph-color);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.atc-close:hover {
+  color: var(--ltn__heading-color);
+}
+
+.atc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ltn__heading-color);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.atc-check {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.atc-product {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.atc-img {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.atc-info {
+  flex: 1;
+}
+
+.atc-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ltn__heading-color);
+  margin-bottom: 6px;
+}
+
+.atc-qty {
+  font-size: 13px;
+  color: var(--ltn__paragraph-color);
+  margin-bottom: 6px;
+}
+
+.atc-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ltn__secondary-color);
+}
+
+.atc-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.atc-btn-view,
+.atc-btn-checkout {
+  flex: 1;
+  padding: 13px 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.atc-btn-view {
+  background: var(--ltn__secondary-color);
+  color: #fff;
+}
+
+.atc-btn-view:hover {
+  background: var(--ltn__primary-color);
+  color: var(--white-7);
+}
+
+.atc-btn-checkout {
+  background: var(--ltn__heading-color);
+  color: var(--white-7);
+}
+
+.atc-btn-checkout:hover {
+  background: var(--ltn__secondary-color);
+}
